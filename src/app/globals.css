@@ -1,8 +1,39 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "work-sans-medium";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-Medium.ttf");
+}
+@font-face {
+  font-family: "work-sans-light";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-Light.ttf");
+}
+@font-face {
+  font-family: "work-sans-bold";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-Bold.ttf");
+}
+@font-face {
+  font-family: "work-sans-semi-bold";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-SemiBold.ttf");
+}
+@font-face {
+  font-family: "work-sans-extra-bold";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-ExtraBold.ttf");
+}
+@font-face {
+  font-family: "work-sans-regular";
+  src: url("../assets/fonts/Work_Sans/static/WorkSans-Regular.ttf");
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --work-sans-light: "work-sans-light";
+  --work-sans-bold: "work-sans-bold";
+  --work-sans-semi-bold: "work-sans-semi-bold";
+  --work-sans-medium: "work-sans-medium";
+  --work-sans-extra-bold: "work-sans-extra-bold";
+  --work-sans-regular: "work-sans-regular";
 }
 
 @theme inline {
@@ -10,6 +41,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-work-sans-light: var(--work-sans-light);
+  --font-work-sans-bold: var(--work-sans-bold);
+  --font-work-sans-semi-bold: var(--work-sans-semi-bold);
+  --font-work-sans-medium: var(--work-sans-medium);
+  --font-work-sans-extra-bold: var(--work-sans-extra-bold);
+  --font-work-sans-regular: var(--work-sans-regular);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +57,6 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+ 
   font-family: Arial, Helvetica, sans-serif;
 }
