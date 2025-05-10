@@ -13,7 +13,7 @@ export default function RootLayout({
         <div className="flex  items-center justify-center min-h-screen h-screen">
           <Row className="w-full" justify={"center"}>
             <Col xl={8} lg={10} md={12} xs={22}>
-              <div className="bg-white p-4 w-full border border-[#BEBEBE80] rounded-2xl text-center">
+              <div className="bg-white p-4 w-full border border-[#BEBEBE80] rounded-2xl">
                 {children}
               </div>
             </Col>
