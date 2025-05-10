@@ -14,12 +14,14 @@ import Image from "next/image";
 import addIcon from "@/assets/svgs/add-icon.svg";
 import { AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/animation/fade-in";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [citizenChecked, setCitizenChecked] = useState(true);
   const [showPromoCode, setShowPromoCode] = useState(false);
   const [showPartnerCode, setShowPartnerCode] = useState(false);
+  const router = useRouter()
   return (
     <div>
       <AuthHeaderWrapper text="Create your account" />
@@ -133,10 +135,11 @@ const Register = () => {
           <Button
             text="Register"
             fullWidth
-            action={() => {}}
+            action={() => {
+                router.push("/select-account-type")
+            }}
             loading={false}
             variant="green-bg"
-            type="submit"
           />
         </div>
         <div className="flex my-4 justify-center items-center">
