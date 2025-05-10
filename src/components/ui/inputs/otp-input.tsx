@@ -90,7 +90,7 @@ export const OTPInput = () => {
                 inputRefs.current[index] = el;
               }
             }}
-            className="bg-[#F1F2F3] text-center outline-none border-none rounded-lg h-[60px] w-[60px]"
+            className="bg-[#F1F2F3] text-center outline-none border-none rounded-lg w-[48px] h-[54px] lg:h-[60px] lg:w-[60px]"
           />
         );
       })}
