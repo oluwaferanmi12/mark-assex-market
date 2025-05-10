@@ -2,14 +2,24 @@
 
 import { AuthHeaderWrapper } from "@/components/shared/container/auth-header-wrapper";
 import { AuthToggle } from "@/components/shared/container/auth-toggle";
+import { Button } from "@/components/ui/buttons/button";
 import { GInput } from "@/components/ui/inputs/general-input";
 import { CitizenConfirmation } from "@/components/ui/text/citizen-confirmation-text";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
 import React, { useState } from "react";
+import googleIcon from "@/assets/svgs/google-icon.svg";
+import arrowUp from "@/assets/svgs/chevron-arrow-up.svg";
+import arrowDown from "@/assets/svgs/chevron-arrow-down.svg";
+import Image from "next/image";
+import addIcon from "@/assets/svgs/add-icon.svg";
+import { AnimatePresence } from "framer-motion";
+import { FadeIn } from "@/animation/fade-in";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [citizenChecked, setCitizenChecked] = useState(true);
+  const [showPromoCode, setShowPromoCode] = useState(false);
+  const [showPartnerCode, setShowPartnerCode] = useState(false);
   return (
     <div>
       <AuthHeaderWrapper text="Create your account" />
@@ -56,17 +66,103 @@ const Register = () => {
             text="At least one special character (e.g. !, @, #, $)"
           />
         </div>
-        <GInput
-          inputValue={email}
-          setInputValue={setEmail}
-          label="Promo code"
-          placeholder="Enter promo code"
-        />
+
+        <div
+          onClick={() => {
+            setShowPartnerCode((prev) => !prev);
+          }}
+          className="cursor-pointer my-2 flex items-center gap-1 text-sm"
+        >
+          <span>
+            <Image src={addIcon} alt="" />
+          </span>
+          <p className="text-xs text-[#004DF4] font-work-sans-regular">
+            Add a Partner Code (optional)
+          </p>
+          <span className="flex items-center">
+            <Image src={showPartnerCode ? arrowUp : arrowDown} alt="" />
+          </span>
+        </div>
+        <AnimatePresence>
+          {showPartnerCode && (
+            <FadeIn>
+              <GInput
+                inputValue={email}
+                setInputValue={setEmail}
+                label="Partner code"
+                placeholder="Enter partner code"
+              />
+            </FadeIn>
+          )}
+        </AnimatePresence>
+
+        <div
+          onClick={() => {
+            setShowPromoCode((prev) => !prev);
+          }}
+          className="cursor-pointer my-2 flex items-center gap-1 text-sm"
+        >
+          <span>
+            <Image src={addIcon} alt="" />
+          </span>
+          <p className="text-xs text-[#004DF4] font-work-sans-regular">
+            Add a Promo Code (optional)
+          </p>
+          <span className="flex items-center">
+            <Image src={showPromoCode ? arrowUp : arrowDown} alt="" />
+          </span>
+        </div>
+        <AnimatePresence>
+          {showPromoCode && (
+            <FadeIn>
+              <GInput
+                inputValue={email}
+                setInputValue={setEmail}
+                label="Promo code"
+                placeholder="Enter promo code"
+              />
+            </FadeIn>
+          )}
+        </AnimatePresence>
 
         <CitizenConfirmation
           checkVal={citizenChecked}
           setCheckVal={setCitizenChecked}
         />
+        <div className="mt-4">
+          <Button
+            text="Register"
+            fullWidth
+            action={() => {}}
+            loading={false}
+            variant="green-bg"
+            type="submit"
+          />
+        </div>
+        <div className="flex my-4 justify-center items-center">
+          <div
+            style={{ border: "0.5px solid #BEBEBE " }}
+            className=" w-full "
+          ></div>
+          <p className="text-xs font-work-sans-light min-w-[100px] text-center">
+            or register with
+          </p>
+          <div
+            style={{ border: "0.5px solid #BEBEBE " }}
+            className=" w-full "
+          ></div>
+        </div>
+
+        <div className="mt-4">
+          <Button
+            text="Google"
+            fullWidth
+            action={() => {}}
+            loading={false}
+            icon={googleIcon}
+            variant="grey-bg"
+          />
+        </div>
       </form>
     </div>
   );

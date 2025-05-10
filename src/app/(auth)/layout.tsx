@@ -1,5 +1,8 @@
+'use client'
+
 import { AuthNav } from "@/components/ui/navbar/auth-nav";
 import { Col, Row } from "antd";
+import { motion } from "framer-motion";
 
 export default function RootLayout({
   children,
@@ -7,15 +10,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Row className="bg-[#FAFAFA]" align={"middle"} justify={"center"}>
+    <Row className="bg-[#FAFAFA] min-h-full w-full py-8 " align={"middle"} justify={"center"}>
       <Col xs={22}>
         <AuthNav />
-        <div className="flex  items-center justify-center min-h-screen h-screen">
+        <div className="flex  items-center justify-center min-h-screen h-full">
           <Row className="w-full" justify={"center"}>
             <Col xl={8} lg={10} md={12} xs={22}>
-              <div className="bg-white p-4 w-full border border-[#BEBEBE80] rounded-2xl">
+              <motion.div layout className="bg-white p-4 w-full border border-[#BEBEBE80] rounded-2xl">
                 {children}
-              </div>
+              </motion.div>
             </Col>
           </Row>
         </div>
