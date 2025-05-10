@@ -15,7 +15,7 @@ export default function RootLayout({
         <AuthNav />
         <div className="flex  items-center justify-center min-h-screen h-full">
           <Row className="w-full" justify={"center"}>
-            <Col xl={8} lg={10} md={12} xs={22}>
+            <Col xl={10} lg={12} md={16} xs={22}>
               <motion.div layout className="bg-white p-4 w-full border border-[#BEBEBE80] rounded-2xl">
                 {children}
               </motion.div>
