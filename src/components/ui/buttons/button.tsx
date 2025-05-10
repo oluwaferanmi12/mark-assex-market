@@ -15,6 +15,7 @@ export const Button = ({
 }: ButtonInterface) => {
   return (
     <button
+    onClick={action}
     type={type}
       disabled={loading}
       className={`${
