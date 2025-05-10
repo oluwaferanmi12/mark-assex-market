@@ -14,34 +14,34 @@ const SelectAccountType = () => {
     <>
       <AuthNav />
       <Row className="w-full min-h-screen" justify={"center"} align={"middle"}>
-        <Col xs={14}>
+        <Col lg={14} xs={22}>
           <div>
-            <div className="flex justify-center gap-2 flex-col items-center">
-              <p className="text-3xl font-work-sans-semi-bold">
+            <div className="flex justify-center gap-2 mb-12 flex-col items-center">
+              <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
                 Select a trading account
               </p>
-              <p className="w-1/2 mx-auto text-center text-[#606060] font-work-sans-regular">
+              <p className="w-1/2 mx-auto text-center text-[#606060] font-work-sans-regular text-xs lg:text-sm">
                 Experience the market on your terms test or trade live.
               </p>
             </div>
-            <div className="flex items-center gap-4 my-4 ">
+            <div className="flex lg:flex-row flex-col items-center gap-4 my-4 ">
               <div className="rounded-xl w-full p-4 border min-h-[480px] border-[#BEBEBE59]">
                 <div className="flex items-center gap-3">
                   <span>
                     <Image src={demoAccountIcon} alt="" />
                   </span>
                   <div>
-                    <p className="text-[#6F6C90] text-base font-work-sans-medium">
+                    <p className="text-[#6F6C90] text-sm lg:text-base font-work-sans-medium">
                       Trading account
                     </p>
-                    <p className="text-2xl font-work-sans-semi-bold">
+                    <p className=" text-xl lg:text-2xl font-work-sans-semi-bold">
                       Demo Account
                     </p>
                   </div>
                 </div>
                 <div className="flex  gap-3 items-center my-6">
-                  <p className="font-work-sans-bold text-4xl">$10,000</p>
-                  <p className="text-sm font-work-sans-light">
+                  <p className="font-work-sans-bold text-2xl  lg:text-4xl">$10,000</p>
+                  <p className="lg:text-sm text-xs font-work-sans-light">
                     Virtual Balance
                   </p>
                 </div>
@@ -58,19 +58,19 @@ const SelectAccountType = () => {
                   <p className="font-work-sans-medium mb-4">Demo Features</p>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedGreen} alt="" />
-                    <p className="text-[#404040] text-sm font-work-sans-regular">
+                    <p className="text-[#404040] text:xs lg:text-sm font-work-sans-regular">
                       $10,000 Virtual Balance
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedGreen} alt="" />
-                    <p className="text-[#404040] text-sm font-work-sans-regular">
+                    <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
                       Access to all trading Features
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedRed} alt="" />
-                    <p className="text-[#F40E0E] text-sm font-work-sans-regular">
+                    <p className="text-[#F40E0E] text-xs lg:text-sm font-work-sans-regular">
                       No withdrawals
                     </p>
                   </div>
@@ -82,17 +82,17 @@ const SelectAccountType = () => {
                     <Image src={liveAccountIcon} alt="" />
                   </span>
                   <div>
-                    <p className="text-[#6F6C90] text-base font-work-sans-medium">
+                    <p className="text-[#6F6C90] text-sm lg:text-base font-work-sans-medium">
                       Trading account
                     </p>
-                    <p className="text-2xl font-work-sans-semi-bold">
+                    <p className="lg:text-2xl text-xl font-work-sans-semi-bold">
                       Real Account
                     </p>
                   </div>
                 </div>
                 <div className="flex  gap-3 items-center my-6">
                   <p className="font-work-sans-bold text-4xl">Live</p>
-                  <p className="text-sm font-work-sans-light">
+                  <p className="text-xs lg:text-sm font-work-sans-light">
                     Real Profit and Live Trading
                   </p>
                 </div>
@@ -111,19 +111,19 @@ const SelectAccountType = () => {
                   </p>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedGreen} alt="" />
-                    <p className="text-[#404040] text-sm font-work-sans-regular">
+                    <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
                       Live market access with real funds
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedGreen} alt="" />
-                    <p className="text-[#404040] text-sm font-work-sans-regular">
+                    <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
                       Full feature access, including realtime execution
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mb-4">
                     <Image src={checkedGreen} alt="" />
-                    <p className="text-[#404040] text-sm font-work-sans-regular">
+                    <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
                       Instant withdrawals, no delays.
                     </p>
                   </div>
