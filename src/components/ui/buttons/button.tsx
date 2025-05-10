@@ -15,8 +15,8 @@ export const Button = ({
 }: ButtonInterface) => {
   return (
     <button
-    onClick={action}
-    type={type}
+      onClick={action}
+      type={type}
       disabled={loading}
       className={`${
         variant === "green-bg"
@@ -24,7 +24,7 @@ export const Button = ({
           : variant === "grey-bg"
           ? "bg-[#F3F4F4] text-[#202020] border border-[#BEBEBE80]"
           : variant === "plain"
-          ? "text-[#0DAE94]"
+          ? "text-[#0DAE94] shadow-[0px_4px_6px_#4444440D]"
           : variant === "blue-bg"
           ? "bg-[#1F0D3F] text-white"
           : variant === "white-bg"
@@ -40,7 +40,7 @@ export const Button = ({
           : ""
       } ${fullWidth && "w-full"} ${
         fullRounded ? "rounded-full" : "rounded-md"
-      } font-work-sans-regular flex items-center gap-2 justify-center  cursor-pointer  px-4 py-3`}
+      } font-work-sans-regular flex text-xs lg:text-sm items-center gap-2 justify-center  cursor-pointer  px-4 py-3`}
     >
       {icon && iconPosition === "left" && (
         <div>

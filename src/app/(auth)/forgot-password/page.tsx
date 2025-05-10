@@ -17,18 +17,19 @@ const ForgotPassword = () => {
         subText="No worries! Enter your email address below, and we’ll send you a link to reset your password."
       />
       <form className="my-4">
-        <GInput
-          label="Email address"
-          placeholder="Enter email address"
-          inputValue={email}
-          setInputValue={setEmail}
-        />
+          <GInput
+            label="Email address"
+            placeholder="Enter email address"
+            inputValue={email}
+            setInputValue={setEmail}
+          />
+
         <Button
           variant="green-bg"
           fullWidth
           text="Reset Password"
           action={() => {
-            router.push("/otp")
+            router.push("/otp");
           }}
           loading={false}
         />
@@ -38,7 +39,7 @@ const ForgotPassword = () => {
             fullWidth
             text="Back to login"
             action={() => {
-                router.push("/login")
+              router.push("/login");
             }}
             loading={false}
             icon={arrowLeft}

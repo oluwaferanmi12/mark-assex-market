@@ -6,7 +6,7 @@ export const AuthToggle = ({ active }: { active: "login" | "register" }) => {
   const router = useRouter();
   return (
     <>
-      <div className="flex justify-center my-4">
+      <div className="flex justify-center my-6">
         <div className="bg-[#F1F5F9] rounded-lg flex items-center border p-1 border-[#BEBEBE59]">
           <Link href={"/login"}>
             <div
@@ -16,7 +16,7 @@ export const AuthToggle = ({ active }: { active: "login" | "register" }) => {
                   : "text-[#404040]"
               } px-8 rounded-lg cursor-pointer`}
             >
-              <p className="font-work-sans-regular">Sign in</p>
+              <p className="font-work-sans-regular lg:text-sm text-xs">Sign in</p>
             </div>
           </Link>
           <Link href={"/register"}>
@@ -28,7 +28,7 @@ export const AuthToggle = ({ active }: { active: "login" | "register" }) => {
                   : "text-[#404040]"
               } px-8 rounded-lg cursor-pointer`}
             >
-              <p className="font-work-sans-regular">Register</p>
+              <p className="font-work-sans-regular lg:text-sm text-xs">Register</p>
             </div>
           </Link>
         </div>

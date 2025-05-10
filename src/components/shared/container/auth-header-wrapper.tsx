@@ -20,7 +20,7 @@ export const AuthHeaderWrapper = ({
         <Image src={smallLogo} alt="" />
       </span>
       <p
-        className={`text-[#111111] font-work-sans-semi-bold text-2xl ${
+        className={`text-[#111111] font-work-sans-semi-bold text-lg lg:text-2xl ${
           jl && "mt-4"
         }`}
       >

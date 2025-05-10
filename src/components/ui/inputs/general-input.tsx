@@ -28,10 +28,10 @@ export const GInput = ({
   return (
     <div className="mb-4">
       <div className="flex items-center justify-between w-full m-0 p-0">
-        <label className="font-work-sans-regular text-[#404040]">{label}</label>
+        <label className="font-work-sans-regular text-xs text-[#404040] ;lg:text-sm">{label}</label>
         {showForgotPassword && (
           <Link href={"/forgot-password"}>
-            <p className="text-[#004DF4] underline font-work-sans-regular">
+            <p className="text-[#004DF4] underline text-xs font-work-sans-regular">
               Forgot Password
             </p>
           </Link>
@@ -51,7 +51,7 @@ export const GInput = ({
         )}
         <input
           type={type === "password" && !showPassword ? "password" : "text"}
-          className="w-full px-4 py-3 border border-[#BEBEBE59] bg-[#F3F4F4] rounded-lg placeholder:text-[#8A8A8A] placeholder:font-work-sans-regular outline-none font-work-sans-medium"
+          className="w-full px-4 py-3 border border-[#BEBEBE59] bg-[#F3F4F4] rounded-lg placeholder:text-[#8A8A8A] placeholder:font-work-sans-regular outline-none text-xs font-work-sans-medium "
           placeholder={placeholder}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
