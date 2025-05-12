@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import smallLogo from "@/assets/svgs/nav-logo.svg";
@@ -18,45 +18,49 @@ import partnershipActive from "@/assets/svgs/nav-partnership-active.svg";
 import partnershipInactive from "@/assets/svgs/nav-partnership-inactive.svg";
 import bonusActive from "@/assets/svgs/nav-bonus-active.svg";
 import bonusInactive from "@/assets/svgs/nav-bonus-inactive.svg";
+import activeSetting from "@/assets/svgs/nav-setting-active.svg";
+import inactiveSetting from "@/assets/svgs/nav-settings-inactive.svg"
+import logOutIcon from "@/assets/svgs/nav-logout.svg"
 import { DashboardNavWrapper } from "@/components/shared/container/dashboar-side-nav-wrapper";
+import { DashboardUserDetails } from "@/components/shared/container/dashboar-user-detail";
 
 export const DashboardSideNav = () => {
-    //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
+  //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
   const navObject = [
     {
       text: "Wallet",
       activeIcon: activeDollarIcon,
       inactiveIcon: inactiveDollarIcon,
       clickAction: () => {},
-      slug: 'wallet'
+      slug: "wallet",
     },
     {
       text: "My Accounts",
       activeIcon: activeWallet,
       inactiveIcon: inactiveWallet,
       clickAction: () => {},
-      slug: 'account',
+      slug: "account",
     },
     {
       text: "Deposit",
       activeIcon: activeDeposit,
       inactiveIcon: inactiveDeposit,
       clickAction: () => {},
-      slug: 'deposit'
+      slug: "deposit",
     },
     {
       text: "Internal Transfer",
       activeIcon: activeTransfer,
       inactiveIcon: inactiveTransfer,
       clickAction: () => {},
-      slug: 'internal-transfer',
+      slug: "internal-transfer",
     },
     {
       text: "Withdrawal",
       activeIcon: withdrawActive,
       inactiveIcon: withdrawInactive,
       clickAction: () => {},
-      slug: 'withdrawal'
+      slug: "withdrawal",
     },
     {
       text: "Insights",
@@ -65,33 +69,58 @@ export const DashboardSideNav = () => {
       clickAction: () => {},
       slug: "insight",
     },
-   
+
     {
       text: "Partnership",
       activeIcon: partnershipActive,
       inactiveIcon: partnershipInactive,
       clickAction: () => {},
-      slug: 'partnership'
+      slug: "partnership",
     },
     {
       text: "Bonuses",
       activeIcon: bonusActive,
       inactiveIcon: bonusInactive,
       clickAction: () => {},
-      slug: 'bonus'
+      slug: "bonus",
+    },
+  ];
+
+  const nav2object = [
+    {
+      text: "Account Settings",
+      activeIcon: activeSetting,
+      inactiveIcon: inactiveSetting,
+      clickAction: () => {},
+      slug: "settings",
+    },
+    {
+      text: "Logout",
+      activeIcon: logOutIcon,
+      inactiveIcon: logOutIcon,
+      clickAction: () => {},
+      slug: "logout",
     },
   ];
   return (
-    <div className="bg-white border border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6">
+    <div className="bg-white border border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 flex flex-col justify-between">
       <div>
-        <span>
-          <Image src={smallLogo} alt="" />
-        </span>
+        <div>
+          <span>
+            <Image src={smallLogo} alt="" />
+          </span>
+        </div>
+        <div className="mt-8">
+          {navObject.map((item, index) => {
+            return <DashboardNavWrapper key={index} item={item} />;
+          })}
+        </div>
       </div>
-      <div className="mt-8">
-        {navObject.map((item , index) => {
-          return <DashboardNavWrapper  key={index} item={item} />;
+      <div>
+        {nav2object.map((item, index) => {
+          return <DashboardNavWrapper key={index} item={item} />;
         })}
+      <DashboardUserDetails />
       </div>
     </div>
   );
