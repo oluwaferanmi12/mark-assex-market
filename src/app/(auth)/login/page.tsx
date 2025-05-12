@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/buttons/button";
 import { GInput } from "@/components/ui/inputs/general-input";
 import React, { useState } from "react";
 import googleIcon from "@/assets/svgs/google-icon.svg";
+import { useRouter } from "next/navigation";
+
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
+  const router = useRouter()
   return (
     <div>
       <AuthHeaderWrapper text="Login to your account" />
@@ -32,7 +35,9 @@ const Login = () => {
           <Button
             text="Sign in"
             variant="green-bg"
-            action={() => {}}
+            action={() => {
+              router.push('/account')
+            }}
             loading={false}
             fullWidth
           />
