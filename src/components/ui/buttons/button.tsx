@@ -10,7 +10,9 @@ export const Button = ({
   variant,
   fullRounded,
   fullWidth,
-  type="button"
+  type = "button",
+  buttonSmaller,
+  textBolder,
   
 }: ButtonInterface) => {
   return (
@@ -40,7 +42,11 @@ export const Button = ({
           : ""
       } ${fullWidth && "w-full"} ${
         fullRounded ? "rounded-full" : "rounded-md"
-      } font-work-sans-regular flex text-xs lg:text-sm items-center gap-2 justify-center  cursor-pointer  px-4 py-3`}
+      } ${
+        buttonSmaller ? "py-2 px-4 text-xs" : "px-4 py-3 text-xs lg:text-sm"
+      } ${
+        textBolder ? "font-work-sans-medium" : "font-work-sans-regular "
+      } flex  items-center gap-1 justify-center  cursor-pointer   `}
     >
       {icon && iconPosition === "left" && (
         <div>
