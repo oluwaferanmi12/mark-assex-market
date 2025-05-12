@@ -9,3 +9,11 @@ export interface ButtonInterface {
     fullWidth ?: boolean;
     type?: 'button' | 'submit'
 }
+
+export interface NavObjectInterface {
+    text: string,
+    activeIcon: string,
+    inactiveIcon: string,
+    clickAction: () => void,
+    slug:string
+}
