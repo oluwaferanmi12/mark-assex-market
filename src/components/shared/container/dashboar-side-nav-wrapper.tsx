@@ -25,7 +25,7 @@ export const DashboardNavWrapper = ({ item }: { item: NavObjectInterface }) => {
           duration: 0.3,
           ease: "easeInOut",
         }}
-        className={`flex cursor-pointer items-center gap-3  rounded-2xl my-1 p-4`}
+        className={`flex cursor-pointer items-center gap-3  rounded-2xl my-1 p-3`}
       >
         <span>
           <Image src={active ? item.activeIcon : item.inactiveIcon} alt="" />

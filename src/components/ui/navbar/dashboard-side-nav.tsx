@@ -110,7 +110,7 @@ export const DashboardSideNav = () => {
             <Image src={smallLogo} alt="" />
           </span>
         </div>
-        <div className="mt-8">
+        <div className="mt-6">
           {navObject.map((item, index) => {
             return <DashboardNavWrapper key={index} item={item} />;
           })}
