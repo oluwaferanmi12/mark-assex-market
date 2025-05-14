@@ -28,6 +28,7 @@ import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import checkCircle from "@/assets/svgs/check-circle-icon.svg";
+import { TradeContainer } from "@/components/shared/wrappers/trade-container";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -110,7 +111,9 @@ const Account = () => {
             <Button
               text="Continue"
               fullWidth
-              action={() => {}}
+              action={() => {
+                setShowAccountReadyModal(false)
+              }}
               variant="blue-bg"
               loading={false}
             />
@@ -400,267 +403,15 @@ const Account = () => {
                   style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
                   className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-2"
                 >
-                  <p className="font-work-sans-medium">{filterSelected}</p>
+                  <p className="font-work-sans-medium lg:text-sm text-xs">
+                    {filterSelected}
+                  </p>
                   <Image src={arrowDown} alt="" />
                 </div>
               </DropDownList>
             </div>
-            <div
-              style={{ border: "0.5px solid #BEBEBE " }}
-              className="my-4  bg-white  rounded-lg"
-            >
-              <div
-                style={{ borderBottom: "0.5px solid #BEBEBE " }}
-                className="flex p-6 border-b   justify-between items-stretch"
-              >
-                <div className="flex flex-col gap-4 ">
-                  <div className="flex items-center gap-3">
-                    <span className="bg-[#34C65933] rounded-sm text-xs text-[#34C659] px-2 py-1 font-work-sans-regular">
-                      Live
-                    </span>
-                    <span className="bg-[#1F0D3F1A] rounded-sm text-xs text-[#1F0D3F] px-2 py-1 font-work-sans-regular">
-                      Raw Spread
-                    </span>
-                    <span className="bg-[#F1F5F9] rounded-sm text-xs text-black px-2 py-1 font-work-sans-regular">
-                      Account #81978
-                    </span>
-                  </div>
-                  <p className="text-3xl font-work-sans-semi-bold">
-                    $50,000 USD
-                  </p>
-                </div>
-                <div className="flex items-center gap-12 ">
-                  <div className="flex items-center gap-4 flex-col justify-center">
-                    <p className="text-[#0DAE94]  font-work-sans-regular">
-                      Equity
-                    </p>
-                    <p className="text-lg font-work-sans-regular">50,000 USD</p>
-                  </div>
-                  <div className="flex gap-4 items-center flex-col justify-center">
-                    <p className="text-[#0DAE94] font-work-sans-regular">
-                      Leverage
-                    </p>
-                    <p className="text-lg font-work-sans-regular">1:500</p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 ">
-                  <div className="flex justify-end">
-                    <Button
-                      icon={iconTransaction}
-                      variant="green-bg"
-                      buttonSmaller
-                      text="Trade"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                    />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      icon={arrowDownLeft}
-                      variant="green-bg-faded"
-                      buttonSmaller
-                      text="Deposit"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                      fullRounded
-                    />
-                    <Button
-                      icon={arrowUpRight}
-                      variant="green-bg-faded"
-                      buttonSmaller
-                      text="Withdraw"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                      fullRounded
-                    />
-                    <DropDownList
-                      selected={liveAccountSelected}
-                      setSelected={setLiveAccountSelected}
-                      dropDownList={liveAccountDropDownList}
-                    >
-                      <span>
-                        <Image src={ellipsis} alt="" />
-                      </span>
-                    </DropDownList>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6  flex items-center justify-between">
-                <div className="flex flex-col gap-3">
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Balance
-                  </p>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Equity
-                  </p>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    MT5 Login: <span className="text-[#1F0D3F]">81978</span>
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-                    <p className="text-[#202020]">$ 50,000</p>
-                    <p>Actual leverage</p>
-                  </div>
-                  <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-                    <p className="text-[#202020]">$ 50,000</p>
-                    <p>Available to withdraw</p>
-                  </div>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Server:{" "}
-                    <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
-                    <p className="text-[#202020]">1:200</p>
-                    <Image src={editIconBlack} alt="" />
-                  </div>
-                  <p className="text-[#202020] flex justify-end items-center text-lg font-work-sans-regular">
-                    $ 49,000
-                  </p>
-                  <div>
-                    <Button
-                      variant="green-bg"
-                      action={() => {
-                        setShowPasswordModal(true);
-                      }}
-                      loading={false}
-                      text="Change password"
-                      buttonSmaller
-                      icon={editIconWhite}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              style={{ border: "0.5px solid #BEBEBE " }}
-              className="my-4  bg-white  rounded-lg"
-            >
-              <div
-                style={{ borderBottom: "0.5px solid #BEBEBE " }}
-                className="flex p-6 border-b   justify-between items-stretch"
-              >
-                <div className="flex flex-col gap-4 ">
-                  <div className="flex items-center gap-3">
-                    <span className="bg-[#34C65933] rounded-sm text-xs text-[#34C659] px-2 py-1 font-work-sans-regular">
-                      Demo
-                    </span>
-                    <span className="bg-[#1F0D3F1A] rounded-sm text-xs text-[#1F0D3F] px-2 py-1 font-work-sans-regular">
-                      Standard
-                    </span>
-                    <span className="bg-[#F1F5F9] rounded-sm text-xs text-black px-2 py-1 font-work-sans-regular">
-                      Account #81978
-                    </span>
-                  </div>
-                  <p className="text-3xl font-work-sans-semi-bold">
-                    $50,000 USD
-                  </p>
-                </div>
-                <div className="flex items-center gap-12 ">
-                  <div className="flex items-center gap-4 flex-col justify-center">
-                    <p className="text-[#0DAE94]  font-work-sans-regular">
-                      Equity
-                    </p>
-                    <p className="text-lg font-work-sans-regular">50,000 USD</p>
-                  </div>
-                  <div className="flex gap-4 items-center flex-col justify-center">
-                    <p className="text-[#0DAE94] font-work-sans-regular">
-                      Leverage
-                    </p>
-                    <p className="text-lg font-work-sans-regular">1:500</p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 ">
-                  <div className="flex justify-end">
-                    <Button
-                      icon={iconTransaction}
-                      variant="green-bg"
-                      buttonSmaller
-                      text="Trade"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                    />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      icon={arrowDownLeft}
-                      variant="green-bg-faded"
-                      buttonSmaller
-                      text="Deposit"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                      fullRounded
-                    />
-                    <Button
-                      icon={arrowUpRight}
-                      variant="green-bg-faded"
-                      buttonSmaller
-                      text="Withdraw"
-                      loading={false}
-                      action={() => {}}
-                      textBolder
-                      fullRounded
-                    />
-                    <span>
-                      <Image src={ellipsis} alt="" />
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6  flex items-center justify-between">
-                <div className="flex flex-col gap-3">
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Balance
-                  </p>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Equity
-                  </p>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    MT5 Login: <span className="text-[#1F0D3F]">81978</span>
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-                    <p className="text-[#202020]">$ 50,000</p>
-                    <p>Actual leverage</p>
-                  </div>
-                  <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-                    <p className="text-[#202020]">$ 50,000</p>
-                    <p>Available to withdraw</p>
-                  </div>
-                  <p className="text-[#707070] text-lg font-work-sans-regular">
-                    Server:{" "}
-                    <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
-                    <p className="text-[#202020]">1:200</p>
-                    <Image src={editIconBlack} alt="" />
-                  </div>
-                  <p className="text-[#202020] flex justify-end items-center text-lg font-work-sans-regular">
-                    $ 49,000
-                  </p>
-                  <div>
-                    <Button
-                      variant="green-bg"
-                      action={() => {}}
-                      loading={false}
-                      text="Change password"
-                      buttonSmaller
-                      icon={editIconWhite}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TradeContainer />
+            <TradeContainer />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import alertIcon from "@/assets/svgs/alert-icon-octagon.svg";
 import { Button } from "@/components/ui/buttons/button";
@@ -14,14 +14,25 @@ export const AccounVerificationPending = () => {
           security and unlocks more features.
         </p>
       </div>
-      <Button
-        action={() => {}}
-        loading={false}
-        text="Verify account"
-        variant="green-faded-border"
-        buttonSmaller
-        fullWidth
-      />
+      <div className="lg:hidden w-full">
+        <Button
+          action={() => {}}
+          loading={false}
+          text="Verify account"
+          variant="green-faded-border"
+          buttonSmaller
+          fullWidth
+        />
+      </div>
+      <div className="hidden lg:block">
+        <Button
+          action={() => {}}
+          loading={false}
+          text="Verify account"
+          variant="green-faded-border"
+          buttonSmaller
+        />
+      </div>
     </div>
   );
 };

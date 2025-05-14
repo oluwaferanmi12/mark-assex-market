@@ -39,7 +39,7 @@ export const ModalContainer = ({
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
           }}
-          className="fixed inset-0 z-40 flex justify-center items-center bg-black/30 backdrop-blur-sm"
+          className="fixed min-h-screen flex justify-center items-center h-screen top-0 z-40 right-0 bottom-0  left-0"
         >
           <motion.div
             key="modal"
@@ -49,8 +49,7 @@ export const ModalContainer = ({
             transition={{ duration: 0.25, ease: "easeOut" }}
             className={` ${greyBg ? "bg-[#FAFAFA]" : "bg-white"} rounded-xl ${
               addPadding && "p-4"
-            }`}
-            style={{ width: width === "medium" ? "500px" : "400px" }}
+            } lg:w-[500px] w-[90%]`}
             onClick={(e) => e.stopPropagation()}
           >
             {children}
