@@ -19,3 +19,9 @@ export interface NavObjectInterface {
     clickAction: () => void,
     slug:string
 }
+
+export interface DropDownListInterface {
+    text: string;
+    id: string
+    clickAction ?: () => void
+}
