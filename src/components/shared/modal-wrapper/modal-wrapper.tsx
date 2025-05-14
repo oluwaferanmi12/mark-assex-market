@@ -39,7 +39,7 @@ export const ModalContainer = ({
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
           }}
-          className="fixed min-h-screen flex justify-center items-center h-screen top-0 z-40 right-0 bottom-0  left-0"
+          className="fixed inset-0 z-40 flex justify-center items-center bg-black/30 backdrop-blur-sm"
         >
           <motion.div
             key="modal"
