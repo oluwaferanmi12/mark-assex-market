@@ -7,16 +7,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <div className="bg-[#FAFAFA] w-full h-full">
       <Row>
-        <Col xs={4}>
+        <Col className="col-responsive" lg={4} md={6} xs={4}>
           <DashboardSideNav />
         </Col>
         <Col
-          xs={20}
-          className="relative pt-24  h-screen min-h-screen max-h-screen overflow-hidden"
+          lg={20}
+          md={24}
+          xs={24}
+          className="relative lg:pt-24 pt-20  h-screen min-h-screen max-h-screen overflow-hidden"
         >
           <div className="h-full overflow-y-scroll hide-scrollbar">
             <DashboardTopNav />
-            <div className=" px-8">{children}</div>
+            <div className=" px-4 lg:px-8">{children}</div>
           </div>
         </Col>
       </Row>

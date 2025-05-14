@@ -238,7 +238,9 @@ const Account = () => {
         <AccounVerificationPending />
         <div className="mt-8">
           <div className="flex items-center justify-between">
-            <p className="text-2xl font-work-sans-semi-bold">My Accounts</p>
+            <p className="lg:text-2xl text-lg font-work-sans-medium  lg:font-work-sans-semi-bold">
+              My Accounts
+            </p>
 
             <Button
               variant="green-bg"
@@ -269,7 +271,7 @@ const Account = () => {
                   setActiveAccount("live");
                   setShowModal(true);
                 }}
-                className={`relative z-10 font-work-sans-medium cursor-pointer p-2 text-sm rounded-sm ${
+                className={`relative z-10 font-work-sans-medium cursor-pointer p-2 lg:text-sm text-xs rounded-sm ${
                   activeAccount === "live" ? "text-[#111111]" : "text-[#707070]"
                 }`}
               >
@@ -278,7 +280,7 @@ const Account = () => {
               <p
                 ref={demoRef}
                 onClick={() => setActiveAccount("demo")}
-                className={`relative z-10 font-work-sans-medium cursor-pointer p-2 text-sm rounded-sm ${
+                className={`relative z-10 font-work-sans-medium cursor-pointer p-2 lg:text-sm text-xs rounded-sm ${
                   activeAccount === "demo" ? "text-[#111111]" : "text-[#707070]"
                 }`}
               >
@@ -286,7 +288,7 @@ const Account = () => {
               </p>
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-2">
+          <div className="mt-4 flex flex-col lg:flex-row items-center gap-2">
             <DashboardCardWrapper>
               <div className="flex items-center gap-3">
                 <span>
@@ -301,7 +303,7 @@ const Account = () => {
                       <Image src={eyeOff} alt="" />
                     </span>
                   </div>
-                  <p className="text-[#111111] text-[20px] font-work-sans-semi-bold">
+                  <p className="text-[#111111] text-base lg:text-[20px] font-work-sans-semi-bold">
                     $ 21,522,400
                   </p>
                 </div>
@@ -325,7 +327,7 @@ const Account = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-[#111111] text-[20px] font-work-sans-semi-bold">
+                    <p className="text-[#111111] font-work-sans-semi-bold text-base lg:text-[20px] ">
                       $ 21,522,400
                     </p>
                     <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
@@ -349,7 +351,7 @@ const Account = () => {
                       <Image src={eyeOff} alt="" />
                     </span>
                   </div>
-                  <p className="text-[#111111] text-[20px] font-work-sans-semi-bold">
+                  <p className="text-[#111111] text-base lg:text-[20px]  font-work-sans-semi-bold">
                     2,023
                   </p>
                   <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
@@ -376,7 +378,7 @@ const Account = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-[#111111] text-[20px] font-work-sans-semi-bold">
+                    <p className="text-[#111111] text-base lg:text-[20px]  font-work-sans-semi-bold">
                       +$300,000
                     </p>
                     <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
@@ -398,7 +400,7 @@ const Account = () => {
                   style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
                   className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-2"
                 >
-                  <p>{filterSelected}</p>
+                  <p className="font-work-sans-medium">{filterSelected}</p>
                   <Image src={arrowDown} alt="" />
                 </div>
               </DropDownList>
