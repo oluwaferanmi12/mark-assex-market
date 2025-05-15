@@ -18,8 +18,8 @@ export const DashboardTopNav = () => {
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
-    }else{
-       document.body.style.overflow = "hidden"; 
+    } else {
+      document.body.style.overflow = "hidden";
     }
   }, [showSideNav]);
   return (
@@ -34,7 +34,9 @@ export const DashboardTopNav = () => {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="fixed top-0 left-0 h-full w-4/5 bg-white z-50 shadow-lg"
             >
-              <DashboardSideNav />
+              <DashboardSideNav
+                handleCloseAsModal={() => setShowSideNav(false)}
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}

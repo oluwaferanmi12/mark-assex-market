@@ -19,16 +19,24 @@ import partnershipInactive from "@/assets/svgs/nav-partnership-inactive.svg";
 import bonusActive from "@/assets/svgs/nav-bonus-active.svg";
 import bonusInactive from "@/assets/svgs/nav-bonus-inactive.svg";
 import activeSetting from "@/assets/svgs/nav-setting-active.svg";
-import inactiveSetting from "@/assets/svgs/nav-settings-inactive.svg"
-import logOutIcon from "@/assets/svgs/nav-logout.svg"
+import inactiveSetting from "@/assets/svgs/nav-settings-inactive.svg";
+import logOutIcon from "@/assets/svgs/nav-logout.svg";
 import dailyIcon from "@/assets/svgs/icon-24-hours.svg";
 import { DashboardNavWrapper } from "@/components/shared/container/dashboar-side-nav-wrapper";
 import { DashboardUserDetails } from "@/components/shared/container/dashboar-user-detail";
 import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
 import wallet from "@/assets/svgs/top-nav-wallet.svg";
 import notificationIcon from "@/assets/svgs/icon-notification.svg";
-export const DashboardSideNav = () => {
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
+export const DashboardSideNav = ({
+  handleCloseAsModal,
+}: {
+  handleCloseAsModal?: () => void;
+}) => {
   //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
+  const pathName = usePathname();
+  const prevPath = useRef(pathName);
   const navObject = [
     {
       text: "Wallet",
@@ -122,6 +130,13 @@ export const DashboardSideNav = () => {
       slug: "logout",
     },
   ];
+
+  useEffect(() => {
+    if (prevPath.current !== pathName) {
+        prevPath.current = pathName
+      handleCloseAsModal && handleCloseAsModal();
+    }
+  }, [pathName]);
   return (
     <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col lg:justify-between">
       <div>
