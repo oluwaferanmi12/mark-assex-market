@@ -21,9 +21,12 @@ import bonusInactive from "@/assets/svgs/nav-bonus-inactive.svg";
 import activeSetting from "@/assets/svgs/nav-setting-active.svg";
 import inactiveSetting from "@/assets/svgs/nav-settings-inactive.svg"
 import logOutIcon from "@/assets/svgs/nav-logout.svg"
+import dailyIcon from "@/assets/svgs/icon-24-hours.svg";
 import { DashboardNavWrapper } from "@/components/shared/container/dashboar-side-nav-wrapper";
 import { DashboardUserDetails } from "@/components/shared/container/dashboar-user-detail";
-
+import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
+import wallet from "@/assets/svgs/top-nav-wallet.svg";
+import notificationIcon from "@/assets/svgs/icon-notification.svg";
 export const DashboardSideNav = () => {
   //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
   const navObject = [
@@ -86,6 +89,23 @@ export const DashboardSideNav = () => {
     },
   ];
 
+  const mobileObject = [
+    {
+      text: "Notification",
+      activeIcon: notificationIcon,
+      inactiveIcon: notificationIcon,
+      clickAction: () => {},
+      slug: "partnership",
+    },
+    {
+      text: "Support",
+      activeIcon: dailyIcon,
+      inactiveIcon: dailyIcon,
+      clickAction: () => {},
+      slug: "bonus",
+    },
+  ];
+
   const nav2object = [
     {
       text: "Account Settings",
@@ -103,24 +123,55 @@ export const DashboardSideNav = () => {
     },
   ];
   return (
-    <div className="bg-white border fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col justify-between">
+    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col lg:justify-between">
       <div>
-        <div>
+        <div className="hidden lg:block">
           <span>
             <Image src={smallLogo} alt="" />
           </span>
         </div>
-        <div className="mt-6">
+        <div className="lg:hidden border-b pb-4 border-[#BEBEBE]">
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-xs font-work-sans-regular text-[#707070] ">
+              Wallet balance
+            </p>
+            <span>
+              <Image src={eyeIcon} alt="" />
+            </span>
+          </div>
+          <div className="flex gap-1 items-center">
+            <span>
+              <Image src={wallet} alt="" />
+            </span>
+            <p className="text-[#202020] text-base font-work-sans-semi-bold">
+              $21,034.00
+            </p>
+          </div>
+        </div>
+        <div className="lg:mt-6">
           {navObject.map((item, index) => {
             return <DashboardNavWrapper key={index} item={item} />;
           })}
         </div>
       </div>
       <div>
-        {nav2object.map((item, index) => {
-          return <DashboardNavWrapper key={index} item={item} />;
-        })}
-      <DashboardUserDetails />
+        <div className="hidden lg:block">
+          {nav2object.map((item, index) => {
+            return <DashboardNavWrapper key={index} item={item} />;
+          })}
+        </div>
+        <div className="lg:hidden">
+          {mobileObject.map((item, index) => {
+            return <DashboardNavWrapper key={index} item={item} />;
+          })}
+        </div>
+
+        <DashboardUserDetails />
+        <div className=" lg:hidden">
+          {nav2object.map((item, index) => {
+            return <DashboardNavWrapper key={index} item={item} />;
+          })}
+        </div>
       </div>
     </div>
   );

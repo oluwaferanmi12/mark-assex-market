@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
@@ -11,21 +11,37 @@ import smallLogo from "@/assets/svgs/nav-logo.svg";
 import hamburgerIcon from "@/assets/svgs/hamburger-icon.svg";
 import { useEffect, useState } from "react";
 import { DashboardSideNav } from "@/components/ui/navbar/dashboard-side-nav";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const DashboardTopNav = () => {
-    const [showSideNav, setShowSideNav] = useState(false);
-    useEffect(() => {
-        if(showSideNav){
-            document.body.style.overflow = "hidden"
-        }
-    }, [showSideNav])
+  const [showSideNav, setShowSideNav] = useState(false);
+  useEffect(() => {
+    if (showSideNav) {
+      document.body.style.overflow = "hidden";
+    }
+  }, [showSideNav]);
   return (
     <>
       <AnimatePresence>
         {showSideNav && (
           <>
-            <DashboardSideNav />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed top-0 left-0 h-full w-4/5 bg-white z-50 shadow-lg"
+            >
+              <DashboardSideNav />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black z-40"
+              onClick={() => setShowSideNav(false)} // closes the side nav on click
+            />
           </>
         )}
       </AnimatePresence>

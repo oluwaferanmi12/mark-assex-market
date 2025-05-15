@@ -31,7 +31,7 @@ export const DashboardNavWrapper = ({ item }: { item: NavObjectInterface }) => {
           <Image src={active ? item.activeIcon : item.inactiveIcon} alt="" />
         </span>
         <p
-          className={`font-work-sans-regular text-sm`}
+          className={`font-work-sans-regular lg:text-sm text-xs`}
         >
           {item.text}
         </p>
