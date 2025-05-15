@@ -18,6 +18,8 @@ export const DashboardTopNav = () => {
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
+    }else{
+       document.body.style.overflow = "hidden"; 
     }
   }, [showSideNav]);
   return (
