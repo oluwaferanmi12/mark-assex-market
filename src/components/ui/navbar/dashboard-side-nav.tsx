@@ -103,7 +103,7 @@ export const DashboardSideNav = () => {
     },
   ];
   return (
-    <div className="bg-white border border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 flex flex-col justify-between">
+    <div className="bg-white border fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col justify-between">
       <div>
         <div>
           <span>

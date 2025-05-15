@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
 import wallet from "@/assets/svgs/top-nav-wallet.svg";
@@ -7,12 +9,34 @@ import profilePlaceholder from "@/assets/svgs/profile-placeholder.svg";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import smallLogo from "@/assets/svgs/nav-logo.svg";
 import hamburgerIcon from "@/assets/svgs/hamburger-icon.svg";
+import { useEffect, useState } from "react";
+import { DashboardSideNav } from "@/components/ui/navbar/dashboard-side-nav";
+import { AnimatePresence } from "framer-motion";
 
 export const DashboardTopNav = () => {
+    const [showSideNav, setShowSideNav] = useState(false);
+    useEffect(() => {
+        if(showSideNav){
+            document.body.style.overflow = "hidden"
+        }
+    }, [showSideNav])
   return (
     <>
+      <AnimatePresence>
+        {showSideNav && (
+          <>
+            <DashboardSideNav />
+          </>
+        )}
+      </AnimatePresence>
+
       <div className="lg:hidden flex w-full border-b border-[#BEBEBE59] bg-white z-30  fixed top-0  items-center justify-center py-6">
-        <span className="absolute left-4">
+        <span
+          className="absolute left-4 cursor-pointer "
+          onClick={() => {
+            setShowSideNav(true);
+          }}
+        >
           <Image src={hamburgerIcon} alt="" />
         </span>
         <div className="flex items-center">
