@@ -25,3 +25,20 @@ export interface DropDownListInterface {
     id: string
     clickAction ?: () => void
 }
+
+export interface OrderInterface {
+    currency: string;
+    type: string;
+    orderType: string;
+    executedPrice: number;
+    profit: number;
+    amount: number;
+    status: string;
+    createdAt: string;
+
+}
+
+export interface TableTextInterface {
+    text: string | number;
+    variant: "header" | "body"
+}

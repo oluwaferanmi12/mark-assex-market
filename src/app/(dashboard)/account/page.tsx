@@ -11,15 +11,8 @@ import Image from "next/image";
 import eyeOff from "@/assets/svgs/top-nav-eye-icon.svg";
 import infoIcon from "@/assets/svgs/info-icon.svg";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
-import iconTransaction from "@/assets/svgs/icon-transaction.svg";
-import arrowUpRight from "@/assets/svgs/arrow-up-right.svg";
-import arrowDownLeft from "@/assets/svgs/arrow-down-left.svg";
-import ellipsis from "@/assets/svgs/ellipsis.svg";
-import editIconBlack from "@/assets/svgs/edit-icon-dark.svg";
-import editIconWhite from "@/assets/svgs/edit-icon-white.svg";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
 import { DropDownList } from "@/components/ui/drop-down/dropdown-list";
-import { PlainModalWrapper } from "@/components/ui/modal/plain-modal-wrapper";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
 import padlockIcon from "@/assets/svgs/padlockIcon.svg";
 import { GInput } from "@/components/ui/inputs/general-input";
@@ -29,6 +22,7 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import checkCircle from "@/assets/svgs/check-circle-icon.svg";
 import { TradeContainer } from "@/components/shared/wrappers/trade-container";
+import Link from "next/link";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -112,7 +106,7 @@ const Account = () => {
               text="Continue"
               fullWidth
               action={() => {
-                setShowAccountReadyModal(false)
+                setShowAccountReadyModal(false);
               }}
               variant="blue-bg"
               loading={false}
@@ -410,8 +404,13 @@ const Account = () => {
                 </div>
               </DropDownList>
             </div>
-            <TradeContainer />
-            <TradeContainer />
+            <Link href={"/account/details"}>
+              <TradeContainer />
+              <TradeContainer />
+              <TradeContainer />
+              <TradeContainer />
+              <TradeContainer />
+            </Link>
           </div>
         </div>
       </div>

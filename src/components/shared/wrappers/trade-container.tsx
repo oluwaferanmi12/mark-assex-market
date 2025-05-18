@@ -187,16 +187,16 @@ export const TradeContainer = () => {
                 Account #81978
               </span>
             </div>
-            <p className="text-3xl font-work-sans-semi-bold">$50,000 USD</p>
+            <p className="text-3xl font-work-sans-semi-bold text-black">$50,000 USD</p>
           </div>
           <div className="flex items-center gap-12 ">
             <div className="flex items-center gap-4 flex-col justify-center">
               <p className="text-[#0DAE94]  font-work-sans-regular">Equity</p>
-              <p className="text-lg font-work-sans-regular">50,000 USD</p>
+              <p className="text-lg font-work-sans-regular text-black">50,000 USD</p>
             </div>
             <div className="flex gap-4 items-center flex-col justify-center">
               <p className="text-[#0DAE94] font-work-sans-regular">Leverage</p>
-              <p className="text-lg font-work-sans-regular">1:500</p>
+              <p className="text-lg font-work-sans-regular text-black">1:500</p>
             </div>
           </div>
           <div className="flex flex-col gap-4 ">

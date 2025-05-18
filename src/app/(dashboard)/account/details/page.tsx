@@ -1,0 +1,98 @@
+"use client";
+
+import { DropDownList } from "@/components/ui/drop-down/dropdown-list";
+import { DropDownListInterface } from "@/interfaces/ui-interfac";
+import React, { useState } from "react";
+import Image from "next/image";
+import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
+import { TradeContainer } from "@/components/shared/wrappers/trade-container";
+import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
+import { OrderTable } from "@/components/ui/tables/order-table";
+
+const AccountDetails = () => {
+  const [filterSelected, setFilterSelected] = useState("Newest");
+  const [orderTypeSelected, setOrderTypeSelected] = useState("All");
+  const [statusSelected, setStatusSelected] = useState("All");
+  const filterDropDownList: DropDownListInterface[] = [
+    { text: "All", id: "" },
+    { text: "Newest", id: "" },
+    { text: "Oldest", id: "" },
+  ];
+  const orderDropDownList: DropDownListInterface[] = [
+    { text: "All", id: "" },
+    { text: "Market", id: "" },
+    { text: "Limit", id: "" },
+    { text: "Stop", id: "" },
+  ];
+
+  const statusDropDownList: DropDownListInterface[] = [
+    { text: "All", id: "" },
+    { text: "Executed", id: "" },
+    { text: "Pending", id: "" },
+    { text: "Cancelled", id: "" },
+  ];
+  return (
+    <div>
+      <p className="text-2xl font-work-sans-medium">Account #81978</p>
+      <div className="mt-8">
+        <div className="flex">
+          <DropDownList
+            dropDownList={filterDropDownList}
+            selected={filterSelected}
+            setSelected={setFilterSelected}
+          >
+            <div
+              style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
+              className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-2"
+            >
+              <p className="font-work-sans-medium lg:text-sm text-xs">
+                {filterSelected}
+              </p>
+              <Image src={arrowDown} alt="" />
+            </div>
+          </DropDownList>
+        </div>
+      </div>
+      <TradeContainer />
+      <div className="mt-6">
+        <p className="text-xl font-work-sans-medium">Orders</p>
+        <div className="flex justify-end items-center gap-2">
+          <div>
+            <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+              Operations
+            </p>
+            <DropDownList
+              dropDownList={orderDropDownList}
+              selected={orderTypeSelected}
+              setSelected={setOrderTypeSelected}
+            >
+              <div>
+                <DropDownTextWrapper filterSelected={orderTypeSelected} />
+              </div>
+            </DropDownList>
+          </div>
+
+          <div>
+            <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+              Status
+            </p>
+            <DropDownList
+              dropDownList={statusDropDownList}
+              selected={statusSelected}
+              setSelected={setStatusSelected}
+            >
+              <div>
+                <DropDownTextWrapper filterSelected={statusSelected} />
+              </div>
+            </DropDownList>
+          </div>
+        </div>
+      </div>
+      <div className="my-4">
+        <OrderTable />
+      </div>
+    </div>
+  );
+};
+
+export default AccountDetails;

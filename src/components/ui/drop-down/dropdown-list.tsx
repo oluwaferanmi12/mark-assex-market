@@ -1,3 +1,4 @@
+"use client";
 import { Dropdown, MenuProps } from "antd";
 import { Dispatch, ReactNode, SetStateAction, useEffect } from "react";
 import checkedIcon from "@/assets/svgs/drop-down-check-icon.svg";
