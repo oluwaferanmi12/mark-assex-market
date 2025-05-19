@@ -1,4 +1,4 @@
-import { OrderInterface } from "@/interfaces/ui-interfac";
+import { OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
 
 export const orderData: OrderInterface[] = [
     {
@@ -41,4 +41,43 @@ export const orderData: OrderInterface[] = [
         createdAt: "10 Oct, 2025 14:10",
         profit: 12.54
     }
+]
+
+export const transactionData: TransactionInterface[] = [
+    {
+        id: "1274597",
+        amount: "220000",
+        date: "10 Oct, 2025 14:10",
+        paymentMethod: "Korahq",
+        status: "Successful",
+        type: "Deposit"
+
+    },
+    {
+        id: "1274597",
+        amount: "220000",
+        date: "10 Oct, 2025 14:10",
+        paymentMethod: "Korahq",
+        status: "Successful",
+        type: "Deposit"
+
+    },
+    {
+        id: "1274597",
+        amount: "220000",
+        date: "10 Oct, 2025 14:10",
+        paymentMethod: "Korahq",
+        status: "Successful",
+        type: "Deposit"
+
+    },
+    {
+        id: "1274597",
+        amount: "220000",
+        date: "10 Oct, 2025 14:10",
+        paymentMethod: "Korahq",
+        status: "Successful",
+        type: "Deposit"
+
+    },
 ]

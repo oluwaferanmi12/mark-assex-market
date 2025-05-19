@@ -21,6 +21,10 @@ import depositIcon from "@/assets/svgs/deposit-icon.svg";
 import withdrawIcon from "@/assets/svgs/withdraw-icon.svg";
 import mobileEllipsis from "@/assets/svgs/mobile-ellipsis-icon.svg";
 import mobileEditIcon from "@/assets/svgs/mobile-edit-icon.svg";
+import minusIcon from "@/assets/svgs/minus-button.svg";
+import plusIcon from "@/assets/svgs/plus-button.svg";
+import redCaution from "@/assets/svgs/red-caution.svg";
+
 
 export const TradeContainer = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -28,6 +32,7 @@ export const TradeContainer = () => {
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
   const [password, setPassword] = useState("");
   const [newAccountName, setNewAccountName] = useState("");
+  const [showLeverageModal, setShowLeverageModal] = useState(false);
   const liveAccountDropDownList: DropDownListInterface[] = [
     { text: "Deposit Funds", id: "" },
     { text: "Account Trade History", id: "" },
@@ -103,6 +108,55 @@ export const TradeContainer = () => {
               loading={false}
               text="Continue"
               variant="green-bg"
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+
+      <ModalContainer
+        active={showLeverageModal}
+        handleClose={() => {
+          setShowLeverageModal(false);
+        }}
+        greyBg
+      >
+        <ModalHeader
+          handleCancel={() => setShowLeverageModal(false)}
+          headText="Change Leverage"
+        />
+        <ModalBody>
+          <div className="my-3">
+            <p className="font-work-sans-regular">
+              Change Max Leverage{" "}
+              <span className="font-work-sans-regular text-[#707070]">
+                (Account #123004)
+              </span>
+            </p>
+            <div className="justify-between mt-2 rounded-lg bg-[#F2F4F7] flex items-center">
+              <span className="mt-1 pl-1 cursor-pointer">
+                <Image src={minusIcon} alt="" />
+              </span>
+              <p className="text-[#404040] font-work-sans-medium">1:200</p>
+              <span className="flex items-center mt-1 pr-1 cursor-pointer">
+                <Image src={plusIcon} alt="" />
+              </span>
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <Image src={redCaution} alt="" />
+              <p className="text-[#F40E0E] font-work-sans-regular">
+                Hold on “+” or “-” to reduce or increase quantities faster
+              </p>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="my-3">
+            <Button
+              fullWidth
+              variant="green-bg"
+              text="Change"
+              loading={false}
+              action={() => {}}
             />
           </div>
         </ModalFooter>
@@ -187,12 +241,16 @@ export const TradeContainer = () => {
                 Account #81978
               </span>
             </div>
-            <p className="text-3xl font-work-sans-semi-bold text-black">$50,000 USD</p>
+            <p className="text-3xl font-work-sans-semi-bold text-black">
+              $50,000 USD
+            </p>
           </div>
           <div className="flex items-center gap-12 ">
             <div className="flex items-center gap-4 flex-col justify-center">
               <p className="text-[#0DAE94]  font-work-sans-regular">Equity</p>
-              <p className="text-lg font-work-sans-regular text-black">50,000 USD</p>
+              <p className="text-lg font-work-sans-regular text-black">
+                50,000 USD
+              </p>
             </div>
             <div className="flex gap-4 items-center flex-col justify-center">
               <p className="text-[#0DAE94] font-work-sans-regular">Leverage</p>
@@ -272,7 +330,15 @@ export const TradeContainer = () => {
           <div className="flex flex-col gap-3">
             <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
               <p className="text-[#202020]">1:200</p>
-              <Image src={editIconBlack} alt="" />
+
+              <Image
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowLeverageModal(true);
+                }}
+                src={editIconBlack}
+                alt=""
+              />
             </div>
             <p className="text-[#202020] flex justify-end items-center text-lg font-work-sans-regular">
               $ 49,000
@@ -353,7 +419,7 @@ export const TradeContainer = () => {
               <p className="font-work-sans-regular text-[#404040] text-xs">
                 1:200
               </p>
-              <span>
+              <span onClick={() => {}} className="cursor-pointer ">
                 <Image src={mobileEditIcon} alt="" />
               </span>
             </div>
@@ -395,7 +461,7 @@ export const TradeContainer = () => {
           variant="green-bg"
           text="Change password"
           action={() => {
-            setShowPasswordModal(true)
+            setShowPasswordModal(true);
           }}
           loading={false}
           fullWidth

@@ -50,3 +50,13 @@ export interface CreateAccountInterface {
     benefitList: string[]
     active: boolean
 }
+
+export interface TransactionInterface {
+    id: string;
+    amount: string;
+    type: string;
+    paymentMethod: string;
+    status: string;
+    date: string;
+    
+}
