@@ -29,6 +29,7 @@ import wallet from "@/assets/svgs/top-nav-wallet.svg";
 import notificationIcon from "@/assets/svgs/icon-notification.svg";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import navCloseIcon from "@/assets/svgs/nav-x-button.svg";
 export const DashboardSideNav = ({
   handleCloseAsModal,
 }: {
@@ -133,7 +134,7 @@ export const DashboardSideNav = ({
 
   useEffect(() => {
     if (prevPath.current !== pathName) {
-        prevPath.current = pathName
+      prevPath.current = pathName;
       handleCloseAsModal && handleCloseAsModal();
     }
   }, [pathName]);
@@ -145,22 +146,32 @@ export const DashboardSideNav = ({
             <Image src={smallLogo} alt="" />
           </span>
         </div>
-        <div className="lg:hidden border-b pb-4 border-[#BEBEBE]">
-          <div className="flex items-center gap-2 mb-1">
-            <p className="text-xs font-work-sans-regular text-[#707070] ">
-              Wallet balance
-            </p>
-            <span>
-              <Image src={eyeIcon} alt="" />
-            </span>
+        <div className="lg:hidden border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="text-xs font-work-sans-regular text-[#707070] ">
+                Wallet balance
+              </p>
+              <span>
+                <Image src={eyeIcon} alt="" />
+              </span>
+            </div>
+            <div className="flex gap-1 items-center">
+              <span>
+                <Image src={wallet} alt="" />
+              </span>
+              <p className="text-[#202020] text-base font-work-sans-semi-bold">
+                $21,034.00
+              </p>
+            </div>
           </div>
-          <div className="flex gap-1 items-center">
-            <span>
-              <Image src={wallet} alt="" />
-            </span>
-            <p className="text-[#202020] text-base font-work-sans-semi-bold">
-              $21,034.00
-            </p>
+          <div
+            onClick={() => {
+              handleCloseAsModal && handleCloseAsModal();
+            }}
+            className="cursor-pointer"
+          >
+            <Image src={navCloseIcon} alt="" />
           </div>
         </div>
         <div className="lg:mt-6">

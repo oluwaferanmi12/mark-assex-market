@@ -23,6 +23,7 @@ import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import checkCircle from "@/assets/svgs/check-circle-icon.svg";
 import { TradeContainer } from "@/components/shared/wrappers/trade-container";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -39,6 +40,7 @@ const Account = () => {
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
+  const router = useRouter()
   useEffect(() => {
     const targetRef = activeAccount === "live" ? liveRef : demoRef;
     if (targetRef.current) {
@@ -241,7 +243,9 @@ const Account = () => {
 
             <Button
               variant="green-bg"
-              action={() => {}}
+              action={() => {
+                router.push("/account/create-account")
+              }}
               loading={false}
               text="Open Live Account"
               icon={plusIcon}

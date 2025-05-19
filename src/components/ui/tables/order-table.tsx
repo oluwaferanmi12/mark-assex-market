@@ -1,6 +1,7 @@
 "use client";
 
 import { TablePagination } from "@/components/shared/pagination/table-pagination";
+import { TableEmptyState } from "@/components/shared/states/empty/table-empty-state";
 import { TableText } from "@/components/shared/table/table-text";
 import { TableStatus } from "@/components/ui/status/table-status";
 import { orderData } from "@/data/drop-down-data";
@@ -12,6 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import graphIcon from "@/assets/svgs/order-empty-icon.svg"
 
 export const OrderTable = () => {
   const columnHelper = createColumnHelper<OrderInterface>();
@@ -57,6 +59,7 @@ export const OrderTable = () => {
   });
   return (
     <>
+    <TableEmptyState icon={graphIcon} tableText="No orders" />
       <div className="mt-4">
         <table className="w-full">
           <thead>

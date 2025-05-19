@@ -42,3 +42,11 @@ export interface TableTextInterface {
     text: string | number;
     variant: "header" | "body"
 }
+
+export interface CreateAccountInterface {
+    title: string;
+    description: string;
+    icon: string;
+    benefitList: string[]
+    active: boolean
+}
