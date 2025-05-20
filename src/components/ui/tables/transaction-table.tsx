@@ -16,8 +16,16 @@ import { useState } from "react";
 import graphIcon from "@/assets/svgs/order-empty-icon.svg";
 import Image from "next/image";
 import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
+import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import cancelIcon from "@/assets/svgs/xIcon.svg";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import { Button } from "@/components/ui/buttons/button";
 
 export const TransactionTable = () => {
+  const [showSideDrawer, setShowSideDrawer] = useState(false);
+  
   const columnHelper = createColumnHelper<TransactionInterface>();
   const columns = [
     columnHelper.accessor("id", {
@@ -50,7 +58,11 @@ export const TransactionTable = () => {
     }),
     columnHelper.display({
       id: "action",
-      cell: (info) => <div className="flex justify-center"><Image src={horizontalEllipsis} alt="" /></div>,
+      cell: (info) => (
+        <div className="flex justify-center">
+          <Image src={horizontalEllipsis} alt="" />
+        </div>
+      ),
       header: (info) => <TableText variant="header" text="Action" />,
     }),
   ];
@@ -62,7 +74,99 @@ export const TransactionTable = () => {
   });
   return (
     <>
-      <TableEmptyState icon={graphIcon} tableText="No Transactions" />
+      <SideDrawerWrapper
+        active={showSideDrawer}
+        handleClose={() => setShowSideDrawer(false)}
+      >
+        <div className="h-full flex flex-col justify-between">
+          <div>
+            <ModalHeader
+              headText="Transaction History"
+              handleCancel={() => setShowSideDrawer(false)}
+            />
+            <ModalBody>
+              <div className="mt-4 flex flex-col h-full flex-1 justify-between">
+                <div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">ID</p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      1274597
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Amount
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      220,000
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Payment Type
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      Withdrawal
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Status
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      <TableStatus text="Failed" variant="Cancelled" />
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Date
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      10 Oct, 2025 14:22
+                    </p>
+                  </div>
+
+                  <div className="mt-8">
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Reason
+                    </p>
+                    <div className="mt-1 bg-[#F40E0E1A] rounded-lg gap-2 p-2 flex items-center">
+                      <div className="">
+                        <Image
+                          src={cancelIcon}
+                          className="w-[30px] h-[30px]"
+                          alt=""
+                        />
+                      </div>
+                      <div className="font-work-sans-regular text-[#202020]">
+                        <span className="font-work-sans-medium">
+                          Insufficient Funds:{" "}
+                        </span>
+                        <span className="">
+                          There wasn’t enough money in your account to complete
+                          the transaction.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ModalBody>
+          </div>
+          <div className="p-4">
+            <Button
+              fullWidth
+              action={() => {
+                setShowSideDrawer(false);
+              }}
+              loading={false}
+              text="Close"
+              variant="green-bg"
+            />
+          </div>
+        </div>
+      </SideDrawerWrapper>
+      {/* <TableEmptyState icon={graphIcon} tableText="No Transactions" /> */}
       <div className="mt-4">
         <table className="w-full">
           <thead>
@@ -94,6 +198,9 @@ export const TransactionTable = () => {
             {table.getRowModel().rows.map((row) => {
               return (
                 <tr
+                  onClick={() => {
+                    setShowSideDrawer(true);
+                  }}
                   style={{
                     boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
                   }}

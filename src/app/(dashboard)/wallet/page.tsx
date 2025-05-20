@@ -14,8 +14,10 @@ import { DropDownListInterface } from "@/interfaces/ui-interfac";
 import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
 import { TransactionTable } from "@/components/ui/tables/transaction-table";
 
+
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
+  
   const [typeSelected, setTypeSelected] = useState("All");
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -31,6 +33,7 @@ const Wallet = () => {
   ];
   return (
     <>
+      
       <PageHeader text="Wallet" />
       <div className="flex items-center justify-between mt-8">
         <div className="flex items-center gap-4 ">
