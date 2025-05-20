@@ -12,6 +12,8 @@ import paystack from "@/assets/svgs/paystack.svg";
 import crypto from "@/assets/svgs/deposit-crypto.svg";
 import cautionIcon from "@/assets/svgs/caution-icon.svg";
 import Image from "next/image";
+import { Button } from "@/components/ui/buttons/button";
+import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg"
 
 const Deposit = () => {
   const [statusSelected, setStatusSelected] = useState("All");
@@ -30,7 +32,7 @@ const Deposit = () => {
   ];
 
   return (
-    <>
+    <React.Fragment>
       <PageHeader text="Deposit" />
       <div className="mt-4">
         <Row>
@@ -93,7 +95,7 @@ const Deposit = () => {
         </div>
         <div className="mb-4 text-base">
           <p className="font-work-sans-medium">
-            2. Ensure Network Compatibility:
+            {"2. "}Ensure Network Compatibility:
           </p>
           <p className="font-work-sans-regular">
             {`Only send Crypto from platforms or wallets
@@ -102,9 +104,9 @@ const Deposit = () => {
           </p>
         </div>
         <div className="mb-4 text-base">
-            <p className="font-work-sans-medium">
-              3. Verify the Minimum Deposit Amount:
-            </p>
+          <p className="font-work-sans-medium">
+            3. Verify the Minimum Deposit Amount:
+          </p>
           <p className="font-work-sans-regular">
             {`Make sure your deposit meets the
       platform’s required minimum. Some exchanges may enforce specific limits
@@ -117,9 +119,9 @@ const Deposit = () => {
             4. Track Transaction Confirmations:
           </p>
           <p className="font-work-sans-regular">
-            {`After initiating your deposit, monitor
-      the blockchain for confirmation. Confirmation times can vary based on
-      network activity and congestion.`}
+            After initiating your deposit, monitor the blockchain for
+            confirmation. Confirmation times can vary based on network activity
+            and congestion.
           </p>
         </div>
 
@@ -134,8 +136,18 @@ const Deposit = () => {
           </p>
         </div>
       </div>
-      
-    </>
+
+      <div className="mt-3">
+        <Button
+        iconPosition="right"
+        icon={arrowRightMultiple}
+          loading={false}
+          action={() => {}}
+          text="Proceed"
+          variant="green-bg"
+        />
+      </div>
+    </React.Fragment>
   );
 };
 
