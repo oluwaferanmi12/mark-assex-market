@@ -17,6 +17,7 @@ import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
 import bigXIcon from "@/assets/svgs/moda-big-x-icon.svg";
+import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
 
 const Deposit = () => {
   const [statusSelected, setStatusSelected] = useState("All");
@@ -83,7 +84,7 @@ const Deposit = () => {
           </Col>
         </Row>
       </div>
-      <div className="mt-8 flex gap-4">
+      <div className="mt-8 flex flex-col lg:flex-row gap-4">
         {depositObject.map((item, index) => {
           return (
             <DepositWrapper
@@ -184,85 +185,115 @@ const Deposit = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg p-4 mt-6">
-          <div>
-            <Row className="mb-4">
-              <Col xs={12}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Currency
-                  </p>
-                  <select
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                  >
-                    <option>Select Currency</option>
-                  </select>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Amount
-                  </p>
+        <>
+          <div className="bg-white rounded-lg p-4 mt-6">
+            <div>
+              <Row className="mb-4">
+                <Col lg={12} xs={24}>
                   <div>
-                    <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
-                      <Image src={dollarGreen} alt="" />
-                    </span>
-
-                    <input
-                      placeholder="Enter amount"
+                    <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                      Currency
+                    </p>
+                    <select
                       style={{
                         boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                       }}
                       className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                    />
-                  </div>
-                </div>
-              </Col>
-            </Row>
-            <div className="my-4">
-              <Button
-                action={() => {
-                  setVerificationModal(true);
-                }}
-                loading={false}
-                text="Proceed"
-                variant="green-bg"
-                icon={arrowRightMultiple}
-                iconPosition="right"
-              />
-            </div>
-            <div className="bg-white border border-[#BEBEBE80] p-4 rounded-sm">
-              <Row>
-                <Col xs={12}>
-                  <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                    <p className="text-[#404040]">Min Deposit:</p>
-                    <p className="text-[#111111]">$10.00</p>
-                  </div>
-                  <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                    <p className="text-[#404040]">Max Deposit:</p>
-                    <p className="text-[#111111]">$50,000,000.00</p>
-                  </div>
-                </Col>
-                <Col xs={12}>
-                  <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                    <p className="text-[#404040]">Commission:</p>
-                    <p className="text-[#111111]">From $0.00 to $01.00</p>
-                  </div>
-                  <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                    <p className="text-[#404040]">Deposit Time:</p>
-                    <p className="text-[#111111]">Instant</p>
+                    >
+                      <option>Select Currency</option>
+                    </select>
                   </div>
                 </Col>
               </Row>
+              <Row>
+                <Col xs={24} lg={12}>
+                  <div>
+                    <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                      Amount
+                    </p>
+                    <div>
+                      <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
+                        <Image src={dollarGreen} alt="" />
+                      </span>
+
+                      <input
+                        placeholder="Enter amount"
+                        style={{
+                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                        }}
+                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                      />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <div className="my-4">
+                <Button
+                  action={() => {
+                    setVerificationModal(true);
+                  }}
+                  loading={false}
+                  text="Proceed"
+                  variant="green-bg"
+                  icon={arrowRightMultiple}
+                  iconPosition="right"
+                />
+              </div>
+              <VisibleOnDesktop>
+                <div className="bg-white border border-[#BEBEBE80] p-4 rounded-sm">
+                  <Row>
+                    <Col xs={12}>
+                      <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                        <p className="text-[#404040]">Min Deposit:</p>
+                        <p className="text-[#111111]">$10.00</p>
+                      </div>
+                      <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                        <p className="text-[#404040]">Max Deposit:</p>
+                        <p className="text-[#111111]">$50,000,000.00</p>
+                      </div>
+                    </Col>
+                    <Col xs={12}>
+                      <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                        <p className="text-[#404040]">Commission:</p>
+                        <p className="text-[#111111]">From $0.00 to $01.00</p>
+                      </div>
+                      <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                        <p className="text-[#404040]">Deposit Time:</p>
+                        <p className="text-[#111111]">Instant</p>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+              </VisibleOnDesktop>
             </div>
           </div>
-        </div>
+          <div className="bg-white rounded-2xl border border-[#BEBEBE80] p-4 mt-4">
+            <div className="flex items-center gap-4 mb-4">
+              <p className="text-[#404040] font-work-sans-regular text-xs">
+                Min deposit:
+              </p>
+              <p className="text-xs text-[#111111]">$10.00</p>
+            </div>
+            <div className="flex items-center gap-4 mb-4">
+              <p className="text-[#404040] font-work-sans-regular text-xs">
+                Commission:
+              </p>
+              <p className="text-xs text-[#111111]">From $0.00 to $01.00</p>
+            </div>
+            <div className="flex items-center gap-4 mb-4">
+              <p className="text-[#404040] font-work-sans-regular text-xs">
+                Max Deposit:
+              </p>
+              <p className="text-xs text-[#111111]">$50,000,000.00</p>
+            </div>
+            <div className="flex items-center gap-4 mb-4">
+              <p className="text-[#404040] font-work-sans-regular text-xs">
+               Deposit Time:
+              </p>
+              <p className="text-xs text-[#111111]">Instant</p>
+            </div>
+          </div>
+        </>
       )}
     </React.Fragment>
   );

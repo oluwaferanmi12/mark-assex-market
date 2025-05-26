@@ -35,7 +35,7 @@ export const DepositWrapper = ({
       >
         <Image src={active ? radioChecked : radioUnChecked} alt="" />
         <Image src={icon} alt="" />
-        <p className="text-base font-work-sans-regular">{text}</p>
+        <p className="lg:text-base text-sm font-work-sans-regular">{text}</p>
       </div>
 
       {isHovered && (
