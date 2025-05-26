@@ -12,7 +12,7 @@ export const AccountTypeWrapper = ({
   return (
     <>
       <div
-        className="p-8 rounded-lg min-h-[500px]  bg-white"
+        className="p-8 rounded-lg mb-4 lg:mb-0 min-h-[500px]  bg-white"
         style={{
           boxShadow: item.active
             ? `0px 16px 48px 0px rgba(0, 204, 177, 0.12),
@@ -31,7 +31,7 @@ export const AccountTypeWrapper = ({
           </span>
         </div>
         <div>
-          <p className="text-base font-work-sans-regular leading-7">
+          <p className="lg:text-base text-sm font-work-sans-regular leading-7">
             {item.description}
           </p>
         </div>
@@ -52,7 +52,7 @@ export const AccountTypeWrapper = ({
                 <span>
                   <Image src={checkIcon} alt="" />
                 </span>
-                <p className={` text-[#404040]  font-work-sans-regular`}>
+                <p className={` text-[#404040] text-xs lg:text-sm  font-work-sans-regular`}>
                   {item}
                 </p>
               </div>

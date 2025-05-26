@@ -70,13 +70,13 @@ const CreateAccount = () => {
         <Row justify={"center"} gutter={24}>
           {activeAccount === "live" ? liveAccountObject.map((item) => {
             return (
-              <Col xs={8}>
+              <Col xs={24} lg={8}>
                 <AccountTypeWrapper item={item} />
               </Col>
             );
           }) : demoAccountObject.map((item , index) => {
             return (
-              <Col xs={8}>
+              <Col xs={24} lg={8}>
                 <AccountTypeWrapper item={item} />
               </Col>
             );

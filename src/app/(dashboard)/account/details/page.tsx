@@ -11,6 +11,8 @@ import { OrderTable } from "@/components/ui/tables/order/order-table";
 import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
 import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
 import { MobileOrderTable } from "@/components/ui/tables/order/mobile-order-table";
+import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
+import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
@@ -59,38 +61,48 @@ const AccountDetails = () => {
       </div>
       <TradeContainer />
       <div className="mt-6">
-        <p className="text-xl font-work-sans-medium">Orders</p>
-        <div className="flex justify-end items-center gap-2">
-          <div>
-            <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-              Operations
-            </p>
-            <DropDownList
-              dropDownList={orderDropDownList}
-              selected={orderTypeSelected}
-              setSelected={setOrderTypeSelected}
-            >
-              <div>
-                <DropDownTextWrapper filterSelected={orderTypeSelected} />
-              </div>
-            </DropDownList>
-          </div>
+        <p className="lg:text-xl text-base font-work-sans-medium">Orders</p>
+        <VisibleOnDesktop>
+          <div className="flex justify-end items-center gap-2">
+            <div>
+              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                Operations
+              </p>
+              <DropDownList
+                dropDownList={orderDropDownList}
+                selected={orderTypeSelected}
+                setSelected={setOrderTypeSelected}
+              >
+                <div>
+                  <DropDownTextWrapper filterSelected={orderTypeSelected} />
+                </div>
+              </DropDownList>
+            </div>
 
-          <div>
-            <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-              Status
-            </p>
-            <DropDownList
-              dropDownList={statusDropDownList}
-              selected={statusSelected}
-              setSelected={setStatusSelected}
-            >
-              <div>
-                <DropDownTextWrapper filterSelected={statusSelected} />
-              </div>
-            </DropDownList>
+            <div>
+              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                Status
+              </p>
+              <DropDownList
+                dropDownList={statusDropDownList}
+                selected={statusSelected}
+                setSelected={setStatusSelected}
+              >
+                <div>
+                  <DropDownTextWrapper filterSelected={statusSelected} />
+                </div>
+              </DropDownList>
+            </div>
           </div>
-        </div>
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <div className="flex items-center gap-2 mt-4">
+            <MobileInput />
+            <div className="h-[40px]">
+              <Image src={mobileFilterIcon} objectFit="cover" alt="" className="h-full" />
+            </div>
+          </div>
+        </VisibleOnMobile>
       </div>
       <div className="my-4">
         <VisibleOnDesktop>
@@ -99,12 +111,12 @@ const AccountDetails = () => {
         <VisibleOnMobile>
           <MobileOrderTable
             index={0}
-            activeIndex={0}
+            activeIndex={indexActive}
             setActiveIndex={setIndexActive}
           />
           <MobileOrderTable
             index={1}
-            activeIndex={0}
+            activeIndex={indexActive}
             setActiveIndex={setIndexActive}
           />
         </VisibleOnMobile>

@@ -13,11 +13,16 @@ import { DropDownList } from "@/components/ui/drop-down/dropdown-list";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
 import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
 import { TransactionTable } from "@/components/ui/tables/transaction/transaction-table";
-
+import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
+import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
+import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
+import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
+import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
 
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
-  
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const [typeSelected, setTypeSelected] = useState("All");
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -33,96 +38,159 @@ const Wallet = () => {
   ];
   return (
     <>
-      
       <PageHeader text="Wallet" />
-      <div className="flex items-center justify-between mt-8">
-        <div className="flex items-center gap-4 ">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between mt-8">
+        <div className="flex items-center gap-4 mb-4 lg:mb-0 ">
           <span>
             <Image src={walletDollarIcon} alt="" />
           </span>
           <div>
             <div className="flex items-center gap-2 ">
-              <p className="text-[#202020] font-work-sans-regular">
+              <p className="text-[#202020] text-xs lg:text-sm font-work-sans-regular">
                 Total Balance
               </p>
               <div className="flex items-center">
                 <div>
                   <Image src={arrowUp} alt="" />
                 </div>
-                <p className="text-[#34C659] text-[10px]">+4.8</p>
               </div>
             </div>
-            <p className="text-3xl font-work-sans-semi-bold">$21,093.20</p>
+            <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
+              $21,093.20
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Button
-            text="Deposit"
-            loading={false}
-            variant="green-bg"
-            fullRounded
-            icon={arrowSlantDown}
-            action={() => {}}
-          />
-          <Button
-            text="Withdraw"
-            loading={false}
-            variant="green-bg"
-            fullRounded
-            action={() => {}}
-            icon={arrowSlantUp}
-          />
+        <VisibleOnDesktop>
+          <div className="lg:flex items-center gap-3">
+            <Button
+              text="Deposit"
+              loading={false}
+              variant="green-bg"
+              fullRounded
+              icon={arrowSlantDown}
+              action={() => {}}
+            />
+            <Button
+              text="Withdraw"
+              loading={false}
+              variant="green-bg"
+              fullRounded
+              action={() => {}}
+              icon={arrowSlantUp}
+            />
+
+            <Button
+              text="Internal Transfer"
+              loading={false}
+              variant="green-bg-faded"
+              fullRounded
+              action={() => {}}
+              icon={internalTransferIcon}
+            />
+          </div>
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <div className="w-full flex items-center gap-4 mb-3">
+            <Button
+              text="Deposit"
+              loading={false}
+              variant="green-bg"
+              icon={arrowSlantDown}
+              action={() => {}}
+              fullWidth
+            />
+            <Button
+              text="Withdraw"
+              loading={false}
+              variant="green-bg"
+              action={() => {}}
+              fullWidth
+              icon={arrowSlantUp}
+            />
+          </div>
 
           <Button
             text="Internal Transfer"
             loading={false}
             variant="green-bg-faded"
-            fullRounded
+            fullWidth
             action={() => {}}
             icon={internalTransferIcon}
           />
-        </div>
+        </VisibleOnMobile>
       </div>
+
       <div className="mt-8">
-        <p className="text-xl font-work-sans-medium mb-12">
+        <p className="lg:text-xl text-lg font-work-sans-medium lg:mb-12">
           Transaction History
         </p>
-        <div className="flex justify-between items-end">
-          <div>
-            <SearchInput />
-          </div>
-          <div className="flex items-center gap-3">
+        <VisibleOnDesktop>
+          <div className="flex justify-between items-end">
             <div>
-              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-                Type
-              </p>
-              <DropDownList
-                dropDownList={typeDropDownList}
-                selected={typeSelected}
-                setSelected={setTypeSelected}
-              >
-                <div>
-                  <DropDownTextWrapper filterSelected={statusSelected} />
-                </div>
-              </DropDownList>
+              <SearchInput />
             </div>
-            <div>
-              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-                Status
-              </p>
-              <DropDownList
-                dropDownList={statusDropDownList}
-                selected={statusSelected}
-                setSelected={setStatusSelected}
-              >
-                <div>
-                  <DropDownTextWrapper filterSelected={statusSelected} />
-                </div>
-              </DropDownList>
+            <div className="flex items-center gap-3">
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Type
+                </p>
+                <DropDownList
+                  dropDownList={typeDropDownList}
+                  selected={typeSelected}
+                  setSelected={setTypeSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={statusSelected} />
+                  </div>
+                </DropDownList>
+              </div>
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Status
+                </p>
+                <DropDownList
+                  dropDownList={statusDropDownList}
+                  selected={statusSelected}
+                  setSelected={setStatusSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={statusSelected} />
+                  </div>
+                </DropDownList>
+              </div>
             </div>
           </div>
-        </div>
-        <TransactionTable />
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <div className="flex items-center gap-2 mt-4">
+            <MobileInput />
+            <div className="h-[40px]">
+              <Image
+                src={mobileFilterIcon}
+                objectFit="cover"
+                alt=""
+                className="h-full"
+              />
+            </div>
+          </div>
+        </VisibleOnMobile>
+        <VisibleOnDesktop>
+          <TransactionTable />
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <div className="my-4">
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+              index={0}
+            />
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+              index={1}
+            />
+          </div>
+        </VisibleOnMobile>
       </div>
     </>
   );

@@ -419,7 +419,9 @@ export const TradeContainer = () => {
               <p className="font-work-sans-regular text-[#404040] text-xs">
                 1:200
               </p>
-              <span onClick={() => {}} className="cursor-pointer ">
+              <span onClick={() => {
+                setShowLeverageModal(true);
+              }} className="cursor-pointer ">
                 <Image src={mobileEditIcon} alt="" />
               </span>
             </div>

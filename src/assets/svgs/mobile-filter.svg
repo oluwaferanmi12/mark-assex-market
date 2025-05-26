@@ -1,0 +1,43 @@
+<svg width="46" height="42" viewBox="0 0 46 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_d_1297_46249)">
+        <rect x="1" width="42" height="38" rx="8" fill="white" />
+        <rect x="1.15" y="0.15" width="41.7" height="37.7" rx="7.85" stroke="#BEBEBE"
+            stroke-opacity="0.35" stroke-width="0.3" />
+        <path d="M22.9997 13.6665H18.333" stroke="black" stroke-width="0.666667"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M15.6667 13.6665H11" stroke="black" stroke-width="0.666667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        <path d="M23 19H17" stroke="black" stroke-width="0.666667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        <path d="M14.3333 19H11" stroke="black" stroke-width="0.666667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        <path d="M23.0003 24.3335H19.667" stroke="black" stroke-width="0.666667"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M17 24.3335H11" stroke="black" stroke-width="0.666667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        <path d="M18.333 12.3335V15.0002" stroke="black" stroke-width="0.666667"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M14.333 17.6665V20.3332" stroke="black" stroke-width="0.666667"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M19.667 23V25.6667" stroke="black" stroke-width="0.666667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        <path d="M29 17.5L32 20.5L35 17.5" stroke="black" stroke-width="0.333333"
+            stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <defs>
+        <filter id="filter0_d_1297_46249" x="0" y="0" width="46" height="42"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix in="SourceAlpha" type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+            <feOffset dx="1" dy="2" />
+            <feGaussianBlur stdDeviation="1" />
+            <feColorMatrix type="matrix"
+                values="0 0 0 0 0.431373 0 0 0 0 0.431373 0 0 0 0 0.431373 0 0 0 0.05 0" />
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1297_46249" />
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1297_46249"
+                result="shape" />
+        </filter>
+    </defs>
+</svg>
+    
