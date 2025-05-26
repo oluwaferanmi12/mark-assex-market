@@ -7,11 +7,15 @@ import Image from "next/image";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import { TradeContainer } from "@/components/shared/wrappers/trade-container";
 import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
-import { OrderTable } from "@/components/ui/tables/order-table";
+import { OrderTable } from "@/components/ui/tables/order/order-table";
+import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
+import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
+import { MobileOrderTable } from "@/components/ui/tables/order/mobile-order-table";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
   const [orderTypeSelected, setOrderTypeSelected] = useState("All");
+  const [indexActive, setIndexActive] = useState(0);
   const [statusSelected, setStatusSelected] = useState("All");
   const filterDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -89,7 +93,21 @@ const AccountDetails = () => {
         </div>
       </div>
       <div className="my-4">
-        <OrderTable />
+        <VisibleOnDesktop>
+          <OrderTable />
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <MobileOrderTable
+            index={0}
+            activeIndex={0}
+            setActiveIndex={setIndexActive}
+          />
+          <MobileOrderTable
+            index={1}
+            activeIndex={0}
+            setActiveIndex={setIndexActive}
+          />
+        </VisibleOnMobile>
       </div>
     </div>
   );

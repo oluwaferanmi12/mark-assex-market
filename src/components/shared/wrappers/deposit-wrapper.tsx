@@ -44,7 +44,7 @@ export const DepositWrapper = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.3 }}
-          className="bg-[#FFFFFF] w-full p-8 absolute -bottom-40 mt-2 rounded-lg shadow-md"
+          className="bg-[#FFFFFF] w-full p-8 absolute -bottom-40 mt-2 rounded-lg shadow-md z-20"
         >
           <div className="flex items-center gap-8 mb-3">
             <p className="text-[#404040] font-work-sans-regular">

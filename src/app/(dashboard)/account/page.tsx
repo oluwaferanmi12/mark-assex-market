@@ -49,26 +49,7 @@ const Account = () => {
     }
   }, [activeAccount]);
 
-  const liveAccountDropDownList: DropDownListInterface[] = [
-    { text: "Deposit Funds", id: "" },
-    { text: "Account Trade History", id: "" },
-    {
-      text: "Change Password",
-      id: "",
-      clickAction: () => {
-        setShowPasswordModal(true);
-      },
-    },
-    { text: "Archive Account", id: "" },
-    {
-      text: "Customize Account Name",
-      id: "",
-      clickAction: () => {
-        setShowCustomiseNameModal(true);
-      },
-    },
-  ];
-
+ 
   const filterDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Newest", id: "" },

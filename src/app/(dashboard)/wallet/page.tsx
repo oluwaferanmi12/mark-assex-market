@@ -12,7 +12,7 @@ import { SearchInput } from "@/components/ui/inputs/search-input";
 import { DropDownList } from "@/components/ui/drop-down/dropdown-list";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
 import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
-import { TransactionTable } from "@/components/ui/tables/transaction-table";
+import { TransactionTable } from "@/components/ui/tables/transaction/transaction-table";
 
 
 const Wallet = () => {

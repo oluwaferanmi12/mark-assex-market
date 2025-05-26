@@ -7,7 +7,6 @@ export const DropDownTextWrapper = ({
   filterSelected: string;
 }) => {
   return (
-    
       <div
         style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
         className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-2"

@@ -60,7 +60,7 @@ export const OrderTable = () => {
   return (
     <>
     <TableEmptyState icon={graphIcon} tableText="No orders" />
-      <div className="mt-4">
+      <div className="mt-4 ">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => {
@@ -114,6 +114,8 @@ export const OrderTable = () => {
         </table>
         <TablePagination />
       </div>
+      {/* Mobile table  */}
+      
     </>
   );
 };
