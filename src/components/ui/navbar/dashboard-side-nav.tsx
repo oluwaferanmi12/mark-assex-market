@@ -28,14 +28,16 @@ import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
 import wallet from "@/assets/svgs/top-nav-wallet.svg";
 import notificationIcon from "@/assets/svgs/icon-notification.svg";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import navCloseIcon from "@/assets/svgs/nav-x-button.svg";
+
 export const DashboardSideNav = ({
   handleCloseAsModal,
 }: {
   handleCloseAsModal?: () => void;
 }) => {
   //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
+  const [showInsightDropDown, setShowInsightDropdown] = useState(false);
   const pathName = usePathname();
   const prevPath = useRef(pathName);
   const navObject = [
@@ -78,8 +80,19 @@ export const DashboardSideNav = ({
       text: "Insights",
       activeIcon: insightActive,
       inactiveIcon: insightInactive,
-      clickAction: () => {},
+      activeState: showInsightDropDown,
+      clickAction: () => {
+        setShowInsightDropdown((prev) => !prev);
+      },
       slug: "insight",
+      sub: [
+        { text: "Analytics", slug: "analytics", clickAction: () => {} },
+        {
+          text: "Transaction History",
+          slug: "transaction",
+          clickAction: () => {},
+        },
+      ],
     },
 
     {

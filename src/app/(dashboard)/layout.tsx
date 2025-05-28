@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           <div className="h-full overflow-y-scroll hide-scrollbar">
             <DashboardTopNav />
-            <div className=" px-4 lg:px-8">{children}</div>
+            <div className="px-4 lg:px-8 h-full">{children}</div>
           </div>
         </Col>
       </Row>
