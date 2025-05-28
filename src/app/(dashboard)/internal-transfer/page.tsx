@@ -22,7 +22,7 @@ const InternalTransfer = () => {
     <>
       <PageHeader text="Internal Transfer" />
       <div className="py-4">
-        <p className="text-[#707070] mb-2 font-work-sans-regular">
+        <p className="text-[#707070] mb-2 lg:text-sm text-xs font-work-sans-regular">
           Select option
         </p>
         <div className="flex items-center gap-2">
@@ -37,7 +37,7 @@ const InternalTransfer = () => {
               alt=""
             />
             <p
-              className={`font-work-sans-regular ${
+              className={`font-work-sans-regular text-xs lg:text-sm ${
                 activeOption === 0 ? "text-[#202020]" : "text-[#707070]"
               } `}
             >
@@ -57,7 +57,7 @@ const InternalTransfer = () => {
               alt=""
             />
             <p
-              className={`font-work-sans-regular ${
+              className={`font-work-sans-regular text-xs lg:text-sm ${
                 activeOption === 1 ? "text-[#202020]" : "text-[#707070]"
               } `}
             >
@@ -81,7 +81,7 @@ const InternalTransfer = () => {
           </div>
         </div>
         <div className="bg-white p-4 rounded-lg my-4 w-full">
-          <div className="flex items-center gap-6 w-full mb-4">
+          <div className="flex flex-col lg:flex-row items-center gap-6 w-full mb-4">
             <SelectInput
               value={senderAccount}
               setValue={setSenderAccount}
@@ -91,7 +91,7 @@ const InternalTransfer = () => {
             </SelectInput>
             <TransferInput label="Trader's Account" />
           </div>
-          <div className="flex items-center gap-6 w-full mb-4">
+          <div className="flex items-center flex-col lg:flex-row gap-6 w-full mb-4">
             <TransferInput label="Amount" icon={dollarIcon} />
             <TransferInput label="Amount to be recieved" greyBg />
           </div>
