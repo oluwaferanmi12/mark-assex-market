@@ -10,6 +10,8 @@ import Image from "next/image";
 import arrowRight from "@/assets/svgs/tabler-icon-rights.svg";
 import { Button } from "@/components/ui/buttons/button";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
+import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
+import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
 
 const Withdrawal = () => {
   const [accountType, setAccountType] = useState("");
@@ -19,7 +21,7 @@ const Withdrawal = () => {
       <PageHeader text="Withdrawal" />
       <div className="my-4">
         <Row>
-          <Col xs={6}>
+          <Col xs={18} lg={6}>
             <SelectInput
               value={accountType}
               setValue={setAccountType}
@@ -47,8 +49,8 @@ const Withdrawal = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white p-4 rounded-lg my-4 w-full">
-        <div className="flex items-center gap-6 w-full mb-4">
+      <div className="bg-white p-4 rounded-lg lg:my-4 my-2 w-full">
+        <div className="flex items-center gap-2 lg:gap-6 w-full lg:mb-4 mb-2">
           <SelectInput
             value={paymentMethod}
             setValue={setPaymentMethod}
@@ -56,11 +58,11 @@ const Withdrawal = () => {
           >
             <option></option>
           </SelectInput>
-          <div className="w-full opacity-0">
+          <div className="w-full opacity-0 hidden lg:block">
             <TransferInput label="Trader's Account" />
           </div>
         </div>
-        <div className="flex items-center gap-6 w-full mb-4">
+        <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-6 w-full mb-2 lg:mb-4">
           <TransferInput label="Account number" />
           <SelectInput
             value={paymentMethod}
@@ -70,48 +72,64 @@ const Withdrawal = () => {
             <option></option>
           </SelectInput>
         </div>
-        <div className="flex items-center gap-6 w-full mb-4">
+        <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-6 w-full mb-4">
           <TransferInput label="Amount" icon={dollarIcon} />
           <TransferInput label="Amount to be recieved" greyBg />
         </div>
-        <div className="my-4">
-          <Button
-            action={() => {}}
-            loading={false}
-            variant="green-bg"
-            text="Proceed"
-            icon={arrowRight}
-            iconPosition="right"
-          />
-        </div>
+        <VisibleOnDesktop>
+          <div className="my-4">
+            <Button
+              action={() => {}}
+              loading={false}
+              variant="green-bg"
+              text="Proceed"
+              icon={arrowRight}
+              iconPosition="right"
+            />
+          </div>
+        </VisibleOnDesktop>
+        <VisibleOnMobile>
+          <div className="my-4">
+            <Button
+              action={() => {}}
+              loading={false}
+              variant="green-bg"
+              text="Proceed"
+              icon={arrowRight}
+              iconPosition="right"
+              fullWidth
+            />
+          </div>
+        </VisibleOnMobile>
+
         <div className="py-4 px-8 border border-[#BEBEBE80] rounded-sm">
           <Row>
-            <Col xs={12}>
-              <div className="mb-3">
-                <p className="font-work-sans-regular text-lg">
+            <Col xs={24} lg={12}>
+              <div className="lg:mb-0 mb-3">
+                <p className="font-work-sans-regular text-sm lg:text-lg">
                   {" "}
                   <span className=" text-[#404040]">Min Commission:</span>{" "}
                   <span className="text-[#111111]">$10.00</span>
                 </p>
               </div>
-              <div>
-                <p className="font-work-sans-regular text-lg">
+              <div className="lg:mb-0 mb-3">
+                <p className="font-work-sans-regular text-sm lg:text-lg">
                   {" "}
                   <span className=" text-[#404040]">Max Commission:</span>{" "}
                   <span className="text-[#111111]">$10,000,000</span>
                 </p>
               </div>
             </Col>
-            <Col xs={12}>
-              <div className="mb-3">
-                <p className="font-work-sans-regular text-lg">
+            <Col xs={24} lg={12}>
+              <div className="lg:mb-0 mb-3">
+                <p className="font-work-sans-regular text-sm lg:text-lg">
                   {" "}
                   <span className=" text-[#404040]">Fee:</span>{" "}
                   <span className="text-[#111111]">$0.00</span>
                 </p>
               </div>
-              <div className="mb-3">
-                <p className="font-work-sans-regular text-lg">
+              <div className="lg:mb-0 mb-3">
+                <p className="font-work-sans-regular text-sm lg:text-lg">
                   {" "}
                   <span className=" text-[#404040]">
                     Avg. Payment Time:

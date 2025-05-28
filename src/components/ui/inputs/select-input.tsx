@@ -13,7 +13,7 @@ export const SelectInput = ({
 }) => {
   return (
     <div className="w-full">
-      <p className="text-[#707070] font-work-sans-regular text-sm lg:text-sm mb-1">
+      <p className="text-[#707070] font-work-sans-regular text-xs lg:text-sm mb-1">
         {label}
       </p>
       <div className="w-full">
@@ -25,7 +25,7 @@ export const SelectInput = ({
           style={{
             boxShadow: "0px 2px 5px rgba(68, 68, 68, 0.1)",
           }}
-          className="bg-white w-full border border-[#66666659] rounded-lg px-4 h-[48px]"
+          className="bg-white w-full border border-[#66666659] rounded-lg px-4 h-[36px] lg:h-[48px]"
         >
           {children}
         </select>
