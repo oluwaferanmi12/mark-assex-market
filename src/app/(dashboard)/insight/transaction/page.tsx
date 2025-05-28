@@ -12,9 +12,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { TransactionTable } from "@/components/ui/tables/transaction/transaction-table";
+import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
 
 const Transaction = () => {
   const [typeSelected, setTypeSelected] = useState("All");
+  const [activeIndex, setActiveIndex] = useState(0)
   const [statusSelected, setStatusSelected] = useState("All");
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -82,8 +84,28 @@ const Transaction = () => {
             </div>
           </div>
         </VisibleOnMobile>
-
-        <TransactionTable />
+        <div className="mt-4">
+          <VisibleOnDesktop>
+            <TransactionTable />
+          </VisibleOnDesktop>
+          <VisibleOnMobile>
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              index={0}
+              setActiveIndex={setActiveIndex}
+            />
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              index={1}
+              setActiveIndex={setActiveIndex}
+            />
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              index={2}
+              setActiveIndex={setActiveIndex}
+            />
+          </VisibleOnMobile>
+        </div>
       </div>
     </>
   );
