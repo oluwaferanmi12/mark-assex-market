@@ -104,6 +104,16 @@ const Transaction = () => {
               index={2}
               setActiveIndex={setActiveIndex}
             />
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              index={3}
+              setActiveIndex={setActiveIndex}
+            />
+            <MobileTransactionTable
+              activeIndex={activeIndex}
+              index={4}
+              setActiveIndex={setActiveIndex}
+            />
           </VisibleOnMobile>
         </div>
       </div>

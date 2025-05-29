@@ -25,7 +25,7 @@ export interface NavObjectInterface {
     clickAction: () => void,
     slug: string,
     sub?: SubNavInterface[]
-    activeState ?: boolean
+    activeState?: boolean
 }
 
 export interface DropDownListInterface {
@@ -67,4 +67,13 @@ export interface TransactionInterface {
     status: string;
     date: string;
 
+}
+
+
+export type SettingsIdType = "account" | "documents" | "security" | "notification" | "agreement"
+
+
+export interface SettingsTabInterface {
+    text: string;
+    id: SettingsIdType
 }
