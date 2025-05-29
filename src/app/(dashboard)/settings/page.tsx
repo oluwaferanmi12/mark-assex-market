@@ -3,6 +3,7 @@
 import { FadeIn } from "@/animation/fade-in";
 import { AccounVerificationPending } from "@/components/shared/container/account-verifitcation-pending";
 import { AccountSetting } from "@/components/shared/setting/account-setting";
+import { DocumentSetting } from "@/components/shared/setting/document-setting";
 import { SettingsTab } from "@/components/shared/setting/settings-tab";
 import { PageHeader } from "@/components/ui/text/page-header";
 import { SettingsIdType, SettingsTabInterface } from "@/interfaces/ui-interfac";
@@ -27,6 +28,13 @@ const Settings = () => {
           {activeTab === "account" && (
             <FadeIn>
               <AccountSetting />
+            </FadeIn>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {activeTab === "documents" && (
+            <FadeIn>
+              <DocumentSetting />
             </FadeIn>
           )}
         </AnimatePresence>
