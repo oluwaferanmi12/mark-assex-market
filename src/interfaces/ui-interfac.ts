@@ -69,6 +69,16 @@ export interface TransactionInterface {
 
 }
 
+export interface BonusInterface {
+    id: string;
+    amount: number;
+    type: string;
+    status: "Active" | "Used" | "Expired";
+    date: string;
+    expiryDate: string;
+
+}
+
 
 export type SettingsIdType = "account" | "documents" | "security" | "notification" | "agreement"
 

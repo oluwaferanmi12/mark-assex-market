@@ -22,7 +22,6 @@ import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobil
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
-
   const [typeSelected, setTypeSelected] = useState("All");
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },

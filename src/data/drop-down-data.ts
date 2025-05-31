@@ -1,4 +1,4 @@
-import { OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
+import { BonusInterface, OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
 
 export const orderData: OrderInterface[] = [
     {
@@ -80,4 +80,11 @@ export const transactionData: TransactionInterface[] = [
         type: "Deposit"
 
     },
+]
+
+export const bonusData: BonusInterface[] = [
+    { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
+    { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
+    { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
+    { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
 ]
