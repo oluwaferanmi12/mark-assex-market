@@ -3,8 +3,10 @@
 import alertIcon from "@/assets/svgs/alert-icon-octagon.svg";
 import { Button } from "@/components/ui/buttons/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export const AccounVerificationPending = () => {
+  const router = useRouter();
   return (
     <div className="w-full lg:flex-row bg-[#1F0D3F] lg:py-2  rounded-lg p-4 py-4 flex justify-between items-center flex-col">
       <div className="flex items-center mb-4 lg:mb-0 gap-2">
@@ -26,7 +28,9 @@ export const AccounVerificationPending = () => {
       </div>
       <div className="hidden lg:block">
         <Button
-          action={() => {}}
+          action={() => {
+            router.push("/account-verification");
+          }}
           loading={false}
           text="Verify account"
           variant="green-faded-border"

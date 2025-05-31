@@ -72,8 +72,9 @@ export interface TransactionInterface {
 
 export type SettingsIdType = "account" | "documents" | "security" | "notification" | "agreement"
 
-
+export type VerificationIdtype = "email" | "phone" | "personal-info" | "personal-finance" | "document"
 export interface SettingsTabInterface {
     text: string;
     id: SettingsIdType
 }
+export type ModuleVerifiedStatus = "verifying" | "verified" | 'not-verified';
