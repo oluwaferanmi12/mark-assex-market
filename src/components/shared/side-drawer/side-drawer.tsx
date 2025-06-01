@@ -5,11 +5,13 @@ import { ReactNode, useEffect } from "react";
 export const SideDrawerWrapper = ({
   active,
   handleClose,
-  children
+  children,
+  fullHeight,
 }: {
   active: boolean;
   handleClose: () => void;
-  children:ReactNode
+  children: ReactNode;
+  fullHeight?: boolean;
 }) => {
   useEffect(() => {
     if (active) {
@@ -45,7 +47,9 @@ export const SideDrawerWrapper = ({
               exit={{ opacity: 0, x: "100%" }}
               transition={{ duration: 0.25, ease: "easeIn" }}
               onClick={(e) => e.stopPropagation()}
-              className="min-h-[80%] bg-[#FAFAFA]  h-[80%] lg:w-[500px] w-[90%]  rounded-lg mr-4"
+              className={`${
+                fullHeight ? "min-h-[95vh] h-[95vh]" : "min-h-[80vh] h-[80vh]"
+              }  bg-[#FAFAFA]   lg:w-[500px] w-[90%]  rounded-lg mr-4`}
             >
               {children}
             </motion.div>

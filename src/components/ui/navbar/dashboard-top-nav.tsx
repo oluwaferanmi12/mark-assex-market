@@ -12,9 +12,17 @@ import hamburgerIcon from "@/assets/svgs/hamburger-icon.svg";
 import { useEffect, useState } from "react";
 import { DashboardSideNav } from "@/components/ui/navbar/dashboard-side-nav";
 import { AnimatePresence, motion } from "framer-motion";
+import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { NotificationWrapper } from "@/components/shared/wrappers/notification-wrapper";
+import { NotificationWithImage } from "@/components/shared/wrappers/notification-with-wrapper";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [activeNotificationTab, setActiveNotificationTab] = useState(0);
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
@@ -24,6 +32,134 @@ export const DashboardTopNav = () => {
   }, [showSideNav]);
   return (
     <>
+      <SideDrawerWrapper
+        fullHeight
+        active={showNotification}
+        handleClose={() => {
+          setShowNotification(false);
+        }}
+      >
+        <div className="flex h-full flex-col">
+          <ModalHeader
+            headText="Notifications"
+            handleCancel={() => {
+              setShowNotification(false);
+            }}
+          />
+          <ModalBody>
+            <div>
+              <div className="bg-[#F1F1F1] mb-3 p-1 rounded-lg flex justify-between">
+                <div
+                  onClick={() => {
+                    setActiveNotificationTab(0);
+                  }}
+                  className={`flex items-center gap-2 ${
+                    activeNotificationTab === 0 && "bg-white "
+                  } px-4 py-2 rounded-lg cursor-pointer`}
+                >
+                  <p
+                    className={`text-xs font-work-sans-regular ${
+                      activeNotificationTab === 0 ? "text-[#0DAE94]" : "#202020"
+                    } `}
+                  >
+                    View all{" "}
+                  </p>
+                  <div
+                    className={`${
+                      activeNotificationTab === 0
+                        ? "bg-[#E7F7F4]"
+                        : "bg-[#7070701A]"
+                    } p-1 px-2 rounded-sm`}
+                  >
+                    <p
+                      className={`${
+                        activeNotificationTab === 0
+                          ? "text-[#0DAE94]"
+                          : "#202020"
+                      } text-xs font-work-sans-regular`}
+                    >
+                      7
+                    </p>
+                  </div>
+                </div>
+                <div
+                  onClick={() => {
+                    setActiveNotificationTab(1);
+                  }}
+                  className={`flex items-center gap-2 ${
+                    activeNotificationTab === 1 && "bg-white "
+                  } px-4 py-2 rounded-lg cursor-pointer`}
+                >
+                  <p
+                    className={`text-xs font-work-sans-regular ${
+                      activeNotificationTab === 1 ? "text-[#0DAE94]" : "#202020"
+                    } `}
+                  >
+                    Unread
+                  </p>
+                  <div
+                    className={`${
+                      activeNotificationTab === 1
+                        ? "bg-[#E7F7F4]"
+                        : "bg-[#7070701A]"
+                    } p-1 px-2 rounded-sm`}
+                  >
+                    <p
+                      className={`${
+                        activeNotificationTab === 1
+                          ? "text-[#0DAE94]"
+                          : "#202020"
+                      } text-xs font-work-sans-regular`}
+                    >
+                      7
+                    </p>
+                  </div>
+                </div>
+                <div
+                  onClick={() => {
+                    setActiveNotificationTab(2);
+                  }}
+                  className={`flex items-center gap-2 ${
+                    activeNotificationTab === 2 && "bg-white "
+                  } px-4 py-2 rounded-lg cursor-pointer`}
+                >
+                  <p
+                    className={`text-xs font-work-sans-regular ${
+                      activeNotificationTab === 2 ? "text-[#0DAE94]" : "#202020"
+                    } `}
+                  >
+                    System
+                  </p>
+                  <div
+                    className={`${
+                      activeNotificationTab === 2
+                        ? "bg-[#E7F7F4]"
+                        : "bg-[#7070701A]"
+                    } p-1 px-2 rounded-sm`}
+                  >
+                    <p
+                      className={`${
+                        activeNotificationTab === 2
+                          ? "text-[#0DAE94]"
+                          : "#202020"
+                      } text-xs font-work-sans-regular`}
+                    >
+                      2
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <NotificationWrapper />
+              <NotificationWithImage />
+              <NotificationWrapper />
+              <NotificationWrapper />
+              <NotificationWrapper />
+              <NotificationWrapper />
+            </div>
+          </ModalBody>
+        </div>
+      </SideDrawerWrapper>
       <AnimatePresence>
         {showSideNav && (
           <>
@@ -96,7 +232,12 @@ export const DashboardTopNav = () => {
               </p>
             </div>
           </div>
-          <div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              setShowNotification(true);
+            }}
+          >
             <Image src={notificationIcon} alt="" />
           </div>
           <div>
