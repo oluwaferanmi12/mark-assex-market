@@ -18,11 +18,13 @@ import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper"
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { NotificationWrapper } from "@/components/shared/wrappers/notification-wrapper";
 import { NotificationWithImage } from "@/components/shared/wrappers/notification-with-wrapper";
+import { useRouter } from "next/navigation";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [activeNotificationTab, setActiveNotificationTab] = useState(0);
+  const router = useRouter()
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
@@ -240,7 +242,9 @@ export const DashboardTopNav = () => {
           >
             <Image src={notificationIcon} alt="" />
           </div>
-          <div>
+          <div className="cursor-pointer" onClick={() => {
+            router.push("/support")
+          }}>
             <Image src={dailyIcon} alt="" />
           </div>
           <div className="flex items-center gap-2">
