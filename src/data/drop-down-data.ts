@@ -1,4 +1,4 @@
-import { BonusInterface, OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
+import { AnalyticsDataInterface, BonusInterface, OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
 
 export const orderData: OrderInterface[] = [
     {
@@ -87,4 +87,47 @@ export const bonusData: BonusInterface[] = [
     { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
     { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
     { amount: 100, date: "10 Oct, 2025 14:10", expiryDate: "10 Oct, 2025 14:10", id: 'BNS 01', status: "Active", type: "Interest" },
+]
+
+export const analyticsData: AnalyticsDataInterface[] = [
+    {
+        pair: "EUR/USD",
+        change: +0.46,
+        currentPrice: 1.0845,
+        date: "Yesterday 14:10 (UTC+1)",
+        openPrice: 1.0845,
+        trend: "Bullish"
+    },
+    {
+        pair: "EUR/USD",
+        change: +0.46,
+        currentPrice: 1.0845,
+        date: "Yesterday 14:10 (UTC+1)",
+        openPrice: 1.0845,
+        trend: "Bearish"
+    },
+    {
+        pair: "EUR/USD",
+        change: +0.46,
+        currentPrice: 1.0845,
+        date: "Yesterday 14:10 (UTC+1)",
+        openPrice: 1.0845,
+        trend: "Bullish"
+    },
+    {
+        pair: "EUR/USD",
+        change: +0.46,
+        currentPrice: 1.0845,
+        date: "Yesterday 14:10 (UTC+1)",
+        openPrice: 1.0845,
+        trend: "Bearish"
+    },
+    {
+        pair: "EUR/USD",
+        change: +0.46,
+        currentPrice: 1.0845,
+        date: "Yesterday 14:10 (UTC+1)",
+        openPrice: 1.0845,
+        trend: "Bearish"
+    }
 ]

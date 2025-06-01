@@ -14,6 +14,7 @@ import infoIcon from "@/assets/svgs/info-icon.svg";
 import arrowRightGreen from "@/assets/svgs/arrow-right-green.svg";
 import { useRouter } from "next/navigation";
 import { TransactionSummary } from "@/components/shared/container/transaction-summary";
+import { AnalyticsTable } from "@/components/ui/tables/analytics/analytics-table";
 
 const Analytics = () => {
   const [statusSelected, setStatusSelected] = useState(
@@ -214,6 +215,15 @@ const Analytics = () => {
               </div>
             </Col>
           </Row>
+        </div>
+        <div className="mt-4">
+          <p className="font-work-sans-medium text-base">Assex Market Update</p>
+          <p className="text-[#707070] font-work-sans-regular">
+            Latest market news, posted at the time of the trend.
+          </p>
+          <div className="mt-4">
+            <AnalyticsTable />
+          </div>
         </div>
       </div>
     </>

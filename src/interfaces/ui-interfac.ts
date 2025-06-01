@@ -48,7 +48,8 @@ export interface OrderInterface {
 
 export interface TableTextInterface {
     text: string | number;
-    variant: "header" | "body"
+    variant: "header" | "body";
+    icon ?: string
 }
 
 export interface CreateAccountInterface {
@@ -77,6 +78,15 @@ export interface BonusInterface {
     date: string;
     expiryDate: string;
 
+}
+
+export interface AnalyticsDataInterface {
+    pair: string,
+    openPrice: number,
+    currentPrice: number,
+    change: number,
+    trend: "Bullish" | "Bearish",
+    date: string
 }
 
 
