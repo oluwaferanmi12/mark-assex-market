@@ -15,6 +15,11 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import { Button } from "@/components/ui/buttons/button";
 
 export const BonusTable = () => {
   const columnHelper = createColumnHelper<BonusInterface>();
@@ -54,6 +59,7 @@ export const BonusTable = () => {
     }),
   ];
   const [data, setData] = useState(bonusData);
+  const [showModal, setShowModal] = useState(false);
   const table = useReactTable({
     data,
     columns,
@@ -61,6 +67,59 @@ export const BonusTable = () => {
   });
   return (
     <>
+      <ModalContainer
+        active={showModal}
+        handleClose={() => {
+          setShowModal(false);
+        }}
+        greyBg
+      >
+        <ModalHeader
+          handleCancel={() => {
+            setShowModal(false);
+          }}
+          headText="Bonus Details"
+        />
+        <ModalBody>
+          <div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Bonus ID</p>
+              <p className="font-work-sans-regular">BNS 01</p>
+            </div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Amount</p>
+              <p className="font-work-sans-regular">$ 20</p>
+            </div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Type</p>
+              <p className="font-work-sans-regular">Welcome bonus</p>
+            </div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Status</p>
+              <p className="font-work-sans-regular">
+                <TableStatus text="Active" variant="Success" />
+              </p>
+            </div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Date Issued</p>
+              <p className="font-work-sans-regular">10 Oct, 2025 14:10</p>
+            </div>
+            <div className="flex items-center mb-3 justify-between">
+              <p className="font-work-sans-regular">Expiry Date</p>
+              <p className="font-work-sans-regular">08 Nov, 2025</p>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            action={() => {}}
+            text="Close"
+            loading={false}
+            variant="green-bg"
+            fullWidth
+          />
+        </ModalFooter>
+      </ModalContainer>
       <div className="mt-4 ">
         <table className="w-full">
           <thead>
@@ -100,7 +159,11 @@ export const BonusTable = () => {
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <td className="bg-[#FEFEFE33]" key={cell.id}>
+                      <td
+                        onClick={() => setShowModal(true)}
+                        className="bg-[#FEFEFE33]"
+                        key={cell.id}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
