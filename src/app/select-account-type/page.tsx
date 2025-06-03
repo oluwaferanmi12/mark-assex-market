@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { AuthNav } from "@/components/ui/navbar/auth-nav";
 import { Col, Row } from "antd";
@@ -7,9 +7,12 @@ import liveAccountIcon from "@/assets/svgs/live-account-icon.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/buttons/button";
 import checkedGreen from "@/assets/svgs/tabler-icon-checkbox.svg";
-import checkedRed from "@/assets/svgs/tabler-icon-checked-red.svg"
+import checkedRed from "@/assets/svgs/tabler-icon-checked-red.svg";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SelectAccountType = () => {
+  const router = useRouter();
   return (
     <>
       <AuthNav />
@@ -40,14 +43,18 @@ const SelectAccountType = () => {
                   </div>
                 </div>
                 <div className="flex  gap-3 items-center my-6">
-                  <p className="font-work-sans-bold text-2xl  lg:text-4xl">$10,000</p>
+                  <p className="font-work-sans-bold text-2xl  lg:text-4xl">
+                    $10,000
+                  </p>
                   <p className="lg:text-sm text-xs font-work-sans-light">
                     Virtual Balance
                   </p>
                 </div>
                 <div>
                   <Button
-                    action={() => {}}
+                    action={() => {
+                      router.push("/select-account-type/demo")
+                    }}
                     loading={false}
                     variant="blue-bg"
                     text="Try Demo Account"
@@ -98,7 +105,9 @@ const SelectAccountType = () => {
                 </div>
                 <div>
                   <Button
-                    action={() => {}}
+                    action={() => {
+                      router.push("/select-account-type/live");
+                    }}
                     loading={false}
                     variant="green-bg"
                     text="Real Account"
@@ -130,6 +139,19 @@ const SelectAccountType = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-[#111] font-work-sans-regular">
+              Not ready to choose a trading account ?
+            </p>
+            <p className="text-[#606060]">
+              {`That's okay you can`}{" "}
+              <Link href={"/account"}>
+                {" "}
+                <span>Skip this step</span>{" "}
+              </Link>{" "}
+              and set it up later
+            </p>
           </div>
         </Col>
       </Row>

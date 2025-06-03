@@ -21,7 +21,7 @@ const Register = () => {
   const [citizenChecked, setCitizenChecked] = useState(true);
   const [showPromoCode, setShowPromoCode] = useState(false);
   const [showPartnerCode, setShowPartnerCode] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   return (
     <div>
       <AuthHeaderWrapper text="Create your account" />
@@ -136,7 +136,7 @@ const Register = () => {
             text="Register"
             fullWidth
             action={() => {
-                router.push("/select-account-type")
+              router.push("/register/otp");
             }}
             loading={false}
             variant="green-bg"
