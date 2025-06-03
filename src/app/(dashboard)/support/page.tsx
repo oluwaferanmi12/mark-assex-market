@@ -4,11 +4,45 @@ import { Button } from "@/components/ui/buttons/button";
 import { SettingsInput } from "@/components/ui/inputs/settings-input";
 import { PageHeader } from "@/components/ui/text/page-header";
 import { Col, Row } from "antd";
-import messageIcon from "@/assets/svgs/message-icon.svg"
+import messageIcon from "@/assets/svgs/message-icon.svg";
+import { useState } from "react";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { SupportChatWrapper } from "@/components/shared/wrappers/support-chat-wrapper";
+import { SupportUserWrapper } from "@/components/shared/wrappers/support-user-wrapper";
 
 const Support = () => {
+  const [showChatModal, setShowChatModal] = useState(false);
   return (
     <>
+      <ModalContainer
+        active={showChatModal}
+        handleClose={() => {
+          setShowChatModal(false);
+        }}
+      >
+        <ModalHeader
+          headText="Assex Market Support"
+          handleCancel={() => {
+            setShowChatModal(false);
+          }}
+        />
+        <ModalBody>
+          <>
+            <SupportChatWrapper />
+            <SupportChatWrapper />
+            <SupportUserWrapper />
+            <div className="mt-2">
+              <textarea placeholder="Write a message" className="border font-work-sans-regular p-4 border-[#BEBEBE] w-full rounded-lg"></textarea>
+              <div className="flex justify-end">
+
+              <Button  action={() => {}} loading={false} text="Send" variant="green-bg" buttonSmaller />
+              </div>
+            </div>
+          </>
+        </ModalBody>
+      </ModalContainer>
       <PageHeader text="Need Support" />
       <p className="text-[#707070] font-work-sans-regular">
         Your go-to place for support. Search answers, resolve issues, and
@@ -70,7 +104,9 @@ const Support = () => {
             <div className="mt-4">
               <Button
                 loading={false}
-                action={() => {}}
+                action={() => {
+                  setShowChatModal(true);
+                }}
                 text="Start Conversation"
                 variant="green-bg"
                 icon={messageIcon}

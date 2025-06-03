@@ -12,12 +12,14 @@ export const DepositWrapper = ({
   text,
   index,
   setActiveIndex,
+  enterUrl = "/deposit/proceed",
 }: {
   icon: string;
   active: boolean;
   text: string;
   index: number;
   setActiveIndex: (val: number) => void;
+  enterUrl?: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
@@ -26,7 +28,7 @@ export const DepositWrapper = ({
       <div
         onClick={() => {
           setActiveIndex(index);
-          router.push("/deposit/proceed");
+          router.push(enterUrl);
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

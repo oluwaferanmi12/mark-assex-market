@@ -18,6 +18,7 @@ import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile"
 import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
+import { useRouter } from "next/navigation";
 
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
@@ -35,6 +36,8 @@ const Wallet = () => {
     { text: "Deposit", id: "" },
     { text: "Withdraw", id: "" },
   ];
+
+  const router = useRouter();
   return (
     <>
       <PageHeader text="Wallet" />
@@ -67,14 +70,18 @@ const Wallet = () => {
               variant="green-bg"
               fullRounded
               icon={arrowSlantDown}
-              action={() => {}}
+              action={() => {
+                router.push("/deposit");
+              }}
             />
             <Button
               text="Withdraw"
               loading={false}
               variant="green-bg"
               fullRounded
-              action={() => {}}
+              action={() => {
+                router.push("/withdrawal");
+              }}
               icon={arrowSlantUp}
             />
 
@@ -83,7 +90,9 @@ const Wallet = () => {
               loading={false}
               variant="green-bg-faded"
               fullRounded
-              action={() => {}}
+              action={() => {
+                router.push("/internal-transfer");
+              }}
               icon={internalTransferIcon}
             />
           </div>
