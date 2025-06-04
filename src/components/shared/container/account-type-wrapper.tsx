@@ -1,14 +1,18 @@
+"use client"
+
 import priceIconWrap from "@/assets/svgs/price-icon-wrap.svg";
 import { Button } from "@/components/ui/buttons/button";
 import checkIcon from "@/assets/svgs/tabler-icon-checkbox.svg";
 import Image from "next/image";
 import { CreateAccountInterface } from "@/interfaces/ui-interfac";
+import { useRouter } from "next/navigation";
 
 export const AccountTypeWrapper = ({
   item,
 }: {
   item: CreateAccountInterface;
 }) => {
+  const router = useRouter();
   return (
     <>
       <div
@@ -39,7 +43,9 @@ export const AccountTypeWrapper = ({
           <Button
             text="Create Account"
             variant="green-bg"
-            action={() => {}}
+            action={() => {
+              router.push("/create-account");
+            }}
             loading={false}
             fullRounded
             fullWidth
@@ -52,7 +58,9 @@ export const AccountTypeWrapper = ({
                 <span>
                   <Image src={checkIcon} alt="" />
                 </span>
-                <p className={` text-[#404040] text-xs lg:text-sm  font-work-sans-regular`}>
+                <p
+                  className={` text-[#404040] text-xs lg:text-sm  font-work-sans-regular`}
+                >
                   {item}
                 </p>
               </div>
