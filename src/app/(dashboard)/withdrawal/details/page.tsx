@@ -19,6 +19,7 @@ import bidirectionalIcon from "@/assets/svgs/nav-transfer-active.svg";
 import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
+import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 
 const WithdrawalDetails = () => {
   const [accountType, setAccountType] = useState("");
@@ -26,9 +27,19 @@ const WithdrawalDetails = () => {
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   return (
     <>
+      <SuccessModal
+        active={showSuccessModal}
+        closeAction={() => {
+          setShowSuccessModal(false);
+        }}
+        buttonText="Close"
+        mainText="Funds Deposited Successfully"
+        subText="Your trading account has been funded with $4,000 successfully"
+      />
       <ModalContainer
         active={verificationModal}
         handleClose={() => {
@@ -183,6 +194,9 @@ const WithdrawalDetails = () => {
                   <Button
                     action={() => {
                       //   setVerificationModal(true);
+                      if (showOtp) {
+                        setShowSuccessModal(true);
+                      }
                       setShowOtp(true);
                     }}
                     loading={false}

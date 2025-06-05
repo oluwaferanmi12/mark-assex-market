@@ -12,12 +12,24 @@ import { PageHeader } from "@/components/ui/text/page-header";
 import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import bidirectionalIcon from "@/assets/svgs/nav-transfer-active.svg";
 import checkCircle from "@/assets/svgs/check-circle.svg";
+import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   return (
     <>
+      <SuccessModal
+        active={showSuccessModal}
+        closeAction={() => {
+          setShowSuccessModal(false);
+        }}
+        buttonText="Close"
+        mainText="Funds Deposited Successfully"
+        subText="Your trading account has been funded with $4,000 successfully"
+        
+      />
       <ModalContainer
         active={verificationModal}
         handleClose={() => {
