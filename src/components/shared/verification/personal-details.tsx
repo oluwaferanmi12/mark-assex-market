@@ -96,7 +96,7 @@ export const VerifyPersonalDetails = ({
 
 const ColWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <Col className="mb-4" xs={12}>
+    <Col className="mb-4" xs={24} lg={12}>
       {children}
     </Col>
   );

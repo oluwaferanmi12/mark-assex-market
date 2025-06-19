@@ -57,9 +57,21 @@ const AccountVerification = () => {
       <p className="text-[#707070] font-work-sans-regular">
         Verify your account so you can do more.
       </p>
+
+      <div className="flex items-center  hide-scrollbar overflow-x-scroll  lg:hidden">
+        {verifyRequirements.map((item, index) => {
+          return (
+            <ModuleVerified
+              status={item.id === activeState ? "verifying" : item.status}
+              text={item.text}
+            />
+          );
+        })}
+      </div>
+
       <div className="my-8">
-        <Row gutter={40}>
-          <Col xs={4}>
+        <Row gutter={{ lg: 40 }}>
+          <Col xs={0} lg={4}>
             <div>
               {verifyRequirements.map((item, index) => {
                 return (
@@ -71,7 +83,7 @@ const AccountVerification = () => {
               })}
             </div>
           </Col>
-          <Col xs={20}>
+          <Col xs={24} lg={20}>
             <AnimatePresence>
               {activeState === "phone" && (
                 <FadeIn>

@@ -19,11 +19,11 @@ export const VerifyPhoneNumber = ({
   return (
     <>
       <Row>
-        <Col className="p-4 rounded-lg bg-white" xs={14}>
-          <p className="text-[#202020] font-work-sans-medium text-base">
+        <Col className="p-4 rounded-lg bg-white" xs={24} lg={14}>
+          <p className="text-[#202020] font-work-sans-medium text-sm lg:text-base">
             {showOtp ? "Verify Phone Number" : "Enter Phone Number"}
           </p>
-          <p className="mt-1 text-[#707070] font-work-sans-regular">
+          <p className="mt-1 text-[#707070] text-xs lg:text-sm font-work-sans-regular">
             {showOtp
               ? "Enter the code sent to +234 903 432 1111"
               : "This helps confirm your identity and authorize future transactions on your account"}

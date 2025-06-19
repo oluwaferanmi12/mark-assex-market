@@ -10,7 +10,6 @@ import chevroletWhite from "@/assets/svgs/chevron-right-white.svg";
 import checkedBox from "@/assets/svgs/checked-square.svg";
 import unCheckedBox from "@/assets/svgs/unchecked-square.svg";
 import { VerificationIdtype } from "@/interfaces/ui-interfac";
-import { resolve } from "path";
 
 export const PersonalFinanceVerification = ({
   id,
@@ -26,12 +25,11 @@ export const PersonalFinanceVerification = ({
 
   useEffect(() => {
     // Get the number of steps we have
-    if(activeStep > 1){
-        const highestNoOfSteps = 11;
-        const unitIncrease = Math.ceil(100 / highestNoOfSteps);
-        setCurrentWidth(currentWidth + unitIncrease);
+    if (activeStep > 1) {
+      const highestNoOfSteps = 11;
+      const unitIncrease = Math.ceil(100 / highestNoOfSteps);
+      setCurrentWidth(currentWidth + unitIncrease);
     }
- 
   }, [activeStep]);
 
   const getIndicatorOffset = () => {
@@ -196,7 +194,7 @@ const StepEleven = ({
     <div className="">
       <div>
         <StepHeader text="Before You Begin Trading, Please Acknowledge the Following" />
-        <p className="font-work-sans-regular text-[#707070]">
+        <p className="font-work-sans-regular lg:text-sm text-xs text-[#707070]">
           We want to make sure you're fully informed before you begin. Trading
           involves risk, and it's important to understand how it might affect
           your finances. Please confirm that you’re aware of the key points
@@ -205,11 +203,11 @@ const StepEleven = ({
       </div>
       <div className="mt-3 bg-white rounded-lg p-4">
         <div className="flex gap-4 mb-8">
-          <span className="flex ">
+          <span className="flex  w-10 lg:w-auto">
             <Image src={checkedBox} alt="" />
           </span>
           <div className="font-work-sans-regular">
-            <p className="text-base text-[#111111] font-work-sans-medium">
+            <p className="lg:text-base text-sm text-[#111111] font-work-sans-medium">
               I Confirm i have reviewed important trading information
             </p>
             <p className="mt-1 text-xs text-[#404040]">
@@ -219,11 +217,11 @@ const StepEleven = ({
           </div>
         </div>
         <div className="flex gap-4 mb-8">
-          <span className="flex ">
+          <span className="flex w-10 lg:w-auto ">
             <Image src={checkedBox} alt="" />
           </span>
           <div className="font-work-sans-regular">
-            <p className="text-base text-[#111111] font-work-sans-medium">
+            <p className="lg:text-base text-sm text-[#111111] font-work-sans-medium">
               I understand the risk of leveraged products
             </p>
             <p className="mt-1 text-xs text-[#404040]">
@@ -233,11 +231,11 @@ const StepEleven = ({
           </div>
         </div>
         <div className="flex gap-4 mb-8">
-          <span className="flex ">
+          <span className="flex w-10 lg:w-auto ">
             <Image src={checkedBox} alt="" />
           </span>
           <div className="font-work-sans-regular">
-            <p className="text-base text-[#111111] font-work-sans-medium">
+            <p className="lg:text-base text-sm text-[#111111] font-work-sans-medium">
               I acknowledge i am trading at my own risk
             </p>
             <p className="mt-1 text-xs text-[#404040]">
@@ -663,7 +661,7 @@ const StepContent = ({
     <div
       onClick={clickHandler}
       style={{ borderBottom: "0.5px solid #1F0D3F80" }}
-      className="cursor-pointer py-3 px-2"
+      className="cursor-pointer text-xs lg:text-sm py-3 px-2"
     >
       <p className="text-[#111111] font-work-sans-regular ">{text}</p>
     </div>
@@ -689,13 +687,15 @@ const StepContentWithCheckbox = ({
         src={checked ? checkedBox : unCheckedBox}
         alt=""
       />
-      <p className="text-[#111111] font-work-sans-regular ">{text}</p>
+      <p className="text-[#111111] font-work-sans-regular lg:text-sm text-xs ">{text}</p>
     </div>
   );
 };
 const StepHeader = ({ text }: { text: string }) => {
   return (
-    <p className="text-[#111111] font-work-sans-medium text-lg my-4">{text}</p>
+    <p className="text-[#111111] font-work-sans-medium text-base lg:text-lg my-4">
+      {text}
+    </p>
   );
 };
 
@@ -722,7 +722,7 @@ const OthersSpecify = ({
           src={showInput ? arrowDown : arrowRightBlack}
           alt=""
         />
-        <p className="font-work-sans-regular text-[#111111]">
+        <p className="font-work-sans-regular lg:text-sm text-xs text-[#111111]">
           Others (please specify)
         </p>
       </div>
