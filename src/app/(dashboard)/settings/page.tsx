@@ -21,7 +21,7 @@ const Settings = () => {
       <AccounVerificationPending />
       <div className="my-6">
         <PageHeader text="Account Settings" />
-        <p className="text-[#707070] font-work-sans-regular ">
+        <p className="text-[#707070] lg:text-sm text-xs font-work-sans-regular ">
           Keep your information accurate and up to date.
         </p>
       </div>

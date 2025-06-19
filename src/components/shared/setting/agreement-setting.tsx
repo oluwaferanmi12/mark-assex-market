@@ -7,7 +7,7 @@ export const AgreementSetting = () => {
   const [isYes, setIsYes] = useState(true);
   return (
     <div>
-      <p className="text-[#707070] font-work-sans-regular">
+      <p className="text-[#707070] font-work-sans-regular lg:text-sm text-xs">
         I confirm that I am not a citizen or tax resident of the United States.
       </p>
       <div className="flex cursor-pointer items-center gap-2 py-2">
@@ -21,7 +21,7 @@ export const AgreementSetting = () => {
           <p
             className={`${
               isYes ? " text-[#202020]" : "text-[#707070]"
-            }font-work-sans-regular`}
+            }font-work-sans-regular lg:text-sm text-xs`}
           >
             {" "}
             Yes
@@ -37,7 +37,7 @@ export const AgreementSetting = () => {
           <p
             className={`${
               !isYes ? "text-[#202020]" : "text-[#707070]"
-            }  font-work-sans-regular`}
+            }  font-work-sans-regular lg:text-sm text-xs`}
           >
             {" "}
             No

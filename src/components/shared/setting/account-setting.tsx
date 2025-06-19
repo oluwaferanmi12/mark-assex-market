@@ -156,28 +156,28 @@ export const AccountSetting = () => {
       </div>
       <div className="my-6">
         <div className="mb-4">
-          <p className="font-work-sans-regular text-lg text-[#202020]">
+          <p className="font-work-sans-regular text-base lg:text-lg text-[#202020]">
             Personal Details
           </p>
           <div className="mt-2 bg-white p-4  rounded-lg w-full ">
             <Row gutter={20}>
-              <Col xs={12} className="mb-4">
+              <Col xs={24} lg={12} className="mb-4">
                 <SettingsInput
                   value="Blaise"
                   readOnly={readOnly}
                   label="First Name"
                 />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Middle Name" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Last Name" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Date of Birth" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Gender" />
               </Col>
             </Row>
@@ -185,24 +185,24 @@ export const AccountSetting = () => {
         </div>
 
         <div className="mb-4">
-          <p className="font-work-sans-regular text-lg text-[#202020]">
+          <p className="font-work-sans-regular text-base lg:text-lg text-[#202020]">
             Address
           </p>
           <div className="mt-2 bg-white p-4  rounded-lg w-full ">
             <Row gutter={20}>
-              <Col xs={12} className="mb-4">
+              <Col lg={12} xs={24} className="mb-4">
                 <SettingsInput readOnly={readOnly} label="Country" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="State/Province" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="City" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Address" />
               </Col>
-              <Col className="mb-4" xs={12}>
+              <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput readOnly={readOnly} label="Postal Code" />
               </Col>
             </Row>

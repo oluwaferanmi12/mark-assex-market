@@ -46,7 +46,7 @@ export const Button = ({
         buttonSmaller ? "py-2 px-4 text-xs" : "px-4 py-3 text-xs lg:text-sm"
       } ${
         textBolder ? "font-work-sans-medium" : "font-work-sans-regular "
-      } flex  items-center gap-1 justify-center  cursor-pointer   `}
+      } flex  items-center gap-1 justify-center  cursor-pointer  whitespace-nowrap  `}
     >
       {icon && iconPosition === "left" && (
         <div>

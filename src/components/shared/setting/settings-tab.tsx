@@ -9,11 +9,11 @@ export const SettingsTab = ({
   setActiveTab: (val: SettingsIdType) => void;
 }) => {
   return (
-    <div className=" flex">
+    <div className=" flex hide-scrollbar overflow-x-scroll">
       {settingsData.map((item) => {
         return (
           <button
-            className={`font-work-sans-regular px-4 pb-2 cursor-pointer border-b-2 ${
+            className={`font-work-sans-regular whitespace-nowrap text-xs lg:text-sm  px-4 pb-2 cursor-pointer border-b-2   ${
               activeTab === item.id ? "border-[#0DAE94]" : "border-[#A4A9AE26]"
             } ${activeTab === item.id ? "text-[#0DAE94]" : "text-[#707070]"}`}
             onClick={() => setActiveTab(item.id)}

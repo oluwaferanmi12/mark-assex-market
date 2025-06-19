@@ -15,7 +15,7 @@ export const SettingsInput = ({
 }) => {
   return (
     <div>
-      <p className="text-[#606060] mb-1 font-work-sans-regular">{label}</p>
+      <p className="text-[#606060] mb-1 font-work-sans-regular text-xs lg:text-sm">{label}</p>
       <div>
         <input
           placeholder={placeholder}

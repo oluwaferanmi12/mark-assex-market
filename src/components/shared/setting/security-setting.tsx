@@ -5,15 +5,17 @@ export const SecuritySetting = () => {
     <>
       <div className="mb-4">
         <div>
-          <p className="font-work-sans-medium text-[#202020] text-lg">
+          <p className="font-work-sans-medium text-[#202020] text-base lg:text-lg">
             Password Change
           </p>
-          <p className=" text-[#707070] font-work-sans-regular">
+          <p className=" text-[#707070] text-xs lg:text-sm font-work-sans-regular">
             {`Secure your account by updating your password. A strong, unique password helps protect your personal information`}
           </p>
         </div>
         <div className="mt-2 bg-white border border-[#BEBEBE59] py-4 rounded-lg px-4 flex items-center justify-between">
-          <p className=" text-[#202020]">Sam*****2@Gmail.com</p>
+          <p className=" text-[#202020] lg:text-sm text-xs">
+            Sam*****2@Gmail.com
+          </p>
           <Button
             action={() => {}}
             loading={false}
@@ -24,17 +26,19 @@ export const SecuritySetting = () => {
       </div>
       <div className="mb-4">
         <div>
-          <p className="font-work-sans-medium text-[#202020] text-lg">
+          <p className="font-work-sans-medium text-[#202020] text-base lg:text-lg">
             Two Factor Authentication
           </p>
-          <p className=" text-[#707070] font-work-sans-regular">
+          <p className=" text-[#707070] font-work-sans-regular text-xs lg:text-sm ">
             {`2-step verification adds an extra layer of security to help keep your account safe. We strongly recommend enabling it.`}
           </p>
         </div>
         <div className="mt-2 bg-white border border-[#BEBEBE59] py-4 rounded-lg px-4 flex items-center justify-between">
           <div>
-            <p className=" text-[#202020]">+234 81****1233</p>
-            <p className=" text-[#707070] font-work-sans-regular">
+            <p className=" text-[#202020] text-xs lg:text-sm ">
+              +234 81****1233
+            </p>
+            <p className=" text-[#707070] text-xs lg:text-sm  font-work-sans-regular">
               Add an extra layer of protection to your account.
             </p>
           </div>
@@ -48,17 +52,16 @@ export const SecuritySetting = () => {
       </div>
       <div className="mb-4">
         <div>
-          <p className="font-work-sans-medium text-[#202020] text-lg">
+          <p className="font-work-sans-medium text-[#202020] text-base lg:text-lg">
             Logout from all Sessions
           </p>
-          <p className=" text-[#707070] font-work-sans-regular">
+          <p className=" text-[#707070] text-xs lg:text-sm  font-work-sans-regular">
             {`Log out your account from all other active devices and sessions for better security.`}
           </p>
         </div>
         <div className="mt-2 bg-white border border-[#BEBEBE59] py-4 rounded-lg px-4 flex items-center justify-between">
-         
-            <p className=" text-[#202020]">My Devices</p>
-            
+          <p className=" text-[#202020] text-xs lg:text-sm">My Devices</p>
+
           <Button
             action={() => {}}
             loading={false}
