@@ -38,6 +38,7 @@ export const DashboardSideNav = ({
 }) => {
   //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
   const [showInsightDropDown, setShowInsightDropdown] = useState(false);
+  const [showPartnershipDropDown, setShowPartnershipDropDown] = useState(false);
   const pathName = usePathname();
   const prevPath = useRef(pathName);
   const navObject = [
@@ -99,8 +100,18 @@ export const DashboardSideNav = ({
       text: "Partnership",
       activeIcon: partnershipActive,
       inactiveIcon: partnershipInactive,
-      clickAction: () => {},
+      clickAction: () => {
+        setShowPartnershipDropDown((prev) => !prev);
+      },
       slug: "partnership",
+      activeState: showPartnershipDropDown,
+      sub: [
+        { text: "Accounts", slug: "account", clickAction: () => {} },
+        { text: "Referral Link", slug: "referral", clickAction: () => {} },
+        { text: "Clients", slug: "clients", clickAction: () => {} },
+        { text: "IB Program", slug: "ib-program", clickAction: () => {} },
+        { text: "Reports", slug: "reports", clickAction: () => {} },
+      ],
     },
     {
       text: "Bonuses",

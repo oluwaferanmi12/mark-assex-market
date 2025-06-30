@@ -204,7 +204,7 @@ export const TransactionTable = () => {
                   style={{
                     boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
                   }}
-                  className=" border border-[red]"
+                  
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => {

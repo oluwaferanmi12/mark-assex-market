@@ -324,7 +324,7 @@ export const TradeContainer = () => {
               <p>Available to withdraw</p>
             </div>
             <p className="text-[#707070] text-lg font-work-sans-regular">
-              Server: <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
+              Platform: <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
             </p>
           </div>
           <div className="flex flex-col gap-3">
