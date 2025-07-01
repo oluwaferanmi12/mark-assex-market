@@ -1,4 +1,4 @@
-import { AnalyticsDataInterface, BonusInterface, OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
+import { AnalyticsDataInterface, BonusInterface, ClientInterface, OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
 
 export const orderData: OrderInterface[] = [
     {
@@ -130,4 +130,71 @@ export const analyticsData: AnalyticsDataInterface[] = [
         openPrice: 1.0845,
         trend: "Bearish"
     }
+]
+
+export const clientData: ClientInterface[] = [
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
+    {
+        name: "Marcus Lee",
+        email: "marcuslee@gmail.com",
+        phone: "+44 7700 900123",
+        ibAccount: "IB-10223",
+        status: "Active",
+        date: "10 Oct, 2025 14:10"
+    },
 ]

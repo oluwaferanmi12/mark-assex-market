@@ -98,3 +98,13 @@ export interface SettingsTabInterface {
     id: SettingsIdType
 }
 export type ModuleVerifiedStatus = "verifying" | "verified" | 'not-verified';
+
+
+export interface ClientInterface {
+    name: string;
+    email: string;
+    phone: string;
+    ibAccount: string;
+    status: "Active" | "Inactive";
+    date: string;
+}
