@@ -516,7 +516,12 @@ export const DashboardTopNav = () => {
                     </div>
                   </div>
                   <div className="my-4 cursor-pointer">
-                    <div className="flex items-center gap-2">
+                    <div
+                      onClick={() => {
+                        router.push("/settings");
+                      }}
+                      className="flex items-center gap-2"
+                    >
                       <Image src={accountSetting} alt="" />
                       <p className="text-[#202020] font-work-sans-medium">
                         Account Settings
@@ -524,7 +529,12 @@ export const DashboardTopNav = () => {
                     </div>
                   </div>
                   <div className="my-4 cursor-pointer">
-                    <div className="flex items-center gap-2">
+                    <div
+                      onClick={() => {
+                        router.push("/support");
+                      }}
+                      className="flex items-center gap-2"
+                    >
                       <Image src={headphoneIcon} alt="" />
                       <p className="text-[#202020] font-work-sans-medium">
                         Support
