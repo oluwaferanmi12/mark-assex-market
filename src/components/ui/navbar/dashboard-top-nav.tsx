@@ -9,7 +9,7 @@ import profilePlaceholder from "@/assets/svgs/profile-placeholder.svg";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import smallLogo from "@/assets/svgs/nav-logo.svg";
 import hamburgerIcon from "@/assets/svgs/hamburger-icon.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DashboardSideNav } from "@/components/ui/navbar/dashboard-side-nav";
 import { AnimatePresence, motion } from "framer-motion";
 import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
@@ -19,12 +19,20 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { NotificationWrapper } from "@/components/shared/wrappers/notification-wrapper";
 import { NotificationWithImage } from "@/components/shared/wrappers/notification-with-wrapper";
 import { useRouter } from "next/navigation";
+import { Dropdown, MenuProps } from "antd";
+import { CustomDropDown } from "@/components/ui/drop-down/custom-dropdown";
+import accountSetting from "@/assets/svgs/profile-setting-icon.svg";
+import supportIcon from "@/assets/svgs/support-chat-icon.svg";
+import headphoneIcon from "@/assets/svgs/head-phone-icon.svg";
+import logoutIcon from "@/assets/svgs/logout-icon-red.svg"
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [activeNotificationTab, setActiveNotificationTab] = useState(0);
-  const router = useRouter()
+  const [showCustomDropDown, setShowCustomDropDown] = useState(false);
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
@@ -32,6 +40,27 @@ export const DashboardTopNav = () => {
       document.body.style.overflow = "hidden";
     }
   }, [showSideNav]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: any) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowCustomDropDown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [setShowCustomDropDown]);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <div className="border border-[#BEBEBE59] rounded-lg p-4">
+          1st menu item
+        </div>
+      ),
+    },
+  ];
   return (
     <>
       <SideDrawerWrapper
@@ -242,18 +271,82 @@ export const DashboardTopNav = () => {
           >
             <Image src={notificationIcon} alt="" />
           </div>
-          <div className="cursor-pointer" onClick={() => {
-            router.push("/support")
-          }}>
-            <Image src={dailyIcon} alt="" />
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              router.push("/support");
+            }}
+          >
+            <Image src={headphoneIcon} alt="" />
           </div>
-          <div className="flex items-center gap-2">
-            <Image
-              src={profilePlaceholder}
-              className="w-[30px] h-[30px]"
-              alt=""
-            />
-            <Image src={arrowDown} alt="" />
+
+          <div className="relative " ref={dropdownRef}>
+            <div
+              onClick={() => {
+                setShowCustomDropDown((prev) => !prev);
+              }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Image
+                src={profilePlaceholder}
+                className="w-[30px] h-[30px]"
+                alt=""
+              />
+              <Image src={arrowDown} alt="" />
+            </div>
+            <AnimatePresence>
+              {showCustomDropDown && (
+                <motion.div
+                  key="dropdown"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute right-0 mt-2 w-[300px] rounded-md border border-gray-300 bg-white shadow-lg z-50 p-4"
+                >
+                  <div className="p-2 rounded-lg border border-[#BEBEBE59] flex items-center gap-2">
+                    <Image
+                      alt=""
+                      src={profilePlaceholder}
+                      className="w-[50px] h-[50px]"
+                    />
+                    <div>
+                      <p className="text-[#202020] text-base font-work-sans-medium">
+                        Tarique
+                      </p>
+                      <p className="text-[#707070] text-sm font-work-sans-regular">
+                        Blaise@gmail.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="my-4 cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <Image src={accountSetting} alt="" />
+                      <p className="text-[#202020] font-work-sans-medium">
+                        Account Settings
+                      </p>
+                    </div>
+                  </div>
+                  <div className="my-4 cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <Image src={headphoneIcon} alt="" />
+                      <p className="text-[#202020] font-work-sans-medium">
+                        Support
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="my-4 cursor-pointer border-t border-[#BEBEBE80] pt-4">
+                    <div className="flex items-center gap-2">
+                      <Image src={logoutIcon} alt="" />
+                      <p className="text-[#D80027] font-work-sans-medium">
+                        Log out
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

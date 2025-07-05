@@ -1,0 +1,28 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+        d="M8.33073 12.5H4.9974C4.11334 12.5 3.26549 12.8512 2.64037 13.4763C2.01525 14.1014 1.66406 14.9493 1.66406 15.8333V17.5"
+        stroke="#202020" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M11.9219 13.775L12.691 13.4567" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M12.691 11.5433L11.9219 11.2242" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M14.0457 10.19L13.7266 9.42084" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M14.0457 14.81L13.7266 15.58" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M15.9531 10.19L16.2723 9.42084" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M16.2715 15.58L15.9531 14.81" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M17.3125 11.5433L18.0825 11.2242" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M17.3125 13.4567L18.0825 13.7758" stroke="#202020" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path
+        d="M15 15C16.3807 15 17.5 13.8807 17.5 12.5C17.5 11.1193 16.3807 10 15 10C13.6193 10 12.5 11.1193 12.5 12.5C12.5 13.8807 13.6193 15 15 15Z"
+        stroke="#202020" stroke-linecap="round" stroke-linejoin="round" />
+    <path
+        d="M7.4974 9.16667C9.33835 9.16667 10.8307 7.67428 10.8307 5.83333C10.8307 3.99238 9.33835 2.5 7.4974 2.5C5.65645 2.5 4.16406 3.99238 4.16406 5.83333C4.16406 7.67428 5.65645 9.16667 7.4974 9.16667Z"
+        stroke="#202020" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+    
