@@ -24,7 +24,15 @@ import { CustomDropDown } from "@/components/ui/drop-down/custom-dropdown";
 import accountSetting from "@/assets/svgs/profile-setting-icon.svg";
 import supportIcon from "@/assets/svgs/support-chat-icon.svg";
 import headphoneIcon from "@/assets/svgs/head-phone-icon.svg";
-import logoutIcon from "@/assets/svgs/logout-icon-red.svg"
+import logoutIcon from "@/assets/svgs/logout-icon-red.svg";
+import modalLogoutIcon from "@/assets/svgs/modal-logout-icon.svg";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import { Button } from "@/components/ui/buttons/button";
+import successIcon from "@/assets/svgs/success-icon.svg";
+import twoFAIcon from "@/assets/svgs/two-fa-icon.svg";
+import phoneEmptyIcono from "@/assets/svgs/phone-empty-icon.svg";
+import { OTPInput } from "@/components/ui/inputs/otp-input";
+import { CountDown } from "@/components/shared/timer/count-down";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -32,6 +40,11 @@ export const DashboardTopNav = () => {
   const [activeNotificationTab, setActiveNotificationTab] = useState(0);
   const [showCustomDropDown, setShowCustomDropDown] = useState(false);
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showLoggedOutModal, setShowLoggedOutModal] = useState(false);
+  const [show2fa, setShow2fa] = useState(true);
+  const [showVerifyOtp, setShowVerifyOtp] = useState(false);
+  const [countDownDone, setCountDownDone] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (showSideNav) {
@@ -63,6 +76,189 @@ export const DashboardTopNav = () => {
   ];
   return (
     <>
+      <ModalContainer
+        active={showVerifyOtp}
+        handleClose={() => setShowVerifyOtp(false)}
+      >
+        <ModalBody>
+          <div className="flex flex-col items-center justify-center">
+            <div>
+              <Image src={twoFAIcon} alt="" />
+            </div>
+            <p className="text-base font-work-sans-semi-bold">Verify OTP</p>
+            <div className="w-4/5">
+              <p className="font-work-sans-regular mx-auto text-center text-[#707070] my-2">
+                We’ve sent a 6-digit verification code to +234 81****1233.
+              </p>
+              <div>
+                <OTPInput />
+              </div>
+              <div className="flex items-center justify-center mt-3">
+                {countDownDone ? (
+                  <div className=" flex items-center font-work-sans-light">
+                    <p className="text-xs">
+                      Didn't receive any code?{" "}
+                      <span className="text-[#004DEF] cursor-pointer">
+                        Resend code
+                      </span>
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs font-work-sans-regular">
+                    <span className="font-work-sans-light">Resending in</span>
+                    <span>
+                      {" "}
+                      <CountDown
+                        maxTime={10}
+                        setCountDownDone={setCountDownDone}
+                      />
+                      s
+                    </span>
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex justify-end gap-2">
+            <Button
+              action={() => {
+                setShowVerifyOtp(false);
+              }}
+              loading={false}
+              text="Verify & Enable 2FA"
+              variant="green-bg"
+              fullWidth
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+      <ModalContainer active={show2fa} handleClose={() => setShow2fa(false)}>
+        <ModalBody>
+          <div className="flex flex-col items-center justify-center">
+            <div>
+              <Image src={twoFAIcon} alt="" />
+            </div>
+            <p className="text-base font-work-sans-semi-bold">
+              Secure Your account with 2FA
+            </p>
+            <div className="w-4/5">
+              <p className="font-work-sans-regular mx-auto text-center text-[#707070] my-2">
+                Add an extra layer of protection by enabling two-step
+                verification using your mobile number.
+              </p>
+              <div className="border border-[#0DAE9459] bg-[#0DAE9405] p-4 rounded-lg flex justify-center gap-2">
+                <span>
+                  <Image src={phoneEmptyIcono} alt="" />
+                </span>
+                <p className="text-xs font-work-sans-regular text-[#0DAE94]">
+                  An OTP code would be sent to +234 81****1233
+                </p>
+              </div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex justify-end gap-2">
+            <Button
+              action={() => {
+                setShow2fa(false);
+              }}
+              loading={false}
+              text="Cancel"
+              variant="grey-bg"
+            />
+            <Button
+              action={() => {
+                setShowVerifyOtp(true);
+                setShow2fa(false);
+              }}
+              loading={false}
+              text="Send OTP"
+              variant="green-bg"
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+      <ModalContainer
+        active={showLogoutModal}
+        handleClose={() => {
+          setShowLogoutModal(false);
+        }}
+      >
+        <ModalHeader
+          handleCancel={() => {
+            setShowLogoutModal(false);
+          }}
+          headText={modalLogoutIcon}
+          iconType
+        />
+        <ModalBody>
+          <div>
+            <p className="font-work-sans-medium text-base">
+              Logout from all sessions
+            </p>
+            <p className="font-work-sans-regular mt-2 text-xs">
+              This will log you out from all devices currently signed into your
+              account, except this one
+            </p>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex items-center gap-2 justify-end">
+            <Button
+              action={() => {
+                setShowLogoutModal(false);
+              }}
+              loading={false}
+              variant="grey-bg"
+              text="Cancel"
+            />
+            <Button
+              action={() => {
+                setShowLogoutModal(false);
+                setShowLoggedOutModal(true);
+              }}
+              loading={false}
+              variant="red-bg"
+              text="Yes, Log out"
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+      <ModalContainer
+        active={showLoggedOutModal}
+        handleClose={() => setShowLoggedOutModal(false)}
+      >
+        <ModalBody>
+          <div className="flex items-center flex-col justify-center">
+            <div>
+              <Image src={successIcon} alt="" />
+            </div>
+            <div className="flex items-center justify-center flex-col mb-2">
+              <p className="text-base mb-2 font-work-sans-medium">
+                Logged Out from all devices
+              </p>
+              <p className="text-sm text-center text-[#707070] mb-2 font-work-sans-regular">
+                You’ve been successfully logged out from all active sessions
+                except this one.
+              </p>
+            </div>
+            <div className="w-full">
+              <Button
+                variant="green-bg"
+                action={() => {
+                  setShowLoggedOutModal(false);
+                }}
+                loading={false}
+                text="Close"
+                fullWidth
+              />
+            </div>
+          </div>
+        </ModalBody>
+      </ModalContainer>
       <SideDrawerWrapper
         fullHeight
         active={showNotification}
@@ -336,7 +532,13 @@ export const DashboardTopNav = () => {
                     </div>
                   </div>
 
-                  <div className="my-4 cursor-pointer border-t border-[#BEBEBE80] pt-4">
+                  <div
+                    className="my-4 cursor-pointer border-t border-[#BEBEBE80] pt-4"
+                    onClick={() => {
+                      setShowCustomDropDown(false);
+                      setShowLogoutModal(true);
+                    }}
+                  >
                     <div className="flex items-center gap-2">
                       <Image src={logoutIcon} alt="" />
                       <p className="text-[#D80027] font-work-sans-medium">
