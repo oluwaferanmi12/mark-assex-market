@@ -11,12 +11,13 @@ import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { SupportChatWrapper } from "@/components/shared/wrappers/support-chat-wrapper";
 import { SupportUserWrapper } from "@/components/shared/wrappers/support-user-wrapper";
+import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
 
 const Support = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   return (
     <>
-      <ModalContainer
+      <SideDrawerWrapper
         active={showChatModal}
         handleClose={() => {
           setShowChatModal(false);
@@ -34,15 +35,23 @@ const Support = () => {
             <SupportChatWrapper />
             <SupportUserWrapper />
             <div className="mt-2">
-              <textarea placeholder="Write a message" className="border font-work-sans-regular p-4 border-[#BEBEBE] w-full rounded-lg"></textarea>
+              <textarea
+                placeholder="Write a message"
+                className="border font-work-sans-regular p-4 border-[#BEBEBE] w-full rounded-lg"
+              ></textarea>
               <div className="flex justify-end">
-
-              <Button  action={() => {}} loading={false} text="Send" variant="green-bg" buttonSmaller />
+                <Button
+                  action={() => {}}
+                  loading={false}
+                  text="Send"
+                  variant="green-bg"
+                  buttonSmaller
+                />
               </div>
             </div>
           </>
         </ModalBody>
-      </ModalContainer>
+      </SideDrawerWrapper>
       <PageHeader text="Need Support" />
       <p className="text-[#707070] font-work-sans-regular">
         Your go-to place for support. Search answers, resolve issues, and

@@ -32,7 +32,7 @@ const InternalTransfer = () => {
             onClick={() => {
               setActiveOption(0);
             }}
-            className="bg-white px-4 py-2 border w-full cursor-pointer border-[#BEBEBE59] rounded-lg flex items-center gap-2"
+            className="bg-white  px-4 py-2 border cursor-pointer border-[#BEBEBE59] rounded-lg flex items-center gap-2"
           >
             <Image
               src={activeOption === 0 ? checkedIcon : unCheckedIcon}
@@ -51,7 +51,7 @@ const InternalTransfer = () => {
               setActiveOption(1);
             }}
             className={
-              "bg-white px-4 cursor-pointer py-2 border border-[#BEBEBE59] rounded-lg w-full flex items-center gap-2"
+              "bg-white px-4 cursor-pointer py-2 border border-[#BEBEBE59] rounded-lg flex items-center gap-2"
             }
           >
             <Image
@@ -95,7 +95,7 @@ const InternalTransfer = () => {
           </div>
           <div className="flex items-center flex-col lg:flex-row gap-3 lg:gap-6 w-full mb-4">
             <TransferInput label="Amount" icon={dollarIcon} />
-            <TransferInput label="Amount to be recieved" greyBg />
+            <TransferInput   label="Amount to be recieved" disabled greyBg />
           </div>
           <div className="my-4">
             <VisibleOnDesktop>
