@@ -24,7 +24,7 @@ import mobileEditIcon from "@/assets/svgs/mobile-edit-icon.svg";
 import minusIcon from "@/assets/svgs/minus-button.svg";
 import plusIcon from "@/assets/svgs/plus-button.svg";
 import redCaution from "@/assets/svgs/red-caution.svg";
-
+import { useRouter } from "next/navigation";
 
 export const TradeContainer = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -33,6 +33,7 @@ export const TradeContainer = () => {
   const [password, setPassword] = useState("");
   const [newAccountName, setNewAccountName] = useState("");
   const [showLeverageModal, setShowLeverageModal] = useState(false);
+  const router = useRouter();
   const liveAccountDropDownList: DropDownListInterface[] = [
     { text: "Deposit Funds", id: "" },
     { text: "Account Trade History", id: "" },
@@ -276,7 +277,9 @@ export const TradeContainer = () => {
                 buttonSmaller
                 text="Deposit"
                 loading={false}
-                action={() => {}}
+                action={() => {
+                  router.push("/deposit");
+                }}
                 textBolder
                 fullRounded
               />
@@ -286,7 +289,9 @@ export const TradeContainer = () => {
                 buttonSmaller
                 text="Withdraw"
                 loading={false}
-                action={() => {}}
+                action={() => {
+                  router.push("/withdrawal");
+                }}
                 textBolder
                 fullRounded
               />
@@ -378,13 +383,23 @@ export const TradeContainer = () => {
             </span>
             <p className="text-[#202020] font-work-sans-regular">Trade</p>
           </div>
-          <div className="flex items-center flex-col justify-center gap-2">
+          <div
+            onClick={() => {
+              router.push("/deposit");
+            }}
+            className="flex items-center flex-col justify-center gap-2"
+          >
             <span>
               <Image src={depositIcon} alt="" />
             </span>
             <p className="text-[#0DAE94] font-work-sans-regular">Deposit</p>
           </div>
-          <div className="flex items-center flex-col justify-center gap-2">
+          <div
+            onClick={() => {
+              router.push("/withdrawal");
+            }}
+            className="flex items-center flex-col justify-center gap-2"
+          >
             <span>
               <Image src={withdrawIcon} alt="" />
             </span>
@@ -419,9 +434,12 @@ export const TradeContainer = () => {
               <p className="font-work-sans-regular text-[#404040] text-xs">
                 1:200
               </p>
-              <span onClick={() => {
-                setShowLeverageModal(true);
-              }} className="cursor-pointer ">
+              <span
+                onClick={() => {
+                  setShowLeverageModal(true);
+                }}
+                className="cursor-pointer "
+              >
                 <Image src={mobileEditIcon} alt="" />
               </span>
             </div>
