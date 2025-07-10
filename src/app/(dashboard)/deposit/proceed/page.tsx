@@ -24,7 +24,7 @@ const Proceed = () => {
   const params = useSearchParams();
   const [activeState, setActiveState] = useState(params.get("val"));
 
-  useEffect(() => {}, []);
+
   return (
     <>
       <SuccessModal
