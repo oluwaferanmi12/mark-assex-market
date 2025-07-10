@@ -19,6 +19,9 @@ import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper"
 import bigXIcon from "@/assets/svgs/moda-big-x-icon.svg";
 import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
 import internalTransferIcon from "@/assets/svgs/internal-transfer-icon.svg";
+import bankIcon from "@/assets/svgs/bank-icon.svg";
+import tether1 from "@/assets/svgs/tether-1.svg";
+import tether2 from "@/assets/svgs/tether-2.svg";
 
 const Deposit = () => {
   const [statusSelected, setStatusSelected] = useState("All");
@@ -33,10 +36,13 @@ const Deposit = () => {
   ];
 
   const depositObject = [
-    {text: "Internal Transfer" , icon: internalTransferIcon},
+    { text: "Internal Bank Transfer", icon: internalTransferIcon },
+    { text: "Bank Card", icon: bankIcon },
     { text: "Crypto Chilll", icon: crypto },
     { text: "Korahq", icon: koraHq },
     { text: "Paystack", icon: paystack },
+    { text: "Tether (USDT ERC20)", icon: tether1 },
+    { text: "Tether (USDT TRC20)", icon: tether2 },
   ];
 
   return (
@@ -89,7 +95,7 @@ const Deposit = () => {
       <Row gutter={16} className="mt-8">
         {depositObject.map((item, index) => {
           return (
-            <Col xs={24} lg={12} className="mb-4">
+            <Col key={index} xs={24} lg={12} className="mb-4">
               <DepositWrapper
                 setActiveIndex={setActiveIndex}
                 index={index}
@@ -101,7 +107,6 @@ const Deposit = () => {
           );
         })}
       </Row>
-    
     </React.Fragment>
   );
 };
