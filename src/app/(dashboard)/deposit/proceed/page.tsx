@@ -16,6 +16,9 @@ import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import exclamationIcon from "@/assets/svgs/exclamationIcon.svg";
 import qrCode from "@/assets/svgs/qr-code-placeholder.svg";
+import masterCardIcon from "@/assets/svgs/mastercardIcon.svg";
+import dollarIcon from "@/assets/svgs/dollar-green.svg";
+import securityIcon from "@/assets/svgs/security-icon.svg";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -23,7 +26,6 @@ const Proceed = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const params = useSearchParams();
   const [activeState, setActiveState] = useState(params.get("val"));
-
 
   return (
     <>
@@ -153,6 +155,98 @@ const Proceed = () => {
               </Col>
             </Row>
           </div>
+        ) : activeState?.toLowerCase().includes("bank card") ? (
+          <Row>
+            <Col sm={12} xs={24}>
+              <div>
+                <div>
+                  <p className="text-[#707070] font-work-sans-regular text-xs sm:text-sm mb-1">
+                    Card Information{" "}
+                  </p>
+                  <div>
+                    <div className="relative mb-3">
+                      <span className="absolute right-2 top-3">
+                        <Image src={masterCardIcon} className="" alt="" />
+                      </span>
+                      <input
+                        placeholder="1234 1234 1234"
+                        className="border-[0.5px] w-full border-[#BEBEBE80] p-3"
+                      />
+                      <div className="flex items-center ">
+                        <input
+                          placeholder="MM/YY"
+                          className="border-[0.5px] w-full border-[#BEBEBE80] p-3"
+                        />
+                        <input
+                          placeholder="CVC"
+                          className="border-[0.5px] w-full border-[#BEBEBE80] p-3"
+                        />
+                      </div>
+                    </div>
+                    <div className="relative mb-3">
+                      <p className="text-[#707070] font-work-sans-regular text-xs sm:text-sm mb-1">
+                        Cardholder Name
+                      </p>
+                      <div>
+                        <input
+                          placeholder="Enter Name on card"
+                          className="border-[0.5px] w-full border-[#BEBEBE80] p-3"
+                        />
+                      </div>
+                    </div>
+                    <div className="relative mb-3">
+                      <p className="text-[#707070] font-work-sans-regular text-xs sm:text-sm mb-1">
+                        To account
+                      </p>
+                      <div>
+                        <input
+                          placeholder="8197834"
+                          className="border-[0.5px] w-full border-[#BEBEBE80] p-3"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <TransferInput label="Amount" icon={dollarIcon} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2  py-2">
+                        <p className="text-[#404040] font-work-sans-regular">
+                          To be deposited:
+                        </p>
+                        <p className="text-[#111111]  font-work-sans-semi-bold">
+                          $10.00
+                        </p>
+                      </div>
+                    </div>
+                    <div className="my-4">
+                      <Button
+                        action={() => {
+                          setVerificationModal(true);
+                        }}
+                        loading={false}
+                        text="Proceed"
+                        variant="green-bg"
+                        icon={arrowRightMultiple}
+                        iconPosition="right"
+                      />
+                    </div>
+                    <div className="bg-[#E7F7F4] p-4 rounded-lg flex items-center gap-4">
+                      <Image src={securityIcon} alt="" />
+                      <p>
+                        <span className="text-sm text-[#1F0D3F] font-work-sans-medium">
+                          Notice:{" "}
+                        </span>
+                        <span className="font-work-sans-regular">
+                          All data is securely encrypted and protected in
+                          accordance with industry standards.
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+          </Row>
         ) : (
           <>
             {showDepositDetails ? (
