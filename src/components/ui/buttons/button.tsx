@@ -13,13 +13,13 @@ export const Button = ({
   type = "button",
   buttonSmaller,
   textBolder,
-  
+  buttonDisabled,
 }: ButtonInterface) => {
   return (
     <button
       onClick={action}
       type={type}
-      disabled={loading}
+      disabled={loading || buttonDisabled}
       className={`${
         variant === "green-bg"
           ? "bg-[#0DAE94] text-white"
@@ -46,7 +46,9 @@ export const Button = ({
         buttonSmaller ? "py-2 px-4 text-xs" : "px-4 py-3 text-xs lg:text-sm"
       } ${
         textBolder ? "font-work-sans-medium" : "font-work-sans-regular "
-      } flex  items-center gap-1 justify-center  cursor-pointer  whitespace-nowrap  `}
+      } flex  items-center gap-1 justify-center  cursor-pointer  whitespace-nowrap  ${
+        (loading || buttonDisabled) && "opacity-20"
+      }  `}
     >
       {icon && iconPosition === "left" && (
         <div>
@@ -54,7 +56,7 @@ export const Button = ({
         </div>
       )}
 
-      <p>{text}</p>
+      <p>{loading ? "Loading..." : text}</p>
 
       {icon && iconPosition === "right" && (
         <div>

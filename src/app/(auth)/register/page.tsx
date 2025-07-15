@@ -15,13 +15,71 @@ import addIcon from "@/assets/svgs/add-icon.svg";
 import { AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/animation/fade-in";
 import { useRouter } from "next/navigation";
+import { isValidEmail } from "@/utils/email-validate";
+import { useRegister } from "@/hooks/queries/useAuth";
+import { SelectInput } from "@/components/ui/inputs/select-input";
+import { countryList } from "@/utils/country-list";
+import { GSelect } from "@/components/ui/inputs/general-select";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [citizenChecked, setCitizenChecked] = useState(true);
   const [showPromoCode, setShowPromoCode] = useState(false);
   const [showPartnerCode, setShowPartnerCode] = useState(false);
+  const [country, setCountry] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [countryError, setCountryError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [registerLoading, setRegisterLoading] = useState(false);
+
   const router = useRouter();
+  const registerMutate = useRegister(() => {
+    setRegisterLoading(false);
+    router.push("/register/otp");
+  });
+
+  const validateData = () => {
+    let validated = true;
+    if (!country) {
+      validated = false;
+      setCountryError("Country is required");
+    }
+    if (!email) {
+      validated = false;
+      setEmailError("Email is required");
+    } else if (!isValidEmail(email)) {
+      validated = false;
+      setEmailError("A valid email type is required");
+    }
+
+    if (!password) {
+      validated = false;
+      setPasswordError("Password is required");
+    } else if (
+      !(password.length >= 8) ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[^A-Za-z0-9]/.test(password)
+    ) {
+      setPasswordError("Criteria for password does not match");
+    } else if (password !== confirmPassword) {
+      validated = false;
+      setPasswordError("Password mismatch");
+    }
+
+    return validated;
+  };
+
+  const handleRegister = () => {
+    if (!validateData()) {
+      return;
+    }
+    console.log("I Still got here");
+    registerMutate.mutate({ email, country, password, confirmPassword });
+  };
+
   return (
     <div>
       <AuthHeaderWrapper text="Create your account" />
@@ -32,42 +90,59 @@ const Register = () => {
           setInputValue={setEmail}
           label="Email Address"
           placeholder="Enter email address"
+          errorState={emailError}
         />
+        <GSelect
+          label="Country/ Region of Residence"
+          inputValue={country}
+          setInputValue={(val) => setCountry(val)}
+          errorState={countryError}
+        >
+          <option value={""}>Select Country</option>
+          {countryList.map((item) => {
+            return (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            );
+          })}
+        </GSelect>
+
         <GInput
-          inputValue={email}
-          setInputValue={setEmail}
-          placeholder="Select country"
-          label="Country / Region Of Residence"
-        />
-        <GInput
-          inputValue={email}
-          setInputValue={setEmail}
+          inputValue={password}
+          setInputValue={setPassword}
           label="Password"
-          placeholder="Enter email address"
+          placeholder="Enter Password"
+          errorState={passwordError}
           type="password"
         />
         <GInput
-          inputValue={email}
-          setInputValue={setEmail}
+          inputValue={confirmPassword}
+          setInputValue={setConfirmPassword}
           label="Confirm password"
           placeholder="Confirm password"
           type="password"
         />
-        <div className="mb-3">
-          <PasswordValidateText validated text="At least 8 characters" />
-          <PasswordValidateText
-            validated
-            text="At least one uppercase letter (A–Z)"
-          />
-          <PasswordValidateText
-            validated={false}
-            text="At least 8 characters"
-          />
-          <PasswordValidateText
-            validated={false}
-            text="At least one special character (e.g. !, @, #, $)"
-          />
-        </div>
+        {!!password.length && (
+          <div className="mb-3">
+            <PasswordValidateText
+              validated={password.length >= 8}
+              text="At least 8 characters"
+            />
+            <PasswordValidateText
+              validated={/[A-Z]/.test(password)}
+              text="At least one uppercase letter (A–Z)"
+            />
+            <PasswordValidateText
+              validated={/[0-9]/.test(password)}
+              text="At least one number (0–9)"
+            />
+            <PasswordValidateText
+              validated={/[^A-Za-z0-9]/.test(password)}
+              text="At least one special character (e.g. !, @, #, $)"
+            />
+          </div>
+        )}
 
         <div
           onClick={() => {
@@ -133,12 +208,14 @@ const Register = () => {
         />
         <div className="mt-4">
           <Button
+            buttonDisabled={!citizenChecked}
             text="Register"
             fullWidth
             action={() => {
-              router.push("/register/otp");
+              // router.push("/register/otp");
+              handleRegister();
             }}
-            loading={false}
+            loading={registerLoading}
             variant="green-bg"
           />
         </div>

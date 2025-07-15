@@ -9,7 +9,8 @@ export interface ButtonInterface {
     fullWidth?: boolean;
     type?: 'button' | 'submit';
     buttonSmaller?: boolean
-    textBolder?: boolean
+    textBolder?: boolean;
+    buttonDisabled?: boolean;
 }
 
 export interface SubNavInterface {
