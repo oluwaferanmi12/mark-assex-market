@@ -11,7 +11,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
       key={pathname}
       initial={{ y: 0, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ ease: "easeInOut", duration: 0.3 }}
+      transition={{ ease: "easeInOut", duration: 0.5 }}
     >
       {children}
     </motion.div>
