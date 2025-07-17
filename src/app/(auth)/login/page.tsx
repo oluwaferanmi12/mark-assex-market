@@ -7,11 +7,42 @@ import { GInput } from "@/components/ui/inputs/general-input";
 import React, { useState } from "react";
 import googleIcon from "@/assets/svgs/google-icon.svg";
 import { useRouter } from "next/navigation";
-
+import { useLogin } from "@/hooks/queries/useAuth";
+import { isValidEmail } from "@/utils/email-validate";
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
-  const router = useRouter()
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const loginMutate = useLogin((data) => {
+    toast.success("Authenticated Successfully");
+  });
+  const router = useRouter();
+
+  const validate = () => {
+    let validated = true;
+    if (!password) {
+      validated = false;
+      setPasswordError("Password is required");
+    }
+    if (!email) {
+      setEmailError("Email is required");
+      validated = false;
+    } else if (!isValidEmail(email)) {
+      setEmailError("Email format is invalid");
+      validated = false;
+    }
+    return validated;
+  };
+
+  const handleLogin = () => {
+    if (!validate()) {
+      return;
+    }
+    loginMutate.mutate({ password, email });
+  };
   return (
     <div>
       <AuthHeaderWrapper text="Login to your account" />
@@ -24,9 +55,9 @@ const Login = () => {
           placeholder="Enter email address"
         />
         <GInput
-          setInputValue={setEmailAddress}
+          setInputValue={setPassword}
           label="Password"
-          inputValue={email}
+          inputValue={password}
           placeholder="Enter password"
           type="password"
           showForgotPassword
@@ -36,9 +67,10 @@ const Login = () => {
             text="Sign in"
             variant="green-bg"
             action={() => {
-              router.push('/account')
+              // router.push("/account");
+              handleLogin();
             }}
-            loading={false}
+            loading={loginMutate.isPending}
             fullWidth
           />
         </div>

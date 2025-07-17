@@ -1,22 +1,27 @@
-import { LoginInterface, LoginUserInterface } from "@/types"
-const userPure = localStorage.getItem("user");
-const userParsed: LoginInterface = JSON.parse(userPure ?? "")
+import { LoginInterface, LoginUserInterface } from "@/types";
+
 export const getAccessToken = () => {
-    return userParsed.accessToken ?? null
-}
+  const userPure = localStorage.getItem("user");
+  const userParsed: LoginInterface = JSON.parse(userPure ?? "");
+  return userParsed.accessToken ?? null;
+};
 
 export const getStoredUser = () => {
-    return userParsed ?? null
-}
+  const userPure = localStorage.getItem("user");
+  const userParsed: LoginInterface = JSON.parse(userPure ?? "");
+  return userParsed ?? null;
+};
 
 export const saveLocalUser = (payload: LoginInterface) => {
-    localStorage.setItem("user", JSON.stringify(payload))
-}
+  localStorage.setItem("user", JSON.stringify(payload));
+};
 
 export const getRefreshToken = () => {
-    return userParsed.refreshToken ?? null
-}
+  const userPure = localStorage.getItem("user");
+  const userParsed: LoginInterface = JSON.parse(userPure ?? "");
+  return userParsed.refreshToken ?? null;
+};
 
 export const removeUser = () => {
-    return localStorage.removeItem('user')
-}
+  return localStorage.removeItem("user");
+};

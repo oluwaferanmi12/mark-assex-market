@@ -20,4 +20,16 @@ export interface RegisterUserInterface {
   country: string;
   password: string;
   confirmPassword: string;
+  promoCode?: string;
+  partnerCode?: string;
+}
+
+export interface VerifyOtpInterface {
+  email: string;
+  otp: string;
+}
+
+export interface CreateLoginInterface {
+  email: string;
+  password: string;
 }

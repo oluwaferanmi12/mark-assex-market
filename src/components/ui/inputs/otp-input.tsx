@@ -2,14 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export const OTPInput = () => {
-  const [arrayInput, setArrayInput] = useState(["", "", "", "" , "", ""]);
+export const OTPInput = ({
+  setOtpValue,
+}: {
+  setOtpValue?: (val: string) => void;
+}) => {
+  const [arrayInput, setArrayInput] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const backSpaceRef = useRef<boolean>(false);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
+
+  useEffect(() => {
+    if (setOtpValue) {
+      setOtpValue(arrayInput.join(""));
+    }
+  }, arrayInput);
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,

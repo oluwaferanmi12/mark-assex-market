@@ -20,11 +20,14 @@ import { useRegister } from "@/hooks/queries/useAuth";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { countryList } from "@/utils/country-list";
 import { GSelect } from "@/components/ui/inputs/general-select";
+import { localStorageSetter } from "@/utils/localstorage-setter";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [citizenChecked, setCitizenChecked] = useState(true);
   const [showPromoCode, setShowPromoCode] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [partnerCode, setPartnerCode] = useState("");
   const [showPartnerCode, setShowPartnerCode] = useState(false);
   const [country, setCountry] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +40,8 @@ const Register = () => {
   const router = useRouter();
   const registerMutate = useRegister(() => {
     setRegisterLoading(false);
-    router.push("/register/otp");
+    localStorage.setItem("otp-email", email);
+    router.replace("/register/otp");
   });
 
   const validateData = () => {
@@ -73,11 +77,19 @@ const Register = () => {
   };
 
   const handleRegister = () => {
+    setRegisterLoading(true);
     if (!validateData()) {
+      setRegisterLoading(false);
       return;
     }
-    console.log("I Still got here");
-    registerMutate.mutate({ email, country, password, confirmPassword });
+    registerMutate.mutate({
+      email,
+      country,
+      password,
+      confirmPassword,
+      partnerCode,
+      promoCode,
+    });
   };
 
   return (
@@ -164,8 +176,8 @@ const Register = () => {
           {showPartnerCode && (
             <FadeIn>
               <GInput
-                inputValue={email}
-                setInputValue={setEmail}
+                inputValue={partnerCode}
+                setInputValue={setPartnerCode}
                 label="Partner code"
                 placeholder="Enter partner code"
               />
@@ -193,8 +205,8 @@ const Register = () => {
           {showPromoCode && (
             <FadeIn>
               <GInput
-                inputValue={email}
-                setInputValue={setEmail}
+                inputValue={promoCode}
+                setInputValue={setPromoCode}
                 label="Promo code"
                 placeholder="Enter promo code"
               />

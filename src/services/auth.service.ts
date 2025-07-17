@@ -1,7 +1,12 @@
 import { axiosInstance } from "@/api/axios";
-import { RegisterUserInterface } from "@/types";
+import {
+  CreateLoginInterface,
+  LoginInterface,
+  RegisterUserInterface,
+  VerifyOtpInterface,
+} from "@/types";
 
-export const login = async (payload: { email: string; password: string }) => {
+export const login = async (payload: CreateLoginInterface) => {
   const result = await axiosInstance.post("/auth/login", payload);
   return result.data;
 };
@@ -11,7 +16,7 @@ export const register = async (payload: RegisterUserInterface) => {
   return result.data;
 };
 
-export const verify = async (payload: { otp: string; email: string }) => {
+export const verify = async (payload: VerifyOtpInterface) => {
   const result = await axiosInstance.post("/auth/verify", payload);
   return result.data;
 };
