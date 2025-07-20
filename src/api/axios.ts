@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = getAccessToken();
     if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -25,7 +25,8 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    toast.error(error?.message)
-    Promise.reject(error);
+    const errorMessage = error?.response?.data?.message ?? error?.message;
+    toast.error(errorMessage);
+    return Promise.reject(error);
   }
-); 
+);

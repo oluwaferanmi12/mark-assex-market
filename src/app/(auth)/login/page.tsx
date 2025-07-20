@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/queries/useAuth";
 import { isValidEmail } from "@/utils/email-validate";
 import { toast } from "sonner";
+import { localStorageSetter } from "@/utils/localstorage-setter";
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
@@ -18,6 +19,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const loginMutate = useLogin((data) => {
     toast.success("Authenticated Successfully");
+    localStorageSetter("user", JSON.stringify(data.data));
   });
   const router = useRouter();
 

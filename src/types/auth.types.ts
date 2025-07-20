@@ -33,3 +33,10 @@ export interface CreateLoginInterface {
   email: string;
   password: string;
 }
+
+export interface CreateNewPasswordInterface {
+  email: string;
+  token: string;
+  password: string;
+  confirmPassword: string;
+}

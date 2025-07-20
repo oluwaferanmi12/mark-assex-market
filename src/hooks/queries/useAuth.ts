@@ -1,6 +1,14 @@
-import { login, register, verify } from "@/services/auth.service";
+import {
+  confirmOtp,
+  login,
+  register,
+  resetComplete,
+  resetPasswordRequest,
+  verify,
+} from "@/services/auth.service";
 import {
   CreateLoginInterface,
+  CreateNewPasswordInterface,
   LoginInterface,
   RegisterUserInterface,
   VerifyOtpInterface,
@@ -43,5 +51,41 @@ export const useLogin = (sc: (val: any) => void) => {
       sc(data);
     },
     mutationKey: ["login"],
+  });
+};
+
+export const useSendResetLink = (sc: () => void) => {
+  return useMutation({
+    mutationFn: (payload: string) => {
+      return resetPasswordRequest(payload);
+    },
+    mutationKey: ["resetPasswordLink"],
+    onSuccess: (data) => {
+      sc();
+    },
+  });
+};
+
+export const useConfirmOtp = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: VerifyOtpInterface) => {
+      return confirmOtp(payload);
+    },
+    mutationKey: ["confirmOtp"],
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useCreateNewPassword = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: CreateNewPasswordInterface) => {
+      return resetComplete(payload);
+    },
+    mutationKey: ["createNewPassword"],
+    onSuccess: (data) => {
+      sc(data);
+    },
   });
 };

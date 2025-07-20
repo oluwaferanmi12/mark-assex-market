@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/axios";
 import {
   CreateLoginInterface,
+  CreateNewPasswordInterface,
   LoginInterface,
   RegisterUserInterface,
   VerifyOtpInterface,
@@ -26,17 +27,12 @@ export const resetPasswordRequest = async (email: string) => {
   return result;
 };
 
-export const confirmOtp = async (payload: { email: string; otp: string }) => {
+export const confirmOtp = async (payload: VerifyOtpInterface) => {
   const result = await axiosInstance.post("/auth/reset/confirm-otp", payload);
   return result;
 };
 
-export const resetComplete = async (payload: {
-  email: string;
-  token: string;
-  password: string;
-  confirmPassword: string;
-}) => {
+export const resetComplete = async (payload: CreateNewPasswordInterface) => {
   const result = await axiosInstance.post("/auth/reset/complete", payload);
   return result;
 };

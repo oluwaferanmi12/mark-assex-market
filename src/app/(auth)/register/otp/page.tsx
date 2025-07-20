@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { useVerifyOTP } from "@/hooks/queries/useAuth";
 import { toast } from "sonner";
+import { getHashedEmail } from "@/utils/get-hashed-email";
 
 const RegisterOtp = () => {
   const router = useRouter();
@@ -19,16 +20,17 @@ const RegisterOtp = () => {
   const [maskedEmail, setMaskedEmail] = useState("");
   const [otpVal, setOtpVal] = useState("");
 
-  const { mutate, isPending, } = useVerifyOTP(() => {
+  const { mutate, isPending } = useVerifyOTP(() => {
     router.replace("/select-account-type");
+    removeLocalStorageValue("otp-email");
     toast.success("Otp verified");
   });
   // const email = localStorageGetter("otp-email");
   useEffect(() => {
     const emailLocalStorage = localStorage.getItem("otp-email")!;
     setEmail(emailLocalStorage);
-    const splittedEmail = emailLocalStorage?.split("@");
-    setMaskedEmail(`${splittedEmail[0][0]}***@${splittedEmail[1]}`);
+    const hashedEmail = getHashedEmail(emailLocalStorage);
+    setMaskedEmail(hashedEmail);
     return () => {
       // localStorage.removeItem("otp-email");
     };
