@@ -11,6 +11,7 @@ import { useLogin } from "@/hooks/queries/useAuth";
 import { isValidEmail } from "@/utils/email-validate";
 import { toast } from "sonner";
 import { localStorageSetter } from "@/utils/localstorage-setter";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
@@ -19,7 +20,9 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const loginMutate = useLogin((data) => {
     toast.success("Authenticated Successfully");
-    localStorageSetter("user", JSON.stringify(data.data));
+    Cookies.set("user", JSON.stringify(data.data));
+    router.push("/account");
+    // localStorageSetter("user", JSON.stringify(data.data));
   });
   const router = useRouter();
 
