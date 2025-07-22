@@ -396,6 +396,7 @@ const WithdrawalDetails = () => {
                   <div>
                     <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
                       <Image src={dollarGreen} alt="" />
+                      
                     </span>
 
                     <input
