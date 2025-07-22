@@ -279,7 +279,7 @@ const WithdrawalDetails = () => {
                   </div>
                   <Button
                     action={() => {
-                      setShowDepositDetails(true);
+                      setShowSuccessModal(true);
                     }}
                     loading={false}
                     text="Confirm"
