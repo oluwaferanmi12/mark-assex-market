@@ -13,6 +13,7 @@ export const SettingsTab = ({
       {settingsData.map((item) => {
         return (
           <button
+            key={item.id}
             className={`font-work-sans-regular whitespace-nowrap text-xs lg:text-sm  px-4 pb-2 cursor-pointer border-b-2   ${
               activeTab === item.id ? "border-[#0DAE94]" : "border-[#A4A9AE26]"
             } ${activeTab === item.id ? "text-[#0DAE94]" : "text-[#707070]"}`}

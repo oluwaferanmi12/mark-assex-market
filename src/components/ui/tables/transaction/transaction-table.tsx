@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/buttons/button";
 
 export const TransactionTable = () => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
-  
+
   const columnHelper = createColumnHelper<TransactionInterface>();
   const columns = [
     columnHelper.accessor("id", {
@@ -172,7 +172,7 @@ export const TransactionTable = () => {
           <thead>
             {table.getHeaderGroups().map((headerGroup) => {
               return (
-                <tr className="  min-w-full w-full">
+                <tr key={headerGroup.id} className="  min-w-full w-full">
                   {headerGroup.headers.map((header, index, rootData) => {
                     return (
                       <th
@@ -204,7 +204,6 @@ export const TransactionTable = () => {
                   style={{
                     boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
                   }}
-                  
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => {

@@ -8,12 +8,13 @@ import koraHq from "@/assets/svgs/korahq.svg";
 import paystack from "@/assets/svgs/paystack.svg";
 import crypto from "@/assets/svgs/deposit-crypto.svg";
 import { DepositWrapper } from "@/components/shared/wrappers/deposit-wrapper";
+import bitcoinIcon from "@/assets/svgs/bitcoin.svg"
 
 const Withdrawal = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const depositObject = [
     { text: "Internal Transfer", icon: internalTransferIcon },
-    { text: "Crypto Chilll", icon: crypto },
+    { text: "Bitcoin", icon: bitcoinIcon },
     { text: "Korahq", icon: koraHq },
     { text: "Paystack", icon: paystack },
   ];
