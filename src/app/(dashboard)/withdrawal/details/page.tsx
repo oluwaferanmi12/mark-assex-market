@@ -28,6 +28,7 @@ const WithdrawalDetails = () => {
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showPaymentSetup, setShowPaymentSetup] = useState(false);
 
   return (
     <>
@@ -195,7 +196,10 @@ const WithdrawalDetails = () => {
                     action={() => {
                       //   setVerificationModal(true);
                       if (showOtp) {
-                        setShowSuccessModal(true);
+                        // setShowSuccessModal(true);
+                        setShowOtp(false);
+                        setShowDepositDetails(false);
+                        setShowPaymentSetup(true);
                       }
                       setShowOtp(true);
                     }}
@@ -205,6 +209,127 @@ const WithdrawalDetails = () => {
                     icon={arrowRightMultiple}
                     iconPosition="right"
                   />
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      ) : showPaymentSetup ? (
+        <div className="bg-white p-4 rounded-lg mt-6">
+          <div>
+            <Row gutter={28} className="mb-4">
+              <Col lg={24}>
+                <div>
+                  <p className="text-[#707070] text-lg font-work-sans-medium mb-1">
+                    Payment setup
+                  </p>
+                  <p className=" text-[#404040] font-work-sans-regular text-xs">
+                    Withdraw instantly to accounts you've previously sent funds
+                    to. Fast, secure, and convenient.
+                  </p>
+                  <Row gutter={28}>
+                    <Col xs={12}>
+                      <div className="mt-6">
+                        <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                          Choose from accounts you've previously withdrawn from
+                        </p>
+                        <select
+                          style={{
+                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          }}
+                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        >
+                          <option>Select Account</option>
+                        </select>
+                      </div>
+                    </Col>
+                  </Row>
+
+                  <Row gutter={28} className="mt-4">
+                    <Col xs={24} lg={12}>
+                      <div>
+                        <TransferInput greyBg label="Account number" />
+                      </div>
+                    </Col>
+                    <Col xs={24} lg={12}>
+                      <div>
+                        <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                          Bank
+                        </p>
+                        <div>
+                          <input
+                            placeholder="Select bank account"
+                            style={{
+                              boxShadow:
+                                "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                            }}
+                            className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                          />
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  <div className="my-3 flex items-center gap-2">
+                    <p className="text-[#404040] font-work-sans-regular text-lg">
+                      To be recieved:
+                    </p>
+                    <p className="text-[#111111] text-lg font-work-sans-semi-bold">
+                      $10
+                    </p>
+                  </div>
+                  <Button
+                    action={() => {
+                      setShowDepositDetails(true);
+                    }}
+                    loading={false}
+                    text="Confirm"
+                    variant="green-bg"
+                    icon={arrowRightMultiple}
+                    iconPosition="right"
+                  />
+                  <div className="my-4">
+                    <Row>
+                      <Col xs={12}>
+                        <p className="text-[#1F0D3F] font-work-sans-medium">
+                          Withdrawal Info:
+                        </p>
+                        <div className="my-4">
+                          <div className="flex items-center my-2 justify-between">
+                            <p className="text-[#707070] font-work-sans-regular text-base">
+                              Amount
+                            </p>
+                            <p className="text-[#111111] font-work-sans-regular text-base">
+                              ₦7,820
+                            </p>
+                          </div>
+                          <div className="flex items-center my-2 justify-between">
+                            <p className="text-[#707070] font-work-sans-regular text-base">
+                              Commission
+                            </p>
+                            <p className="text-[#111111] font-work-sans-regular text-base">
+                              No Commission
+                            </p>
+                          </div>
+                          <div className="flex items-center my-2 justify-between">
+                            <p className="text-[#707070] font-work-sans-regular text-base">
+                              Conversion rate
+                            </p>
+                            <p className="text-[#111111] font-work-sans-regular text-base">
+                              1 USD = 780.022 NGN
+                            </p>
+                          </div>
+                          <div className="flex items-center my-2 justify-between">
+                            <p className="text-[#707070] font-work-sans-regular text-base">
+                              From account{" "}
+                            </p>
+                            <p className="text-[#111111] font-work-sans-regular text-base">
+                              1232321
+                            </p>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
                 </div>
               </Col>
             </Row>
