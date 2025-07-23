@@ -3,6 +3,7 @@ import {
   CreateLoginInterface,
   CreateNewPasswordInterface,
   LoginInterface,
+  RefreshTokenInterface,
   RegisterUserInterface,
   VerifyOtpInterface,
 } from "@/types";
@@ -34,5 +35,10 @@ export const confirmOtp = async (payload: VerifyOtpInterface) => {
 
 export const resetComplete = async (payload: CreateNewPasswordInterface) => {
   const result = await axiosInstance.post("/auth/reset/complete", payload);
+  return result;
+};
+
+export const refreshToken = async (payload: RefreshTokenInterface) => {
+  const result = await axiosInstance.post("/auth/refresh-token", payload);
   return result;
 };

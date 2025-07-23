@@ -1,6 +1,7 @@
 import {
   confirmOtp,
   login,
+  refreshToken,
   register,
   resetComplete,
   resetPasswordRequest,
@@ -10,10 +11,12 @@ import {
   CreateLoginInterface,
   CreateNewPasswordInterface,
   LoginInterface,
+  RefreshTokenInterface,
   RegisterUserInterface,
   VerifyOtpInterface,
 } from "@/types";
 import { useMutation } from "@tanstack/react-query";
+import { data } from "framer-motion/client";
 import { toast } from "sonner";
 
 export const useRegister = (succesCallback: () => void) => {
@@ -86,6 +89,24 @@ export const useCreateNewPassword = (sc: (val: any) => void) => {
     mutationKey: ["createNewPassword"],
     onSuccess: (data) => {
       sc(data);
+    },
+  });
+};
+
+export const useRefreshToken = (
+  sc: (val: any) => void,
+  ec: (val: any) => void
+) => {
+  return useMutation({
+    mutationFn: (payload: RefreshTokenInterface) => {
+      return refreshToken(payload);
+    },
+    mutationKey: ["refreshToken"],
+    onSuccess: (data) => {
+      sc(data);
+    },
+    onError: (data) => {
+      ec(data);
     },
   });
 };

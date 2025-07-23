@@ -1,4 +1,9 @@
-import { getAccessToken } from "@/utils/auth-helper";
+import { LoginInterface, LoginUserInterface } from "@/types";
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveLocalUser,
+} from "@/utils/auth-helper";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -24,8 +29,12 @@ axiosInstance.interceptors.response.use(
     // i can try to see what the response looks like and then fashion the calls based off this
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
     const errorMessage = error?.response?.data?.message ?? error?.message;
+    if (error?.response?.status === 401) {
+      window.location.href = "/login";
+    }
     toast.error(errorMessage);
     return Promise.reject(error);
   }

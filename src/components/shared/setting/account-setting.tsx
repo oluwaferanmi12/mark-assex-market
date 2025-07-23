@@ -13,11 +13,14 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import cloudIcon from "@/assets/svgs/upload-cloud-icon-green.svg";
 import deleteIcon from "@/assets/svgs/border-bin-icon.svg";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
   const [showUploadModal, setShowUploadmodal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { data } = useGetUserProfile();
+
   return (
     <>
       <ModalContainer
