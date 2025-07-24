@@ -47,7 +47,6 @@ export const OTPInput = ({
       if (arrayInput[inputIndex]) {
         const spreadArray = [...arrayInput];
         spreadArray[inputIndex] = "";
-        console.log(spreadArray, "The spread array value");
         setArrayInput([...spreadArray]);
       }
     } else {

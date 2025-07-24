@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/buttons/button";
 import uploadGreenIcon from "@/assets/svgs/upload-icon-green.svg";
 import trashIconRed from "@/assets/svgs/trash-icon-red.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SettingsInput } from "@/components/ui/inputs/settings-input";
 import { Col, Row } from "antd";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
@@ -14,12 +14,19 @@ import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import cloudIcon from "@/assets/svgs/upload-cloud-icon-green.svg";
 import deleteIcon from "@/assets/svgs/border-bin-icon.svg";
 import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import { UserProfileInterface } from "@/types";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
   const [showUploadModal, setShowUploadmodal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { data } = useGetUserProfile();
+  const [userData, setUserData] = useState<UserProfileInterface>();
+  const { data, isSuccess } = useGetUserProfile();
+  useEffect(() => {
+    if (data && isSuccess) {
+      setUserData(data);
+    }
+  }, [data, isSuccess]);
 
   return (
     <>

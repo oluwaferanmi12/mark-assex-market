@@ -27,7 +27,6 @@ export const useRegister = (succesCallback: () => void) => {
     mutationKey: ["register"],
     onSuccess: (data) => {
       toast.success("Registration successful");
-      console.log(data);
       succesCallback();
     },
   });

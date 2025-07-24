@@ -52,12 +52,16 @@ export const useTokenRefresher = () => {
     }, 14 * 60 * 1000);
   }, []);
 
+
+  console.log(isLoggedIn, "isLogged in value here")
   useEffect(() => {
     if (intervalRef.current) {
       stopTimer();
     }
-    if (isLoggedIn || getAccessToken()) {
+    if (isLoggedIn) {
       startTimer();
+    } else if (getAccessToken()) {
+      handleRefreshToken();
     } else {
       stopTimer();
     }
@@ -71,15 +75,10 @@ export const useTokenRefresher = () => {
 
     const onFocus = () => {
       // what i should do here is to refire and start the timer
-      handleRefreshToken().then(() => {
-        startTimer();
-      });
+      handleRefreshToken();
     };
     const onVisibility = () => {
-      if (document.visibilityState === "visible")
-        handleRefreshToken().then(() => {
-          startTimer();
-        });
+      if (document.visibilityState === "visible") handleRefreshToken();
     };
     // handles bfcache restores
 
