@@ -13,14 +13,38 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import cloudIcon from "@/assets/svgs/upload-cloud-icon-green.svg";
 import deleteIcon from "@/assets/svgs/border-bin-icon.svg";
-import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import { useGetUserProfile, useSaveProfile } from "@/hooks/queries/useSettings";
 import { UserProfileInterface } from "@/types";
+import { toast } from "sonner";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
   const [showUploadModal, setShowUploadmodal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [userData, setUserData] = useState<UserProfileInterface>();
+  const { mutate, isPending } = useSaveProfile((data) => {
+    toast.success("Profile Updated successfully");
+  });
+  const [userData, setUserData] = useState<UserProfileInterface>({
+    id: "",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    email: "",
+    middleName: "",
+    dateOfBirth: "",
+    phone: "",
+    country: "",
+    nationality: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    picture: "",
+    walletBalance: 0,
+    profileStatus: "ACTIVE",
+    createdAt: "",
+    updatedAt: "",
+  });
   const { data, isSuccess } = useGetUserProfile();
   useEffect(() => {
     if (data && isSuccess) {
@@ -28,6 +52,32 @@ export const AccountSetting = () => {
     }
   }, [data, isSuccess]);
 
+  const handleUpdateUser = () => {
+    const {
+      firstName,
+      lastName,
+      middleName,
+      gender,
+      dateOfBirth,
+      address,
+      city,
+      state,
+      zip,
+      country,
+    } = userData;
+    mutate({
+      firstName: firstName ?? "",
+      lastName: lastName ?? "",
+      middleName: middleName ?? "",
+      gender: gender ?? "",
+      dateOfBirth: dateOfBirth ?? "",
+      address: address ?? "",
+      city: city ?? "",
+      state: state ?? "",
+      zip: zip ?? "",
+      country: country ?? "",
+    });
+  };
   return (
     <>
       <ModalContainer
@@ -173,22 +223,53 @@ export const AccountSetting = () => {
             <Row gutter={20}>
               <Col xs={24} lg={12} className="mb-4">
                 <SettingsInput
-                  value="Blaise"
+                  value={userData?.firstName ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, firstName: name }));
+                  }}
                   readOnly={readOnly}
                   label="First Name"
                 />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Middle Name" />
+                <SettingsInput
+                  value={userData?.middleName ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, middleName: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Middle Name"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Last Name" />
+                <SettingsInput
+                  value={userData?.lastName ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, lastName: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Last Name"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Date of Birth" />
+                <SettingsInput
+                  value={userData?.dateOfBirth ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, dateOfBirth: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Date of Birth"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Gender" />
+                <SettingsInput
+                  value={userData?.gender ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, gender: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Gender"
+                />
               </Col>
             </Row>
           </div>
@@ -201,19 +282,54 @@ export const AccountSetting = () => {
           <div className="mt-2 bg-white p-4  rounded-lg w-full ">
             <Row gutter={20}>
               <Col lg={12} xs={24} className="mb-4">
-                <SettingsInput readOnly={readOnly} label="Country" />
+                <SettingsInput
+                  value={userData?.country ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, country: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Country"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="State/Province" />
+                <SettingsInput
+                  value={userData?.state ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, state: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="State/Province"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="City" />
+                <SettingsInput
+                  value={userData?.city ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, city: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="City"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Address" />
+                <SettingsInput
+                  value={userData?.address ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, address: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Address"
+                />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput readOnly={readOnly} label="Postal Code" />
+                <SettingsInput
+                  value={userData?.zip ?? ""}
+                  setValue={(name, val) => {
+                    setUserData((prev) => ({ ...prev, zip: name }));
+                  }}
+                  readOnly={readOnly}
+                  label="Postal Code"
+                />
               </Col>
             </Row>
           </div>
@@ -233,8 +349,9 @@ export const AccountSetting = () => {
               <Button
                 action={() => {
                   setReadOnly(false);
+                  handleUpdateUser();
                 }}
-                loading={false}
+                loading={isPending}
                 text="Save Changes"
                 variant="green-bg"
               />

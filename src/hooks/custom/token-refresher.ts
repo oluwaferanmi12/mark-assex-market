@@ -51,9 +51,6 @@ export const useTokenRefresher = () => {
       handleRefreshToken();
     }, 14 * 60 * 1000);
   }, []);
-
-
-  console.log(isLoggedIn, "isLogged in value here")
   useEffect(() => {
     if (intervalRef.current) {
       stopTimer();

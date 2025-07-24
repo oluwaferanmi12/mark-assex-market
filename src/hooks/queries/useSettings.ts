@@ -1,10 +1,21 @@
-import { getUserProfile } from "@/services/setting.service";
-import { UserProfileInterface } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { getUserProfile, saveUserProfile } from "@/services/setting.service";
+import { UpdateUserInterface, UserProfileInterface } from "@/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetUserProfile = () => {
   return useQuery<UserProfileInterface>({
     queryKey: ["test"],
     queryFn: getUserProfile,
+  });
+};
+
+export const useSaveProfile = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: UpdateUserInterface) => {
+      return saveUserProfile(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
   });
 };

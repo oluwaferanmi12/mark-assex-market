@@ -21,3 +21,16 @@ export interface UserProfileInterface {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UpdateUserInterface {
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  gender: string;
+  dateOfBirth: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
