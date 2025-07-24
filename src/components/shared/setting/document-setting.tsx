@@ -1,6 +1,9 @@
 import { DocumentUploadContainer } from "@/components/shared/setting/document-upload-container";
+import { useGetKyc } from "@/hooks/queries/useSettings";
 
 export const DocumentSetting = () => {
+  const { data } = useGetKyc();
+  console.log(data, "Data value here");
   return (
     <>
       <div className="mb-4">

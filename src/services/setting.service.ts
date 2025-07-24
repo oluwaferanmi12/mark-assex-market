@@ -10,3 +10,8 @@ export const saveUserProfile = async (payload: UpdateUserInterface) => {
   const { data } = await axiosInstance.patch("/users", payload);
   return data;
 };
+
+export const getKyc = async () => {
+  const { data } = await axiosInstance.get("/kyc");
+  return data;
+};

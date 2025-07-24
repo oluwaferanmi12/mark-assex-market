@@ -2,7 +2,11 @@ import uploadIcon from "@/assets/svgs/upload-cloud-icon-green.svg";
 import { Button } from "@/components/ui/buttons/button";
 import Image from "next/image";
 
-export const DocumentUploadContainer = () => {
+export const DocumentUploadContainer = ({
+  uploadFunc,
+}: {
+  uploadFunc: () => void;
+}) => {
   return (
     <div className="my-3 border border-[] border-dashed bg-[#0DAE9405] border-[#0DAE94] p-4 flex-col rounded-lg min-h-[200px] flex justify-center items-center">
       <div className="mb-3">
