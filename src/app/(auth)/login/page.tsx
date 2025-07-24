@@ -12,15 +12,19 @@ import { isValidEmail } from "@/utils/email-validate";
 import { toast } from "sonner";
 import { localStorageSetter } from "@/utils/localstorage-setter";
 import Cookies from "js-cookie";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { setAuthenticateUser } from "@/store/slices/authSlice";
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const dispatch = useAppDispatch();
   const loginMutate = useLogin((data) => {
     toast.success("Authenticated Successfully");
     Cookies.set("user", JSON.stringify(data.data));
+    dispatch(setAuthenticateUser());
     router.push("/account");
     // localStorageSetter("user", JSON.stringify(data.data));
   });
