@@ -5,6 +5,7 @@ export const SettingsInput = ({
   readOnly = true,
   setValue,
   name,
+  type = "text",
 }: {
   label: string;
   placeholder?: string;
@@ -12,12 +13,16 @@ export const SettingsInput = ({
   readOnly?: boolean;
   setValue?: (val: string, name: string) => void;
   name?: string;
+  type?: "text" | "date";
 }) => {
   return (
     <div>
-      <p className="text-[#606060] mb-1 font-work-sans-regular text-xs lg:text-sm">{label}</p>
+      <p className="text-[#606060] mb-1 font-work-sans-regular text-xs lg:text-sm">
+        {label}
+      </p>
       <div>
         <input
+          type={type}
           placeholder={placeholder}
           value={value}
           onChange={(e) => {

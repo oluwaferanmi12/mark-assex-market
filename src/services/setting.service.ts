@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/api/axios";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
+import { GetKycResponse, SubmitKycInterface } from "@/types/settings.types";
 
 export const getUserProfile = async (): Promise<UserProfileInterface> => {
   const result = await axiosInstance.get("/users/me");
@@ -11,7 +12,19 @@ export const saveUserProfile = async (payload: UpdateUserInterface) => {
   return data;
 };
 
-export const getKyc = async () => {
+export const getKyc = async (): Promise<GetKycResponse> => {
   const { data } = await axiosInstance.get("/kyc");
+  return data.data;
+};
+
+export const submitKyc = async (payload: FormData) => {
+  const { data } = await axiosInstance.post("/kyc", payload, {
+    headers: { "Content-Type": "multipart/formdata" },
+  });
+  return data;
+};
+
+export const getNotification = async () => {
+  const { data } = await axiosInstance.get("/notification");
   return data;
 };

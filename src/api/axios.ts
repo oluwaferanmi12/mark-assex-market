@@ -33,7 +33,9 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const errorMessage = error?.response?.data?.message ?? error?.message;
     if (error?.response?.status === 401) {
-      window.location.href = "/login";
+      if (!window.location.href.includes("login")) {
+        window.location.href = "/login";
+      }
     }
     toast.error(errorMessage);
     return Promise.reject(error);

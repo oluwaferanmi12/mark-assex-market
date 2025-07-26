@@ -11,13 +11,15 @@ export const GSelect = ({
   inputValue,
   setInputValue,
   errorState,
-  children
+  children,
+  disabled,
 }: {
   label: string;
   inputValue: string;
   setInputValue: (val: string) => void;
   errorState?: string;
-  children: ReactNode
+  children: ReactNode;
+  disabled?: boolean;
 }) => {
   // This sort of only represents an input field that is a string
   return (
@@ -29,8 +31,8 @@ export const GSelect = ({
       </div>
 
       <div className="mt-1 relative">
-        
         <select
+          disabled={disabled}
           className="w-full px-4 py-3 border border-[#BEBEBE59] bg-[#F3F4F4] rounded-lg placeholder:text-[#8A8A8A] placeholder:font-work-sans-regular outline-none text-xs font-work-sans-medium "
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}

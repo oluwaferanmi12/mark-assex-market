@@ -16,6 +16,9 @@ import deleteIcon from "@/assets/svgs/border-bin-icon.svg";
 import { useGetUserProfile, useSaveProfile } from "@/hooks/queries/useSettings";
 import { UserProfileInterface } from "@/types";
 import { toast } from "sonner";
+import { GSelect } from "@/components/ui/inputs/general-select";
+import moment from "moment";
+import { countryList } from "@/utils/country-list";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
@@ -48,7 +51,10 @@ export const AccountSetting = () => {
   const { data, isSuccess } = useGetUserProfile();
   useEffect(() => {
     if (data && isSuccess) {
-      setUserData(data);
+      setUserData({
+        ...data,
+        dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
+      });
     }
   }, [data, isSuccess]);
 
@@ -253,23 +259,37 @@ export const AccountSetting = () => {
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput
-                  value={userData?.dateOfBirth ?? ""}
+                  value={
+                    moment(userData?.dateOfBirth).format("YYYY-MM-DD") ?? ""
+                  }
                   setValue={(name, val) => {
                     setUserData((prev) => ({ ...prev, dateOfBirth: name }));
                   }}
                   readOnly={readOnly}
                   label="Date of Birth"
+                  type="date"
                 />
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
-                <SettingsInput
+                <GSelect
+                  label="Gender"
+                  setInputValue={(e) => {
+                    setUserData((prev) => ({ ...prev, gender: e }));
+                  }}
+                  inputValue={userData.gender!}
+                  disabled={readOnly}
+                >
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </GSelect>
+                {/* <SettingsInput
                   value={userData?.gender ?? ""}
                   setValue={(name, val) => {
                     setUserData((prev) => ({ ...prev, gender: name }));
                   }}
                   readOnly={readOnly}
                   label="Gender"
-                />
+                /> */}
               </Col>
             </Row>
           </div>
@@ -282,14 +302,22 @@ export const AccountSetting = () => {
           <div className="mt-2 bg-white p-4  rounded-lg w-full ">
             <Row gutter={20}>
               <Col lg={12} xs={24} className="mb-4">
-                <SettingsInput
-                  value={userData?.country ?? ""}
-                  setValue={(name, val) => {
-                    setUserData((prev) => ({ ...prev, country: name }));
-                  }}
-                  readOnly={readOnly}
+                <GSelect
+                  inputValue={userData.country!}
                   label="Country"
-                />
+                  setInputValue={(e) =>
+                    setUserData((prev) => ({ ...prev, country: e }))
+                  }
+                >
+                  <option>Select country</option>
+                  {countryList.map((item) => {
+                    return (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </GSelect>
               </Col>
               <Col className="mb-4" lg={12} xs={24}>
                 <SettingsInput
