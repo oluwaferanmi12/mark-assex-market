@@ -22,12 +22,14 @@ import internalTransferIcon from "@/assets/svgs/internal-transfer-icon.svg";
 import bankIcon from "@/assets/svgs/bank-icon.svg";
 import tether1 from "@/assets/svgs/tether-1.svg";
 import tether2 from "@/assets/svgs/tether-2.svg";
+import { useGetPaymentMethods } from "@/hooks/queries/usePayment";
 
 const Deposit = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [verificationModal, setVerificationModal] = useState(false);
+  const { data } = useGetPaymentMethods();
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "" },
@@ -93,19 +95,19 @@ const Deposit = () => {
         </Row>
       </div>
       <Row gutter={16} className="mt-8">
-        {depositObject.map((item, index) => {
-          return (
-            <Col key={index} xs={24} lg={12} className="mb-4">
-              <DepositWrapper
-                setActiveIndex={setActiveIndex}
-                index={index}
-                text={item.text}
-                active={index === activeIndex}
-                icon={item.icon}
-              />
-            </Col>
-          );
-        })}
+        {data &&
+          data.map((item, index) => {
+            return (
+              <Col key={index} xs={24} lg={12} className="mb-4">
+                <DepositWrapper
+                  method={item}
+                  setActiveIndex={setActiveIndex}
+                  index={index}
+                  active={index === activeIndex}
+                />
+              </Col>
+            );
+          })}
       </Row>
     </React.Fragment>
   );
