@@ -33,6 +33,10 @@ import twoFAIcon from "@/assets/svgs/two-fa-icon.svg";
 import phoneEmptyIcono from "@/assets/svgs/phone-empty-icon.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { CountDown } from "@/components/shared/timer/count-down";
+import { useGenerate2FA, useVerify2FA } from "@/hooks/queries/useSettings";
+import { Get2FA } from "@/types";
+import copyIcon from "@/assets/svgs/copyIconGreen.svg";
+import { toast } from "sonner";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -46,6 +50,17 @@ export const DashboardTopNav = () => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [showOTPInstruction, setShowOTPInstruction] = useState(false);
+  const [generated2FA, setGenerated2FA] = useState<Get2FA>();
+  const [otp, setOtp] = useState("");
+  const two2Fa = useGenerate2FA((data: Get2FA) => {
+    setShowOTPInstruction(true);
+    setShow2fa(false);
+    setGenerated2FA(data);
+  });
+  const verifyMutate = useVerify2FA((sc) => {
+    toast.success("2FA Enabled");
+  });
   useEffect(() => {
     if (showSideNav) {
       document.body.style.overflow = "hidden";
@@ -77,6 +92,105 @@ export const DashboardTopNav = () => {
   return (
     <>
       <ModalContainer
+        active={showOTPInstruction}
+        handleClose={() => {
+          setShowOTPInstruction(false);
+        }}
+      >
+        <ModalHeader
+          handleCancel={() => {
+            setShowOTPInstruction(false);
+          }}
+          headText="Setup Authenticator App"
+        />
+        <ModalBody>
+          <>
+            <div className="flex gap-4 mb-3">
+              <p className="text-[#1F0D3F] font-work-sans-semi-bold whitespace-nowrap">
+                Step 1:
+              </p>
+              <p className="font-work-sans-regular text-[#404040]">
+                Download and open any trusted authenticator app of your choice
+                on your mobile phone.We recommend using{" "}
+                <span className="text-[#202020] font-work-sans-medium">
+                  Google Authenticator
+                </span>{" "}
+                for a smooth experience.
+              </p>
+            </div>
+
+            <div className="flex gap-4 mb-3">
+              <p className="text-[#1F0D3F] font-work-sans-semi-bold whitespace-nowrap">
+                Step 2:
+              </p>
+              <p className="font-work-sans-regular text-[#404040]">
+                Scan the QR code below using the app, or manually enter the code
+                if you're unable to scan.
+              </p>
+            </div>
+
+            <div className="my-4 flex justify-center items-center">
+              {generated2FA?.image && (
+                <Image
+                  width={150}
+                  height={150}
+                  alt=""
+                  src={generated2FA?.image}
+                />
+              )}
+            </div>
+            <div>
+              <p className="font-work-sans-regular text-[#404040]">
+                Can’t Scan? Enter Code Manually:
+              </p>
+              <div
+                style={{ border: "0.1px solid #BEBEBE80" }}
+                className="mt-2 p-4 rounded-lg  flex items-center justify-between"
+              >
+                <p className="font-work-sans-medium">{generated2FA?.secret}</p>
+                <div className="flex cursor-pointer items-center gap-2">
+                  <p className="font-work-sans-regular text-[#0DAE94]">Copy</p>
+                  <Image src={copyIcon} alt="" />
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-4 my-3">
+              <p className="text-[#1F0D3F] font-work-sans-semi-bold whitespace-nowrap">
+                Step 3:
+              </p>
+              <p className="font-work-sans-regular text-[#404040]">
+                Once you receive the 6-digit code from your authenticator app,
+                click Proceed below and enter the code to complete the setup.
+              </p>
+            </div>
+          </>
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex justify-end gap-2">
+            <Button
+              action={() => {
+                setShow2fa(false);
+              }}
+              loading={false}
+              text="Cancel"
+              variant="grey-bg"
+            />
+            <Button
+              action={() => {
+                // setShowVerifyOtp(true);
+                // setShow2fa(false);
+                // two2Fa.mutate();
+                setShowOTPInstruction(false);
+                setShowVerifyOtp(true);
+              }}
+              loading={two2Fa.isPending}
+              text="Proceed"
+              variant="green-bg"
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+      <ModalContainer
         active={showVerifyOtp}
         handleClose={() => setShowVerifyOtp(false)}
       >
@@ -88,34 +202,10 @@ export const DashboardTopNav = () => {
             <p className="text-base font-work-sans-semi-bold">Verify OTP</p>
             <div className="w-4/5">
               <p className="font-work-sans-regular mx-auto text-center text-[#707070] my-2">
-                We’ve sent a 6-digit verification code to +234 81****1233.
+                Enter Verification code generated by your authenticator app
               </p>
               <div>
-                <OTPInput />
-              </div>
-              <div className="flex items-center justify-center mt-3">
-                {countDownDone ? (
-                  <div className=" flex items-center font-work-sans-light">
-                    <p className="text-xs">
-                      Didn't receive any code?{" "}
-                      <span className="text-[#004DEF] cursor-pointer">
-                        Resend code
-                      </span>
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-xs font-work-sans-regular">
-                    <span className="font-work-sans-light">Resending in</span>
-                    <span>
-                      {" "}
-                      <CountDown
-                        maxTime={10}
-                        setCountDownDone={setCountDownDone}
-                      />
-                      s
-                    </span>
-                  </p>
-                )}
+                <OTPInput setOtpValue={setOtp} />
               </div>
             </div>
           </div>
@@ -124,6 +214,7 @@ export const DashboardTopNav = () => {
           <div className="flex justify-end gap-2">
             <Button
               action={() => {
+                verifyMutate.mutate({ code: otp });
                 setShowVerifyOtp(false);
               }}
               loading={false}
@@ -148,14 +239,6 @@ export const DashboardTopNav = () => {
                 Add an extra layer of protection by enabling two-step
                 verification using your mobile number.
               </p>
-              <div className="border border-[#0DAE9459] bg-[#0DAE9405] p-4 rounded-lg flex justify-center gap-2">
-                <span>
-                  <Image src={phoneEmptyIcono} alt="" />
-                </span>
-                <p className="text-xs font-work-sans-regular text-[#0DAE94]">
-                  An OTP code would be sent to +234 81****1233
-                </p>
-              </div>
             </div>
           </div>
         </ModalBody>
@@ -171,11 +254,12 @@ export const DashboardTopNav = () => {
             />
             <Button
               action={() => {
-                setShowVerifyOtp(true);
-                setShow2fa(false);
+                // setShowVerifyOtp(true);
+                // setShow2fa(false);
+                two2Fa.mutate();
               }}
-              loading={false}
-              text="Send OTP"
+              loading={two2Fa.isPending}
+              text="Proceed"
               variant="green-bg"
             />
           </div>

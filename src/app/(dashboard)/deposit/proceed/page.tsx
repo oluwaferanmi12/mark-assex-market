@@ -19,6 +19,8 @@ import qrCode from "@/assets/svgs/qr-code-placeholder.svg";
 import masterCardIcon from "@/assets/svgs/mastercardIcon.svg";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import securityIcon from "@/assets/svgs/security-icon.svg";
+import { useDepositPayment } from "@/hooks/queries/usePayment";
+import { toast } from "sonner";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -26,6 +28,19 @@ const Proceed = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const params = useSearchParams();
   const [activeState, setActiveState] = useState(params.get("val"));
+  const mutateDeposit = useDepositPayment((data) => {
+    window.open(data.checkout_url);
+    toast.success("deposited");
+  });
+
+  const handleDeposit = () => {
+    mutateDeposit.mutate({
+      amount: 230,
+      methodSlug: activeState!,
+      chargeHash: "",
+      toAccount: "",
+    });
+  };
 
   return (
     <>
@@ -425,10 +440,11 @@ const Proceed = () => {
                     </div>
                   </Col>
                 </Row>
-                <div className="my-4">
+                <div className="my-4 border border-[red]">
                   <Button
                     action={() => {
-                      setShowDepositDetails(true);
+                      // setShowDepositDetails(true);
+                      handleDeposit();
                     }}
                     loading={false}
                     text="Proceed"

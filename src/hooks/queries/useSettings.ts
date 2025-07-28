@@ -1,11 +1,22 @@
 import {
+  generate2FA,
   getKyc,
+  getNotification,
+  getNotificationPreference,
   getUserProfile,
+  saveNotificationPreference,
   saveUserProfile,
   submitKyc,
+  verify2FA,
 } from "@/services/setting.service";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
-import { GetKycResponse, SubmitKycInterface } from "@/types/settings.types";
+import {
+  Get2FA,
+  GetKycResponse,
+  NotificationPreference,
+  SubmitKycInterface,
+  Verify2fa,
+} from "@/types/settings.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetUserProfile = () => {
@@ -39,6 +50,54 @@ export const useSaveKyc = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: FormData) => {
       return submitKyc(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useGetNotification = () => {
+  return useQuery({
+    queryFn: getNotification,
+    queryKey: ["get-notification"],
+  });
+};
+
+export const useGetNoficationPreference = () => {
+  return useQuery<NotificationPreference>({
+    queryFn: getNotificationPreference,
+    queryKey: ["get-notification-preference"],
+  });
+};
+
+export const useSaveNotificationSetting = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: NotificationPreference) => {
+      return saveNotificationPreference(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useGenerate2FA = (sc: (data: Get2FA) => void) => {
+  return useMutation<Get2FA>({
+    mutationKey: ["get-2fa"],
+    mutationFn: () => {
+      return generate2FA();
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useVerify2FA = (sc: (data: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: Verify2fa) => {
+      return verify2FA(payload);
     },
     onSuccess: (data) => {
       sc(data);

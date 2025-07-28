@@ -11,3 +11,21 @@ export interface GetKycResponse {
   id: string;
   status: "PENDING";
 }
+
+export interface NotificationPreference {
+  tradingActivities: boolean;
+  accountUpdates: boolean;
+  promotions: boolean;
+  marketInsights: boolean;
+  maintenance: boolean;
+}
+
+export interface Get2FA {
+  twoFaStatus: boolean;
+  image: string;
+  secret: string;
+}
+
+export interface Verify2fa {
+  code: string;
+}

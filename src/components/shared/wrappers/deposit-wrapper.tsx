@@ -28,7 +28,7 @@ export const DepositWrapper = ({
       <div
         onClick={() => {
           setActiveIndex(index);
-          router.push(`${enterUrl}?val=${method.name}`);
+          router.push(`${enterUrl}?val=${method.slug}`);
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
