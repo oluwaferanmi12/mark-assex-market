@@ -30,6 +30,7 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { MoneyFormat } from "@/utils/money-format";
 import { QRCodeCanvas } from "qrcode.react";
 import { Copy } from "@/components/shared/copier/copy";
+import { useGetAccount } from "@/hooks/queries/useAccount";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -46,6 +47,7 @@ const Proceed = () => {
   const { data: paymentMethodDetails } = useGetPaymentMethodDetails(
     activeState!
   );
+  const { data: accounts } = useGetAccount();
   const [startTimer, setStartTimer] = useState(false);
   const checkoutUrl = useRef("");
   const mutateDepositInstance = useDepositPayment((data) => {
@@ -520,7 +522,16 @@ const Proceed = () => {
                         }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        <option>Standard: 8197834 ($10,000)</option>
+                        {accounts &&
+                          accounts.map((item) => {
+                            return (
+                              <option>
+                                {item.accountGroup.name}{" "}
+                                {item.accountGroup.description}
+                              </option>
+                            );
+                          })}
+                        <option>Wallet</option>
                       </select>
                     </div>
                   </Col>
