@@ -31,7 +31,7 @@ export const AccountSetting = () => {
     id: "",
     firstName: "",
     lastName: "",
-    gender: "",
+    gender: "MALE",
     email: "",
     middleName: "",
     dateOfBirth: "",
