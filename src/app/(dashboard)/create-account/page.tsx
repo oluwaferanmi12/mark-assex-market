@@ -80,7 +80,7 @@ const CreateAccount = () => {
         </div>
         <div className="bg-white p-4 rounded-lg mt-6">
           <div>
-            <Row gutter={28} className="mb-4">
+            {/* <Row gutter={28} className="mb-4">
               <Col lg={12} xs={24}>
                 <div>
                   <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
@@ -96,11 +96,11 @@ const CreateAccount = () => {
                   </select>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={28} className="mb-4">
-              <Col lg={12} xs={24}>
+              {/* <Col lg={12} xs={24}>
                 <TransferInput greyBg label="Nickname" />
-              </Col>
+              </Col> */}
               <Col lg={12} xs={24}>
                 <div>
                   <p className="text-[#707070] text-sm font-work-sans-regular mb-1">

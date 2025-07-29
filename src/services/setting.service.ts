@@ -19,7 +19,7 @@ export const saveUserProfile = async (payload: UpdateUserInterface) => {
 };
 
 export const getKyc = async (): Promise<GetKycResponse> => {
-  const { data } = await axiosInstance.get("/kyc/document");
+  const { data } = await axiosInstance.get("/kyc");
   return data.data;
 };
 
