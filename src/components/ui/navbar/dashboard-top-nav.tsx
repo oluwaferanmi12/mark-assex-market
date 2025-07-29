@@ -518,7 +518,7 @@ export const DashboardTopNav = () => {
       <div className="absolute hidden lg:flex items-center justify-between bg-[#FFFFFF4D] top-0 border-b px-8 py-4 w-full border-[#BEBEBE80]">
         <div>
           <p className="text-[#111111] text-lg font-work-sans-medium">
-            Hello, Blaise
+            Hello,
           </p>
           <p className="text-xs text-[#666666] font-work-sans-regular">
             Welcome back! The market awaits.
@@ -592,10 +592,10 @@ export const DashboardTopNav = () => {
                     />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
-                        Tarique
+                       User 
                       </p>
                       <p className="text-[#707070] text-sm font-work-sans-regular">
-                        Blaise@gmail.com
+                        user@gmail.com
                       </p>
                     </div>
                   </div>
