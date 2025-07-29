@@ -54,10 +54,10 @@ export const TransactionSummary = ({
           }
           variant={
             transactionStatus === "success"
-              ? "Success"
+              ? "SUCCESS"
               : transactionStatus === "failed"
-              ? "Cancelled"
-              : "Pending"
+              ? "FAILED"
+              : "PENDING"
           }
         />
       </div>

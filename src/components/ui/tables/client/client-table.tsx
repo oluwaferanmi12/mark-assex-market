@@ -56,7 +56,7 @@ export const ClientTable = () => {
         <>
           <TableStatus
             text={info.getValue()}
-            variant={info.getValue() === "Active" ? "Success" : "Cancelled"}
+            variant={info.getValue() === "Active" ? "SUCCESS" : "FAILED"}
           />
         </>
       ),
@@ -71,7 +71,7 @@ export const ClientTable = () => {
       header: (info) => <TableText variant="header" text="Date" />,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <TableStatus variant="Success" text="Success" />,
+      cell: (info) => <TableStatus variant="SUCCESS" text="Success" />,
       header: (info) => <TableText variant="header" text="Status" />,
     }),
     columnHelper.display({

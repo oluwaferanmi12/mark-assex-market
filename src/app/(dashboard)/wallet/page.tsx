@@ -19,11 +19,13 @@ import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
 import { useRouter } from "next/navigation";
+import { useGetPayments } from "@/hooks/queries/usePayment";
 
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
+  const { data } = useGetPayments();
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "" },
@@ -57,9 +59,7 @@ const Wallet = () => {
                 </div>
               </div>
             </div>
-            <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
-              $21,093.20
-            </p>
+            <p className="lg:text-3xl text-xl font-work-sans-semi-bold">$0</p>
           </div>
         </div>
         <VisibleOnDesktop>
@@ -183,7 +183,7 @@ const Wallet = () => {
           </div>
         </VisibleOnMobile>
         <VisibleOnDesktop>
-          <TransactionTable />
+          <TransactionTable data={data} />
         </VisibleOnDesktop>
         <VisibleOnMobile>
           <div className="my-4">

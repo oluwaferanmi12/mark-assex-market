@@ -97,7 +97,7 @@ export const BonusTable = () => {
             <div className="flex items-center mb-3 justify-between">
               <p className="font-work-sans-regular">Status</p>
               <p className="font-work-sans-regular">
-                <TableStatus text="Active" variant="Success" />
+                <TableStatus text="Active" variant="SUCCESS" />
               </p>
             </div>
             <div className="flex items-center mb-3 justify-between">

@@ -43,7 +43,7 @@ export const OrderTable = () => {
       header: (info) => <TableText variant="header" text="Amount" />,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <TableStatus variant="Success" text="Executed" />,
+      cell: (info) => <TableStatus variant="SUCCESS" text="Executed" />,
       header: (info) => <TableText variant="header" text="Status" />,
     }),
     columnHelper.accessor("createdAt", {

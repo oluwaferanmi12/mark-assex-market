@@ -32,7 +32,7 @@ export const MobileOrderTable = ({
           <p className="text-xs font-work-sans-regular text-[#707070]">Buy</p>
         </div>
         <div className="flex items-center gap-2">
-          <TableStatus variant="Success" text="Executed" />
+          <TableStatus variant="SUCCESS" text="Executed" />
           <Image src={activeIndex === index ? arrowDown : arrowRight} alt="" />
         </div>
       </div>

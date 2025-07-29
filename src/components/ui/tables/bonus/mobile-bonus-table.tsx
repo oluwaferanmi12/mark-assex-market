@@ -36,7 +36,7 @@ export const MobileBonusTable = ({
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <TableStatus variant="Success" text="Successful" />
+            <TableStatus variant="SUCCESS" text="Successful" />
             <Image
               src={activeIndex === index ? arrowDown : arrowRight}
               alt=""

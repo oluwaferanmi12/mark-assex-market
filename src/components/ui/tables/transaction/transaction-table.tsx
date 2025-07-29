@@ -27,7 +27,8 @@ import { TableDate } from "@/utils/date-formatter";
 
 export const TransactionTable = ({ data }: { data?: Payment[] }) => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
-
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Payment | null>(null);
   const columnHelper = createColumnHelper<Payment>();
   const columns = [
     columnHelper.accessor("reference", {
@@ -98,7 +99,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
                     <p className="text-[#707070] font-work-sans-regular">ID</p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      1274597
+                      {selectedTransaction?.reference}
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -106,7 +107,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      220,000
+                      {"NGN " + selectedTransaction?.amount}
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -114,7 +115,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                       Payment Type
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      Withdrawal
+                      {selectedTransaction?.type}
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -122,7 +123,10 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                       Status
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      <TableStatus text="Failed" variant="FAILED" />
+                      <TableStatus
+                        text={selectedTransaction?.status!}
+                        variant={selectedTransaction?.status!}
+                      />
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -130,7 +134,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                       Date
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      10 Oct, 2025 14:22
+                      {TableDate(selectedTransaction?.createdAt ?? "")}
                     </p>
                   </div>
 
@@ -210,6 +214,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
                 return (
                   <tr
                     onClick={() => {
+                      setSelectedTransaction(row.original);
                       setShowSideDrawer(true);
                     }}
                     style={{
