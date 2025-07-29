@@ -13,3 +13,8 @@ export const createAccount = async (
   const { data } = await axiosInstance.post("/accounts", payload);
   return data.data;
 };
+
+export const getAccountDetail = async (id: string): Promise<Account> => {
+  const { data } = await axiosInstance.get(`/accounts/${id}`);
+  return data.data;
+};

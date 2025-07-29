@@ -2,7 +2,7 @@
 
 import { DropDownList } from "@/components/ui/drop-down/dropdown-list";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import { TradeContainer } from "@/components/shared/wrappers/trade-container";
@@ -13,12 +13,16 @@ import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile"
 import { MobileOrderTable } from "@/components/ui/tables/order/mobile-order-table";
 import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
+import { useGetAccountDetail } from "@/hooks/queries/useAccount";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
   const [orderTypeSelected, setOrderTypeSelected] = useState("All");
   const [indexActive, setIndexActive] = useState(0);
   const [statusSelected, setStatusSelected] = useState("All");
+
+  const [id, setId] = useState("");
+  const { data } = useGetAccountDetail(id ?? "");
   const filterDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Newest", id: "" },
@@ -37,6 +41,14 @@ const AccountDetails = () => {
     { text: "Pending", id: "" },
     { text: "Cancelled", id: "" },
   ];
+  console.log(data, "DAta value here");
+
+  useEffect(() => {
+    const idVal = new URLSearchParams(window.location.search);
+    const idQuery = idVal.get("id");
+    setId(idQuery ?? "");
+  }, []);
+  console.log(data, "Data value here");
   return (
     <div>
       <p className="text-2xl font-work-sans-medium">Account #81978</p>
@@ -59,7 +71,8 @@ const AccountDetails = () => {
           </DropDownList>
         </div>
       </div>
-      <TradeContainer />
+      {data && <TradeContainer account={data} />}
+
       <div className="mt-6">
         <p className="lg:text-xl text-base font-work-sans-medium">Orders</p>
         <VisibleOnDesktop>
@@ -99,7 +112,12 @@ const AccountDetails = () => {
           <div className="flex items-center gap-2 mt-4">
             <MobileInput />
             <div className="h-[40px]">
-              <Image src={mobileFilterIcon} objectFit="cover" alt="" className="h-full" />
+              <Image
+                src={mobileFilterIcon}
+                objectFit="cover"
+                alt=""
+                className="h-full"
+              />
             </div>
           </div>
         </VisibleOnMobile>

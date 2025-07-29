@@ -393,7 +393,7 @@ const Account = () => {
             {accounts?.length ? (
               accounts.map((item) => {
                 return (
-                  <Link href={"/account/details"}>
+                  <Link href={`/account/details?id=${item.id}`}>
                     <TradeContainer account={item} />
                   </Link>
                 );

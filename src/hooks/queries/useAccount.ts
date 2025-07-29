@@ -1,5 +1,5 @@
 import { CreateAccountInterface } from "@/interfaces/ui-interfac";
-import { createAccount, getAccount } from "@/services";
+import { createAccount, getAccount, getAccountDetail } from "@/services";
 import { Account, CreateTradeAccount } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -19,5 +19,13 @@ export const useCreateTradeAccount = (sc: (val: any) => void) => {
     onSuccess: (data) => {
       sc(data);
     },
+  });
+};
+
+export const useGetAccountDetail = (id: string) => {
+  return useQuery<Account>({
+    queryKey: ["get-account-detail", id],
+    queryFn: () => getAccountDetail(id),
+    enabled: !!id,
   });
 };

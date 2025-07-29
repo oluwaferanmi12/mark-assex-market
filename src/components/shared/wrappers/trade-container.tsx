@@ -339,7 +339,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
           </div>
           <div className="flex flex-col gap-3">
             <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
-              <p className="text-[#202020]">1:{account.leverage}</p>
+              <p className="text-[#202020]">1:{account?.leverage}</p>
 
               <Image
                 className="cursor-pointer"
