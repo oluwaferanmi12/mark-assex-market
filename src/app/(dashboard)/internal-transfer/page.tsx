@@ -18,7 +18,7 @@ import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile"
 const InternalTransfer = () => {
   const [activeOption, setActiveOption] = useState(-1);
   const [senderAccount, setSenderAccount] = useState(
-    "Standard: 8197834 ($21,000.34 USD)"
+    "Standard: 8197834 ($0 USD)"
   );
   return (
     <>
@@ -78,7 +78,7 @@ const InternalTransfer = () => {
               </p>
             </div>
             <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
-              $21,093.20
+              $0
             </p>
           </div>
         </div>

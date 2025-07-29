@@ -15,3 +15,10 @@ export const getPaymentHistory = async (): Promise<Payment[]> => {
   const { data } = await axiosInstance.get("/payments");
   return data.data.data;
 };
+
+export const getPaymentMethodDetails = async (
+  slug: string
+): Promise<PaymentMethod> => {
+  const { data } = await axiosInstance.get(`/payments/method/${slug}`);
+  return data.data;
+};

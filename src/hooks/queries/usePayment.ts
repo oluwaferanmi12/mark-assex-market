@@ -1,4 +1,9 @@
-import { deposit, getPaymentHistory, paymentMethods } from "@/services";
+import {
+  deposit,
+  getPaymentHistory,
+  getPaymentMethodDetails,
+  paymentMethods,
+} from "@/services";
 import {
   CreateDepositInterface,
   Payment,
@@ -31,5 +36,16 @@ export const useGetPayments = () => {
   return useQuery<Payment[]>({
     queryFn: getPaymentHistory,
     queryKey: ["get-payments"],
+  });
+};
+
+export const useGetPaymentMethodDetails = (slug: string) => {
+  return useQuery<PaymentMethod>({
+    queryKey: ["get-payment-method-details", slug],
+    queryFn: ({ queryKey }) => {
+      const [, slug] = queryKey; // Destructure slug from queryKey
+      return getPaymentMethodDetails(slug as string);
+    },
+    enabled: !!slug, // only run if slug is provided
   });
 };

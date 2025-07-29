@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const errorMessage = error?.response?.data?.message ?? error?.message;
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
       if (!window.location.href.includes("login")) {
         window.location.href = "/login";
       }

@@ -4,7 +4,7 @@ import { Col, Row } from "antd";
 import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/buttons/button";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
 import bigXIcon from "@/assets/svgs/moda-big-x-icon.svg";
@@ -21,26 +21,39 @@ import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import securityIcon from "@/assets/svgs/security-icon.svg";
 import {
   useDepositPayment,
+  useGetPaymentMethodDetails,
   useGetPaymentMethods,
 } from "@/hooks/queries/usePayment";
 import { toast } from "sonner";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { MoneyFormat } from "@/utils/money-format";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { data: paymentMethods } = useGetPaymentMethods();
+  const [amountToDeposit, setAmountToDeposit] = useState(0);
+  const [countDown, setCountDown] = useState(5);
+  const [showRedirectModal, setShowRedirectModal] = useState(false);
   const params = useSearchParams();
   const router = useRouter();
   const [activeState, setActiveState] = useState(params.get("val"));
+  const { data: paymentMethodDetails } = useGetPaymentMethodDetails(
+    activeState!
+  );
+  const [startTimer, setStartTimer] = useState(false);
+  const checkoutUrl = useRef("");
   const mutateDeposit = useDepositPayment((data) => {
-    window.open(data.checkout_url);
-    toast.success("deposited");
+    checkoutUrl.current = data.checkout_url;
+    setShowRedirectModal(true);
+    toast.success("Deposit initiated successfully");
   });
 
   const handleDeposit = () => {
     mutateDeposit.mutate({
-      amount: 230,
+      amount: amountToDeposit,
       methodSlug: activeState!,
       chargeHash: "",
       toAccount: "",
@@ -52,8 +65,43 @@ const Proceed = () => {
     router.push(`/deposit/proceed?val=${val}`);
   };
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (startTimer) {
+      timer = setInterval(() => {
+        setCountDown((prev) => {
+          if (prev === 0) {
+            clearTimeout(timer);
+            setShowRedirectModal(false);
+            window.open(checkoutUrl.current, "_blank");
+            setStartTimer(false);
+            return 5;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [startTimer]);
+
   return (
     <>
+      <ModalContainer
+        active={showRedirectModal}
+        handleClose={() => setShowRedirectModal(true)}
+      >
+        <ModalHeader
+          headText="Redirecting..."
+          handleCancel={() => setShowRedirectModal(true)}
+        />
+        <ModalBody>
+          <p className="text-3xl flex items-center justify-center font-work-sans-bold">
+            {countDown}
+          </p>
+        </ModalBody>
+      </ModalContainer>
       <SuccessModal
         active={showSuccessModal}
         closeAction={() => {
@@ -455,6 +503,10 @@ const Proceed = () => {
                         </span>
 
                         <input
+                          onChange={(e) => {
+                            setAmountToDeposit(+e.target.value);
+                          }}
+                          value={amountToDeposit}
                           placeholder="Enter amount"
                           style={{
                             boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
@@ -474,9 +526,10 @@ const Proceed = () => {
                   <Button
                     action={() => {
                       // setShowDepositDetails(true);
+                      setStartTimer(true);
                       handleDeposit();
                     }}
-                    loading={false}
+                    loading={mutateDeposit.isPending}
                     text="Proceed"
                     variant="green-bg"
                     icon={arrowRightMultiple}
@@ -485,28 +538,36 @@ const Proceed = () => {
                 </div>
                 <VisibleOnDesktop>
                   <div className="bg-white border border-[#BEBEBE80] p-4 rounded-sm">
-                    <Row>
-                      <Col xs={12}>
-                        <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                          <p className="text-[#404040]">Min Deposit:</p>
-                          <p className="text-[#111111]">$10.00</p>
-                        </div>
-                        <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                          <p className="text-[#404040]">Max Deposit:</p>
-                          <p className="text-[#111111]">$50,000,000.00</p>
-                        </div>
-                      </Col>
-                      <Col xs={12}>
-                        <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                          <p className="text-[#404040]">Commission:</p>
-                          <p className="text-[#111111]">From $0.00 to $01.00</p>
-                        </div>
-                        <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                          <p className="text-[#404040]">Deposit Time:</p>
-                          <p className="text-[#111111]">Instant</p>
-                        </div>
-                      </Col>
-                    </Row>
+                    {paymentMethodDetails && (
+                      <Row>
+                        <Col xs={12}>
+                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                            <p className="text-[#404040]">Min Deposit:</p>
+                            <p className="text-[#111111]">
+                              ${MoneyFormat(paymentMethodDetails?.minAmount!)}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                            <p className="text-[#404040]">Max Deposit:</p>
+                            <p className="text-[#111111]">
+                              ${MoneyFormat(paymentMethodDetails?.maxAmount!)}
+                            </p>
+                          </div>
+                        </Col>
+                        <Col xs={12}>
+                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                            <p className="text-[#404040]">Commission:</p>
+                            <p className="text-[#111111]">From </p>
+                          </div>
+                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
+                            <p className="text-[#404040]">Deposit Time:</p>
+                            <p className="text-[#111111]">
+                              {paymentMethodDetails.time}
+                            </p>
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
                   </div>
                 </VisibleOnDesktop>
               </div>

@@ -18,10 +18,10 @@ import { AnalyticsTable } from "@/components/ui/tables/analytics/analytics-table
 
 const Analytics = () => {
   const [statusSelected, setStatusSelected] = useState(
-    "Standard: 8197834 ($21,000.34 USD)"
+    "Standard: 8197834 ($0 USD)"
   );
   const statusDropDownList: DropDownListInterface[] = [
-    { text: "Standard: 8197834 ($21,000.34 USD)", id: "" },
+    { text: "Standard: 8197834 ($0 USD)", id: "" },
   ];
   const router = useRouter();
 
@@ -63,7 +63,7 @@ const Analytics = () => {
                   </span>
                 </div>
                 <p className="text-[#111111] text-base lg:text-[20px] font-work-sans-semi-bold">
-                  $ 21,522,400
+                  $ 0
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@ const Analytics = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <p className="text-[#111111] font-work-sans-semi-bold text-base lg:text-[20px] ">
-                    $ 21,522,400
+                    $ 0
                   </p>
                   <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
                     +14%

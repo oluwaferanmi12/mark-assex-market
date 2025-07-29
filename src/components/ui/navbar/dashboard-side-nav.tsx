@@ -185,7 +185,7 @@ export const DashboardSideNav = ({
                 <Image src={wallet} alt="" />
               </span>
               <p className="text-[#202020] text-base font-work-sans-semi-bold">
-                $21,034.00
+                $0
               </p>
             </div>
           </div>
