@@ -1,6 +1,7 @@
-import { deposit, paymentMethods } from "@/services";
+import { deposit, getPaymentHistory, paymentMethods } from "@/services";
 import {
   CreateDepositInterface,
+  Payment,
   PaymentMethod,
   PaymentResponseInterface,
 } from "@/types";
@@ -23,5 +24,12 @@ export const useDepositPayment = (
     onSuccess: (data) => {
       sc(data);
     },
+  });
+};
+
+export const useGetPayments = () => {
+  return useQuery<Payment[]>({
+    queryFn: getPaymentHistory,
+    queryKey: ["get-payments"],
   });
 };

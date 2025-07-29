@@ -13,11 +13,13 @@ import Image from "next/image";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { TransactionTable } from "@/components/ui/tables/transaction/transaction-table";
 import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
+import { useGetPayments } from "@/hooks/queries/usePayment";
 
 const Transaction = () => {
   const [typeSelected, setTypeSelected] = useState("All");
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0);
   const [statusSelected, setStatusSelected] = useState("All");
+  const { data } = useGetPayments();
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "" },
@@ -30,6 +32,7 @@ const Transaction = () => {
     { text: "Deposit", id: "" },
     { text: "Withdraw", id: "" },
   ];
+
   return (
     <>
       <PageHeader text="Transaction History" />
@@ -86,7 +89,7 @@ const Transaction = () => {
         </VisibleOnMobile>
         <div className="mt-4">
           <VisibleOnDesktop>
-            <TransactionTable />
+            <TransactionTable data={data} />
           </VisibleOnDesktop>
           <VisibleOnMobile>
             <MobileTransactionTable

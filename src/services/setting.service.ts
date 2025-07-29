@@ -19,12 +19,12 @@ export const saveUserProfile = async (payload: UpdateUserInterface) => {
 };
 
 export const getKyc = async (): Promise<GetKycResponse> => {
-  const { data } = await axiosInstance.get("/kyc");
+  const { data } = await axiosInstance.get("/kyc/document");
   return data.data;
 };
 
 export const submitKyc = async (payload: FormData) => {
-  const { data } = await axiosInstance.post("/kyc", payload, {
+  const { data } = await axiosInstance.post("/kyc/document", payload, {
     headers: { "Content-Type": "multipart/formdata" },
   });
   return data;

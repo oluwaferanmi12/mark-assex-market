@@ -22,38 +22,46 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import cancelIcon from "@/assets/svgs/xIcon.svg";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import { Button } from "@/components/ui/buttons/button";
+import { Payment } from "@/types";
+import { TableDate } from "@/utils/date-formatter";
 
-export const TransactionTable = () => {
+export const TransactionTable = ({ data }: { data?: Payment[] }) => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
 
-  const columnHelper = createColumnHelper<TransactionInterface>();
+  const columnHelper = createColumnHelper<Payment>();
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor("reference", {
       cell: (info) => <TableText variant="body" text={info.getValue()} />,
       header: (info) => <TableText variant="header" text="ID" />,
     }),
     columnHelper.accessor("amount", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
+      cell: (info) => (
+        <TableText variant="body" text={"NGN " + info.getValue()} />
+      ),
       header: (info) => <TableText variant="header" text="Amount" />,
     }),
     columnHelper.accessor("type", {
       cell: (info) => <TableText variant="body" text={info.getValue()} />,
       header: (info) => <TableText variant="header" text="Type" />,
     }),
-    columnHelper.accessor("paymentMethod", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
+    columnHelper.accessor("method", {
+      cell: (info) => <TableText variant="body" text={info.getValue().name} />,
       header: (info) => <TableText variant="header" text="Payment Method" />,
     }),
     columnHelper.accessor("status", {
       cell: (info) => <TableText variant="body" text={info.getValue()} />,
       header: (info) => <TableText variant="header" text="Status" />,
     }),
-    columnHelper.accessor("date", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
+    columnHelper.accessor("createdAt", {
+      cell: (info) => (
+        <TableText variant="body" text={TableDate(info.getValue())} />
+      ),
       header: (info) => <TableText variant="header" text="Date" />,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <TableStatus variant="Success" text="Success" />,
+      cell: (info) => (
+        <TableStatus variant={info.getValue()} text={info.getValue()} />
+      ),
       header: (info) => <TableText variant="header" text="Status" />,
     }),
     columnHelper.display({
@@ -66,9 +74,9 @@ export const TransactionTable = () => {
       header: (info) => <TableText variant="header" text="Action" />,
     }),
   ];
-  const [data, setData] = useState(transactionData);
+
   const table = useReactTable({
-    data,
+    data: data ? data : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -114,7 +122,7 @@ export const TransactionTable = () => {
                       Status
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      <TableStatus text="Failed" variant="Cancelled" />
+                      <TableStatus text="Failed" variant="FAILED" />
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -168,59 +176,64 @@ export const TransactionTable = () => {
       </SideDrawerWrapper>
       {/* <TableEmptyState icon={graphIcon} tableText="No Transactions" /> */}
       <div className="mt-4">
-        <table className="w-full">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id} className="  min-w-full w-full">
-                  {headerGroup.headers.map((header, index, rootData) => {
-                    return (
-                      <th
-                        className={`bg-[#F0F4F8]  p-4 ${
-                          index === 0 && "rounded-tl-2xl"
-                        } ${index === rootData.length - 1 && "rounded-tr-2xl"}`}
-                        key={header.id}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <tr
-                  onClick={() => {
-                    setShowSideDrawer(true);
-                  }}
-                  style={{
-                    boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
-                  }}
-                  key={row.id}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <td className="bg-[#FEFEFE33]" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {data && data.length && (
+          <table className="w-full">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => {
+                return (
+                  <tr key={headerGroup.id} className="min-w-full w-full">
+                    {headerGroup.headers.map((header, index, rootData) => {
+                      return (
+                        <th
+                          className={`bg-[#F0F4F8]  p-4 ${
+                            index === 0 && "rounded-tl-2xl"
+                          } ${
+                            index === rootData.length - 1 && "rounded-tr-2xl"
+                          }`}
+                          key={header.id}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <tr
+                    onClick={() => {
+                      setShowSideDrawer(true);
+                    }}
+                    style={{
+                      boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
+                    }}
+                    key={row.id}
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <td className="bg-[#FEFEFE33]" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+
         <TablePagination />
       </div>
     </>
