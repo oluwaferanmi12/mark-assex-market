@@ -112,7 +112,7 @@ const CreateAccount = () => {
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
-                    <option>NGN</option>
+                    <option>500</option>
                   </select>
                 </div>
               </Col>
