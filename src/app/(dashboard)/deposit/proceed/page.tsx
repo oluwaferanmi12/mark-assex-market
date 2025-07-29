@@ -19,14 +19,19 @@ import qrCode from "@/assets/svgs/qr-code-placeholder.svg";
 import masterCardIcon from "@/assets/svgs/mastercardIcon.svg";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import securityIcon from "@/assets/svgs/security-icon.svg";
-import { useDepositPayment } from "@/hooks/queries/usePayment";
+import {
+  useDepositPayment,
+  useGetPaymentMethods,
+} from "@/hooks/queries/usePayment";
 import { toast } from "sonner";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { data: paymentMethods } = useGetPaymentMethods();
   const params = useSearchParams();
+  const router = useRouter();
   const [activeState, setActiveState] = useState(params.get("val"));
   const mutateDeposit = useDepositPayment((data) => {
     window.open(data.checkout_url);
@@ -40,6 +45,11 @@ const Proceed = () => {
       chargeHash: "",
       toAccount: "",
     });
+  };
+
+  const handleChangePaymentMethod = (val: string) => {
+    setActiveState(val);
+    router.push(`/deposit/proceed?val=${val}`);
   };
 
   return (
@@ -90,12 +100,22 @@ const Proceed = () => {
                     Payment Method
                   </p>
                   <select
+                    onChange={(e) => {
+                      handleChangePaymentMethod(e.target.value);
+                    }}
+                    value={activeState}
                     style={{
                       boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
-                    <option>Select Method</option>
+                    {paymentMethods?.map((item) => {
+                      return (
+                        <option key={item.slug} value={item.slug}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
                 <div className="bg-[#F40E0E1A] p-3 rounded-lg my-3 flex items-center gap-2">
@@ -386,12 +406,22 @@ const Proceed = () => {
                         Payment Method
                       </p>
                       <select
+                        onChange={(e) => {
+                          handleChangePaymentMethod(e.target.value);
+                        }}
+                        value={activeState!}
                         style={{
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        <option>Select Method</option>
+                        {paymentMethods?.map((item) => {
+                          return (
+                            <option key={item.slug} value={item.slug}>
+                              {item.name}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </Col>
@@ -440,7 +470,7 @@ const Proceed = () => {
                     </div>
                   </Col>
                 </Row>
-                <div className="my-4 border border-[red]">
+                <div className="my-4 ">
                   <Button
                     action={() => {
                       // setShowDepositDetails(true);
