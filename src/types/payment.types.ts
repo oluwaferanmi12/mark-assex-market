@@ -21,6 +21,7 @@ export interface CreateDepositInterface {
 export interface PaymentResponseInterface {
   reference: string;
   checkout_url: string;
+  address?: string;
 }
 
 export interface PaymentUser {

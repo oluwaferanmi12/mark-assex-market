@@ -28,6 +28,8 @@ import { toast } from "sonner";
 import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { MoneyFormat } from "@/utils/money-format";
+import { QRCodeCanvas } from "qrcode.react";
+import { Copy } from "@/components/shared/copier/copy";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -40,11 +42,15 @@ const Proceed = () => {
   const params = useSearchParams();
   const router = useRouter();
   const [activeState, setActiveState] = useState(params.get("val"));
+  const [walletAddress, setWalletAddress] = useState("");
   const { data: paymentMethodDetails } = useGetPaymentMethodDetails(
     activeState!
   );
   const [startTimer, setStartTimer] = useState(false);
   const checkoutUrl = useRef("");
+  const mutateDepositInstance = useDepositPayment((data) => {
+    setWalletAddress(data.address!);
+  });
   const mutateDeposit = useDepositPayment((data) => {
     checkoutUrl.current = data.checkout_url;
     setShowRedirectModal(true);
@@ -64,6 +70,24 @@ const Proceed = () => {
     setActiveState(val);
     router.push(`/deposit/proceed?val=${val}`);
   };
+
+  useEffect(() => {
+    if (activeState) {
+      if (
+        activeState.includes("tether") ||
+        activeState.includes("btc") ||
+        activeState.includes("eth")
+      ) {
+        mutateDepositInstance.mutate({
+          amount: 1000,
+          chargeHash: "",
+          methodSlug: activeState,
+          toAccount: "",
+        });
+        console.log("Got something heree");
+      }
+    }
+  }, [activeState]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -139,7 +163,8 @@ const Proceed = () => {
       </ModalContainer>
       <PageHeader text="Deposit" />
       <div className="bg-white p-4 rounded-lg mt-6">
-        {activeState?.toLowerCase().includes("tether") ? (
+        {activeState?.toLowerCase().includes("tether") ||
+        activeState?.toLowerCase().includes("btc") ? (
           <div className="mt-6 bg-white p-4 rounde">
             <Row className="mb-4">
               <Col lg={12} xs={24}>
@@ -208,19 +233,27 @@ const Proceed = () => {
                       style={{ border: "0.5px solid #BEBEBE80" }}
                     >
                       <p className="font-work-sans-regular text-[#111111]">
-                        0x63b18b1ee302de94d96354b0207ac9ca06c13a5f
+                        {walletAddress ?? "No wallet address available"}
                       </p>
-                      <Button
-                        loading={false}
-                        text="Copy"
-                        variant="green-bg-faded"
-                        action={() => {}}
-                      />
+                      <Copy value={walletAddress ?? ""}>
+                        <Button
+                          loading={false}
+                          text="Copy"
+                          variant="green-bg-faded"
+                          action={() => {}}
+                        />
+                      </Copy>
                     </div>
                   </div>
 
                   <div>
-                    <Image src={qrCode} alt="" />
+                    <QRCodeCanvas
+                      value={walletAddress}
+                      size={200} // size in px
+                      level={"H"} // error correction level
+                      includeMargin={true}
+                    />
+                    {/* <Image src={qrCode} alt="" /> */}
                   </div>
                 </div>
               </Col>
