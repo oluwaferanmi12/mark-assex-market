@@ -93,7 +93,7 @@ function Clients() {
           <VisibleOnDesktop>
             <ClientTable />
           </VisibleOnDesktop>
-          <VisibleOnMobile>
+          {/* <VisibleOnMobile>
             <MobileTransactionTable
               activeIndex={activeIndex}
               index={0}
@@ -104,7 +104,7 @@ function Clients() {
               index={1}
               setActiveIndex={setActiveIndex}
             />
-          </VisibleOnMobile>
+          </VisibleOnMobile> */}
         </div>
       </div>
     </>

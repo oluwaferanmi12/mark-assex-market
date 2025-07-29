@@ -187,16 +187,20 @@ const Wallet = () => {
         </VisibleOnDesktop>
         <VisibleOnMobile>
           <div className="my-4">
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              index={0}
-            />
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              index={1}
-            />
+            {data?.length ? (
+              data.map((item, index) => {
+                return (
+                  <MobileTransactionTable
+                    payment={item}
+                    activeIndex={activeIndex}
+                    setActiveIndex={setActiveIndex}
+                    index={index}
+                  />
+                );
+              })
+            ) : (
+              <></>
+            )}
           </div>
         </VisibleOnMobile>
       </div>

@@ -9,15 +9,20 @@ import { TransactionErrorWrapper } from "@/components/shared/wrappers/transactio
 import { AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/animation/fade-in";
 import arrowRight from "@/assets/svgs/arrow-right-icon.svg";
+import { Payment } from "@/types";
+import { MoneyFormat } from "@/utils/money-format";
+import { TableDate } from "@/utils/date-formatter";
 
 export const MobileTransactionTable = ({
   index,
   activeIndex,
   setActiveIndex,
+  payment,
 }: {
   index: number;
   activeIndex: number;
   setActiveIndex: (val: number) => void;
+  payment: Payment;
 }) => {
   const [showReason, setShowReason] = useState(false);
   return (
@@ -34,13 +39,16 @@ export const MobileTransactionTable = ({
       >
         <div className="flex border-b border-[#BEBEBE80] justify-between p-4">
           <div>
-            <p className="font-work-sans-medium">$20,000</p>
+            <p className="font-work-sans-medium">
+              ${MoneyFormat(+payment.amount)}
+            </p>
             <p className="text-xs font-work-sans-regular text-[#707070]">
-              10 Oct, 2025 <span className="text-[#D80027]">20:12</span>
+              {TableDate(payment.createdAt)}{" "}
+              {/* <span className="text-[#D80027]">20:12</span> */}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <TableStatus variant="SUCCESS" text="Successful" />
+            <TableStatus variant={payment.status} text={payment.status} />
             <Image
               src={activeIndex === index ? arrowDown : arrowRight}
               alt=""
@@ -51,10 +59,13 @@ export const MobileTransactionTable = ({
           {activeIndex === index && (
             <FadeIn>
               <div className="p-4">
-                <TableRow leftText="ID" rightText="1274597" />
-                <TableRow leftText="Amount" rightText="$ 20,000" />
-                <TableRow leftText="Type" rightText="Deposit" />
-                <TableRow leftText="Payment method" rightText="korahq" />
+                <TableRow leftText="ID" rightText={payment.reference} />
+                <TableRow leftText="Amount" rightText={`$ ${payment.amount}`} />
+                <TableRow leftText="Type" rightText={payment.type} />
+                <TableRow
+                  leftText="Payment method"
+                  rightText={payment.method.name}
+                />
                 <TableRow leftText="Date" type="date" rightText="+12.54" last />
               </div>
               <div

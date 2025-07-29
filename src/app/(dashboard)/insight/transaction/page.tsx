@@ -92,31 +92,21 @@ const Transaction = () => {
             <TransactionTable data={data} />
           </VisibleOnDesktop>
           <VisibleOnMobile>
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              index={0}
-              setActiveIndex={setActiveIndex}
-            />
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              index={1}
-              setActiveIndex={setActiveIndex}
-            />
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              index={2}
-              setActiveIndex={setActiveIndex}
-            />
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              index={3}
-              setActiveIndex={setActiveIndex}
-            />
-            <MobileTransactionTable
-              activeIndex={activeIndex}
-              index={4}
-              setActiveIndex={setActiveIndex}
-            />
+            {data?.length ? (
+              data.map((item, index) => {
+                return (
+                  <MobileTransactionTable
+                    key={index}
+                    activeIndex={activeIndex}
+                    index={index}
+                    setActiveIndex={setActiveIndex}
+                    payment={item}
+                  />
+                );
+              })
+            ) : (
+              <></>
+            )}
           </VisibleOnMobile>
         </div>
       </div>

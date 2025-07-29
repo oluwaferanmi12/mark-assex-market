@@ -62,7 +62,7 @@ const Account = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setShowAccountReadyModal(true);
+      // setShowAccountReadyModal(true);
     }, 3000);
   }, []);
 

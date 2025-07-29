@@ -135,7 +135,7 @@ function Analytics() {
         <VisibleOnDesktop>
           <TransactionTable />
         </VisibleOnDesktop>
-        <VisibleOnMobile>
+        {/* <VisibleOnMobile>
           <MobileTransactionTable
             activeIndex={activeIndex}
             index={0}
@@ -161,7 +161,7 @@ function Analytics() {
             index={4}
             setActiveIndex={setActiveIndex}
           />
-        </VisibleOnMobile>
+        </VisibleOnMobile> */}
       </div>
     </>
   );
