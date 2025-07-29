@@ -164,7 +164,8 @@ const Proceed = () => {
       <PageHeader text="Deposit" />
       <div className="bg-white p-4 rounded-lg mt-6">
         {activeState?.toLowerCase().includes("tether") ||
-        activeState?.toLowerCase().includes("btc") ? (
+        activeState?.toLowerCase().includes("btc") ||
+        activeState?.toLowerCase().includes("eth") ? (
           <div className="mt-6 bg-white p-4 rounde">
             <Row className="mb-4">
               <Col lg={12} xs={24}>

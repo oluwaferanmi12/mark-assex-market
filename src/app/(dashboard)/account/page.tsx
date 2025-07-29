@@ -24,6 +24,7 @@ import checkCircle from "@/assets/svgs/check-circle-icon.svg";
 import { TradeContainer } from "@/components/shared/wrappers/trade-container";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useGetAccount } from "@/hooks/queries/useAccount";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -40,7 +41,8 @@ const Account = () => {
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
-  const router = useRouter()
+  const { data: accounts } = useGetAccount();
+  const router = useRouter();
   useEffect(() => {
     const targetRef = activeAccount === "live" ? liveRef : demoRef;
     if (targetRef.current) {
@@ -49,7 +51,6 @@ const Account = () => {
     }
   }, [activeAccount]);
 
- 
   const filterDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Newest", id: "" },
@@ -225,7 +226,7 @@ const Account = () => {
             <Button
               variant="green-bg"
               action={() => {
-                router.push("/account/create-account")
+                router.push("/account/create-account");
               }}
               loading={false}
               text="Open Live Account"
@@ -334,7 +335,7 @@ const Account = () => {
                     </span>
                   </div>
                   <p className="text-[#111111] text-base lg:text-[20px]  font-work-sans-semi-bold">
-                    2,023
+                    0
                   </p>
                   <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
                     Active: 5 I Closed: 2,018{" "}
@@ -361,7 +362,7 @@ const Account = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="text-[#111111] text-base lg:text-[20px]  font-work-sans-semi-bold">
-                      +$300,000
+                      +$0
                     </p>
                     <p className="text-[#34C659] text-xs font-work-sans-semi-bold">
                       XAUUSD
@@ -389,13 +390,19 @@ const Account = () => {
                 </div>
               </DropDownList>
             </div>
-            <Link href={"/account/details"}>
-              <TradeContainer />
-              <TradeContainer />
-              <TradeContainer />
-              <TradeContainer />
-              <TradeContainer />
-            </Link>
+            {accounts?.length ? (
+              accounts.map((item) => {
+                return (
+                  <Link href={"/account/details"}>
+                    <TradeContainer account={item} />
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="my-4 flex items-center w-full justify-center font-work-sans-medium">
+                No accounts created
+              </div>
+            )}
           </div>
         </div>
       </div>

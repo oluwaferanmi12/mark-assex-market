@@ -13,11 +13,20 @@ import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import checkCircle from "@/assets/svgs/check-circle.svg";
 import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
+import { useCreateTradeAccount } from "@/hooks/queries/useAccount";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const CreateAccount = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
   const liveRef = useRef<HTMLParagraphElement>(null);
+  const router = useRouter();
   const demoRef = useRef<HTMLParagraphElement>(null);
+  const mutateCreate = useCreateTradeAccount(() => {
+    toast.success("Account created successfully");
+    router.push("/account");
+  });
+
   const [highlightStyles, setHighlightStyles] = useState({
     left: 0,
     width: 0,
@@ -121,6 +130,7 @@ const CreateAccount = () => {
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
                     <option>NGN</option>
+                    <option>USD</option>
                   </select>
                 </div>
               </Col>
@@ -151,9 +161,9 @@ const CreateAccount = () => {
                 <div className="my-4">
                   <Button
                     action={() => {
-                      //   setVerificationModal(true);
+                      mutateCreate.mutate({ accountGroupId: "id" });
                     }}
-                    loading={false}
+                    loading={mutateCreate.isPending}
                     text="Create Account"
                     variant="green-bg"
                     icon={arrowRightMultiple}

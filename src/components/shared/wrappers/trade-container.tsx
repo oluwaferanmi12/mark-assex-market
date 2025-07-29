@@ -25,8 +25,10 @@ import minusIcon from "@/assets/svgs/minus-button.svg";
 import plusIcon from "@/assets/svgs/plus-button.svg";
 import redCaution from "@/assets/svgs/red-caution.svg";
 import { useRouter } from "next/navigation";
+import { Account } from "@/types";
+import { MoneyFormat } from "@/utils/money-format";
 
-export const TradeContainer = () => {
+export const TradeContainer = ({ account }: { account: Account }) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [liveAccountSelected, setLiveAccountSelected] = useState("");
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
@@ -137,7 +139,9 @@ export const TradeContainer = () => {
               <span className="mt-1 pl-1 cursor-pointer">
                 <Image src={minusIcon} alt="" />
               </span>
-              <p className="text-[#404040] font-work-sans-medium">1:200</p>
+              <p className="text-[#404040] font-work-sans-medium">
+                1:{account.leverage}
+              </p>
               <span className="flex items-center mt-1 pr-1 cursor-pointer">
                 <Image src={plusIcon} alt="" />
               </span>
@@ -239,23 +243,25 @@ export const TradeContainer = () => {
                 Raw Spread
               </span>
               <span className="bg-[#F1F5F9] rounded-sm text-xs text-black px-2 py-1 font-work-sans-regular">
-                Account #81978
+                Account {account.mt5Id}
               </span>
             </div>
             <p className="text-3xl font-work-sans-semi-bold text-black">
-              $50,000 USD
+              ${account.balance} USD
             </p>
           </div>
           <div className="flex items-center gap-12 ">
             <div className="flex items-center gap-4 flex-col justify-center">
               <p className="text-[#0DAE94]  font-work-sans-regular">Equity</p>
               <p className="text-lg font-work-sans-regular text-black">
-                50,000 USD
+                {account.balance}USD
               </p>
             </div>
             <div className="flex gap-4 items-center flex-col justify-center">
               <p className="text-[#0DAE94] font-work-sans-regular">Leverage</p>
-              <p className="text-lg font-work-sans-regular text-black">1:500</p>
+              <p className="text-lg font-work-sans-regular text-black">
+                1:{account.leverage}
+              </p>
             </div>
           </div>
           <div className="flex flex-col gap-4 ">
@@ -313,20 +319,19 @@ export const TradeContainer = () => {
               Balance
             </p>
             <p className="text-[#707070] text-lg font-work-sans-regular">
-              Equity
+              Server
             </p>
             <p className="text-[#707070] text-lg font-work-sans-regular">
-              MT5 Login: <span className="text-[#1F0D3F]">81978</span>
+              MT5 Login: <span className="text-[#1F0D3F]"></span>
             </p>
           </div>
           <div className="flex flex-col gap-3">
             <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-              <p className="text-[#202020]">$ 50,000</p>
+              <p className="text-[#202020]">$ {MoneyFormat(account.balance)}</p>
               <p>Actual leverage</p>
             </div>
             <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-              <p className="text-[#202020]">$ 50,000</p>
-              <p>Available to withdraw</p>
+              <p className="text-[#202020]">{account.server}</p>
             </div>
             <p className="text-[#707070] text-lg font-work-sans-regular">
               Platform: <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
@@ -334,7 +339,7 @@ export const TradeContainer = () => {
           </div>
           <div className="flex flex-col gap-3">
             <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
-              <p className="text-[#202020]">1:200</p>
+              <p className="text-[#202020]">1:{account.leverage}</p>
 
               <Image
                 className="cursor-pointer"
@@ -346,7 +351,7 @@ export const TradeContainer = () => {
               />
             </div>
             <p className="text-[#202020] flex justify-end items-center text-lg font-work-sans-regular">
-              $ 49,000
+              $ 0
             </p>
             <div>
               <Button
