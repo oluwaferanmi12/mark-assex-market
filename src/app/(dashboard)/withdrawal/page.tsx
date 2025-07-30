@@ -10,25 +10,21 @@ import crypto from "@/assets/svgs/deposit-crypto.svg";
 import { DepositWrapper } from "@/components/shared/wrappers/deposit-wrapper";
 import bitcoinIcon from "@/assets/svgs/bitcoin.svg";
 import { useGetPaymentMethods } from "@/hooks/queries/usePayment";
+import { CardGroupLoader } from "@/components/loaders/card-loader";
 
 const Withdrawal = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { data } = useGetPaymentMethods();
-  const depositObject = [
-    { text: "Internal Transfer", icon: internalTransferIcon },
-    { text: "Bitcoin", icon: bitcoinIcon },
-    { text: "Korahq", icon: koraHq },
-    { text: "Paystack", icon: paystack },
-  ];
-
-  console.log(data, "Data value herre");
+  const { data, isPending } = useGetPaymentMethods();
 
   return (
     <>
       <PageHeader text="Withdrawal" />
 
       <Row gutter={16} className="mt-8">
-        {data &&
+        {isPending ? (
+          <CardGroupLoader />
+        ) : (
+          data &&
           data.map((item, index) => {
             return (
               <Col key={item.name} xs={24} lg={12} className="mb-4">
@@ -41,7 +37,8 @@ const Withdrawal = () => {
                 />
               </Col>
             );
-          })}
+          })
+        )}
       </Row>
     </>
   );

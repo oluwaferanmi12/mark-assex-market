@@ -15,7 +15,6 @@ import checkCircle from "@/assets/svgs/check-circle.svg";
 import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import exclamationIcon from "@/assets/svgs/exclamationIcon.svg";
-import qrCode from "@/assets/svgs/qr-code-placeholder.svg";
 import masterCardIcon from "@/assets/svgs/mastercardIcon.svg";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import securityIcon from "@/assets/svgs/security-icon.svg";
@@ -252,7 +251,7 @@ const Proceed = () => {
                   <div>
                     <QRCodeCanvas
                       value={walletAddress}
-                      size={200} // size in px
+                      size={300} // size in px
                       level={"H"} // error correction level
                       includeMargin={true}
                     />

@@ -23,28 +23,19 @@ import bankIcon from "@/assets/svgs/bank-icon.svg";
 import tether1 from "@/assets/svgs/tether-1.svg";
 import tether2 from "@/assets/svgs/tether-2.svg";
 import { useGetPaymentMethods } from "@/hooks/queries/usePayment";
+import { CardGroupLoader } from "@/components/loaders/card-loader";
 
 const Deposit = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [verificationModal, setVerificationModal] = useState(false);
-  const { data } = useGetPaymentMethods();
+  const { data, isPending } = useGetPaymentMethods();
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "" },
     { text: "Pending", id: "" },
     { text: "Failed", id: "" },
-  ];
-
-  const depositObject = [
-    { text: "Internal Bank Transfer", icon: internalTransferIcon },
-    { text: "Bank Card", icon: bankIcon },
-    { text: "Crypto Chilll", icon: crypto },
-    { text: "Korahq", icon: koraHq },
-    { text: "Paystack", icon: paystack },
-    { text: "Tether (USDT ERC20)", icon: tether1 },
-    { text: "Tether (USDT TRC20)", icon: tether2 },
   ];
 
   return (
@@ -95,7 +86,10 @@ const Deposit = () => {
         </Row>
       </div>
       <Row gutter={16} className="mt-8">
-        {data &&
+        {isPending ? (
+          <CardGroupLoader />
+        ) : (
+          data &&
           data.map((item, index) => {
             return (
               <Col key={index} xs={24} lg={12} className="mb-4">
@@ -107,7 +101,8 @@ const Deposit = () => {
                 />
               </Col>
             );
-          })}
+          })
+        )}
       </Row>
     </React.Fragment>
   );
