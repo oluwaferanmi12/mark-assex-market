@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 const CreateAccount = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
   const liveRef = useRef<HTMLParagraphElement>(null);
+
   const router = useRouter();
   const demoRef = useRef<HTMLParagraphElement>(null);
   const mutateCreate = useCreateTradeAccount(() => {
@@ -38,6 +39,7 @@ const CreateAccount = () => {
       setHighlightStyles({ left: offsetLeft, width: offsetWidth });
     }
   }, [activeAccount]);
+  
   return (
     <>
       <PageGoBack />

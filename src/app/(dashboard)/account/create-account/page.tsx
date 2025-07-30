@@ -4,7 +4,7 @@ import { AccountTypeWrapper } from "@/components/shared/container/account-type-w
 import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
 import { AccountToggle } from "@/components/shared/toggle/live-toggle";
 import { Col, Row } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import priceIconWrap from "@/assets/svgs/price-icon-wrap.svg";
 import priceIconWrap2 from "@/assets/svgs/second-price-wrap.svg";
 import priceIconWrap3 from "@/assets/svgs/price-icon-wrap3.svg";
@@ -61,26 +61,41 @@ const CreateAccount = () => {
       benefitList: ["Maximum Deposit $50", "Spread From 0.00", "Commission $3"],
     },
   ];
+
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search);
+    const state_ = param.get("state") as "live" | "demo";
+    console.log(state_, "State value hereee");
+    if (state_) {
+      console.log("Fixes hereee");
+      setActiveAccount(state_);
+    }
+  }, []);
   return (
     <div>
       <PageGoBack />
       <p className="text-2xl font-work-sans-semi-bold mt-4">Account Type</p>
-      <AccountToggle activeAccount={activeAccount} setActiveAccount={setActiveAccount} />
+      <AccountToggle
+        activeAccount={activeAccount}
+        setActiveAccount={setActiveAccount}
+      />
       <div className="mt-4">
         <Row justify={"center"} gutter={24}>
-          {activeAccount === "live" ? liveAccountObject.map((item) => {
-            return (
-              <Col xs={24} lg={8}>
-                <AccountTypeWrapper item={item} />
-              </Col>
-            );
-          }) : demoAccountObject.map((item , index) => {
-            return (
-              <Col xs={24} lg={8}>
-                <AccountTypeWrapper item={item} />
-              </Col>
-            );
-          }) }
+          {activeAccount === "live"
+            ? liveAccountObject.map((item) => {
+                return (
+                  <Col xs={24} lg={8}>
+                    <AccountTypeWrapper item={item} />
+                  </Col>
+                );
+              })
+            : demoAccountObject.map((item, index) => {
+                return (
+                  <Col xs={24} lg={8}>
+                    <AccountTypeWrapper item={item} />
+                  </Col>
+                );
+              })}
         </Row>
       </div>
     </div>
