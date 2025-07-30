@@ -196,8 +196,8 @@ const Proceed = () => {
                 <div className="bg-[#F40E0E1A] p-3 rounded-lg my-3 flex items-center gap-2">
                   <Image src={exclamationIcon} alt="" />
                   <p className="text-[#202020] font-work-sans-regular text-sm">
-                    Only USDT on the Ethereum (ERC20) Network is accepted for
-                    this transaction.
+                    Only USDT on the {activeState.toUpperCase()} Network is
+                    accepted for this transaction.
                   </p>
                 </div>
                 <div className="my-3">

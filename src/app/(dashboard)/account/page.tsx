@@ -229,7 +229,11 @@ const Account = () => {
                 router.push("/account/create-account");
               }}
               loading={false}
-              text="Open Live Account"
+              text={
+                activeAccount === "demo"
+                  ? "Open Demo Account"
+                  : "Open Live Account"
+              }
               icon={plusIcon}
               buttonSmaller
               textBolder
