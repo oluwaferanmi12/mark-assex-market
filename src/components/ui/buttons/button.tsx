@@ -39,6 +39,8 @@ export const Button = ({
           ? "bg-[#D92D20] text-[#FEFEFE]"
           : variant === "green-bg-faded"
           ? "bg-[#0DAE9433] text-[#0DAE94]"
+          : variant === "grey-border"
+          ? "border border-[#BEBEBE] bg-[#FFFFFF59] text-[#202020]"
           : ""
       } ${fullWidth && "w-full"} ${
         fullRounded ? "rounded-full" : "rounded-md"

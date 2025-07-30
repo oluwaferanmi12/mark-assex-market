@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { GSelect } from "@/components/ui/inputs/general-select";
 import moment from "moment";
 import { countryList } from "@/utils/country-list";
+import userRoundPen from "@/assets/svgs/user-round-pen.svg";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
@@ -193,33 +194,45 @@ export const AccountSetting = () => {
           </div>
         </ModalFooter>
       </ModalContainer>
-      <div className="flex items-center gap-2 ">
-        <span>
-          <Image src={placeholderImage} alt="" />
-        </span>
-        <div className="flex items-center gap-2">
-          <Button
-            icon={uploadGreenIcon}
-            action={() => {
-              setShowUploadmodal(true);
-            }}
-            loading={false}
-            text="Upload"
-            variant="green-faded-border"
-            buttonSmaller
-          />
-          <Button
-            icon={trashIconRed}
-            action={() => {
-              setShowDeleteModal(true);
-            }}
-            loading={false}
-            text="Remove"
-            variant="red-faded-border"
-            buttonSmaller
-          />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 ">
+          <span>
+            <Image src={placeholderImage} alt="" />
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              icon={uploadGreenIcon}
+              action={() => {
+                setShowUploadmodal(true);
+              }}
+              loading={false}
+              text="Upload"
+              variant="green-faded-border"
+              buttonSmaller
+            />
+            <Button
+              icon={trashIconRed}
+              action={() => {
+                setShowDeleteModal(true);
+              }}
+              loading={false}
+              text="Remove"
+              variant="red-faded-border"
+              buttonSmaller
+            />
+          </div>
         </div>
+        <Button
+          loading={false}
+          text="Edit"
+          action={() => {
+            setReadOnly(false);
+          }}
+          variant="grey-border"
+          icon={userRoundPen}
+        />
       </div>
+
       <div className="my-6">
         <div className="mb-4">
           <p className="font-work-sans-regular text-base lg:text-lg text-[#202020]">
