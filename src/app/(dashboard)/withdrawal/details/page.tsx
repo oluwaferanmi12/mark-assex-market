@@ -8,7 +8,7 @@ import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import { Col, Row } from "antd";
 import Image from "next/image";
 import walletDollarIcon from "@/assets/svgs/wallet-dollar-icon.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import arrowRight from "@/assets/svgs/tabler-icon-rights.svg";
 import { PageHeader } from "@/components/ui/text/page-header";
@@ -20,15 +20,87 @@ import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { SuccessModal } from "@/components/shared/response-modal/success-modal";
+import {
+  useGetPaymentMethodDetails,
+  useGetPaymentMethods,
+  useSaveWithdraw,
+} from "@/hooks/queries/usePayment";
+import { data } from "framer-motion/client";
+import { useRouter } from "next/navigation";
+import { useGetAccount, useGetAccountDetail } from "@/hooks/queries/useAccount";
+import { toast } from "sonner";
+import { MoneyFormat } from "@/utils/money-format";
+import { CreateWithdrawalInterface } from "@/types";
+import {
+  useSendGenericOtp,
+  useVerifyGenericOtp,
+} from "@/hooks/queries/useGeneric";
 
 const WithdrawalDetails = () => {
   const [accountType, setAccountType] = useState("");
+
   const [paymentMethod, setPaymentMethod] = useState("");
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPaymentSetup, setShowPaymentSetup] = useState(false);
+  const { data: paymentMethods } = useGetPaymentMethods();
+  const { data: accounts } = useGetAccount();
+  const [amount, setAmount] = useState(0);
+  const mutateVerifyOtp = useVerifyGenericOtp();
+  const [fromAccount, setFromAccount] = useState("");
+  const [otpValue, setOtpValue] = useState("");
+  const sendGenericOtp = useSendGenericOtp();
+  const { data: activePaymentDetails } = useGetPaymentMethodDetails(
+    accountType!
+  );
+
+  const [withdrawPayload, setWithdrawPayload] =
+    useState<CreateWithdrawalInterface>({
+      accountName: "",
+      accountNumber: "",
+      amount: 0,
+      bank: "",
+      bankCode: "",
+      coin: "",
+      currency: "",
+      fromAccount: "",
+      methodSlug: "",
+      network: "",
+      paymentAccountId: "",
+      routingNo: "",
+      token: "",
+      walletAddress: "",
+    });
+  const mutateWithdraw = useSaveWithdraw((data) => {
+    toast.success("Withdraw successful");
+  });
+  const router = useRouter();
+
+  const getMethodName = () => {
+    const result = paymentMethods?.find((item) => item.slug === accountType);
+    return result?.name;
+  };
+  console.log(accounts, "Account s hereee");
+
+  const handleAddWithdraw = async () => {
+    mutateWithdraw.mutate(withdrawPayload);
+  };
+
+  useEffect(() => {
+    const urlVal = new URLSearchParams(window.location.search);
+    const val_ = urlVal.get("val");
+    if (val_) {
+      setAccountType(val_);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (accountType) {
+      router.push(`/withdrawal/details?val=${accountType}`);
+    }
+  }, [accountType]);
 
   return (
     <>
@@ -82,7 +154,7 @@ const WithdrawalDetails = () => {
                 >
                   <Image src={bidirectionalIcon} alt="" />
                   <p className="text-[#202020] font-work-sans-regular">
-                    Instant Bank Transfer
+                    {getMethodName()}
                   </p>
                 </div>
                 <div className="mt-4">
@@ -146,10 +218,10 @@ const WithdrawalDetails = () => {
 
                   <div className="flex items-center gap-2  py-2">
                     <p className="text-[#404040] font-work-sans-regular">
-                      To be deposited:
+                      To be withdrawn:
                     </p>
                     <p className="text-[#111111]  font-work-sans-semi-bold">
-                      $10.00
+                      ${MoneyFormat(amount)}
                     </p>
                   </div>
                 </div>
@@ -161,11 +233,11 @@ const WithdrawalDetails = () => {
                       Confirm Withdrawal
                     </p>
                     <p className="text-xs text-[#404040] font-work-sans-regular">
-                      Enter the OTP sent to your phone number +234****9199. If
-                      you didn't receive it, request a new code.
+                      Enter the OTP sent to your email address. If you didn't
+                      receive it, request a new code.
                     </p>
                     <div className="mt-3 flex justify-start">
-                      <OTPInput />
+                      <OTPInput setOtpValue={setOtpValue} />
                     </div>
                     <div className="my-4 flex items-center font-work-sans-light">
                       <p className="text-xs">
@@ -200,7 +272,12 @@ const WithdrawalDetails = () => {
                         setShowOtp(false);
                         setShowDepositDetails(false);
                         setShowPaymentSetup(true);
+                        mutateVerifyOtp.mutate({
+                          otp: otpValue,
+                          withToken: false,
+                        });
                       }
+                      sendGenericOtp.mutate();
                       setShowOtp(true);
                     }}
                     loading={false}
@@ -345,12 +422,24 @@ const WithdrawalDetails = () => {
                     Payment Method
                   </p>
                   <select
+                    value={accountType}
                     style={{
                       boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                    }}
+                    onChange={(e) => {
+                      setAccountType(e.target.value);
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
                     <option>Select Method</option>
+                    {paymentMethods &&
+                      paymentMethods.map((item, index) => {
+                        return (
+                          <option value={item.slug} key={index}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
                   </select>
                 </div>
               </Col>
@@ -382,7 +471,17 @@ const WithdrawalDetails = () => {
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
-                    <option>Standard: 8197834 ($10,000)</option>
+                    {accounts &&
+                      accounts.length &&
+                      accounts.map((item, index) => {
+                        return (
+                          <option key={item.id}>
+                            {item.server}: {item.mt5Id} ($
+                            {item.balance})
+                          </option>
+                        );
+                      })}
+                    <option value={"wallet"}>wallet</option>
                   </select>
                 </div>
               </Col>
@@ -395,11 +494,14 @@ const WithdrawalDetails = () => {
                   </p>
                   <div>
                     <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
-                      <Image src={dollarGreen} alt="" /> 
+                      <Image src={dollarGreen} alt="" />
                     </span>
 
                     <input
                       placeholder="Enter amount"
+                      onChange={(e) => {
+                        setAmount(+e.target.value);
+                      }}
                       style={{
                         boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                       }}
@@ -432,21 +534,27 @@ const WithdrawalDetails = () => {
                   <Col xs={12}>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
                       <p className="text-[#404040]">Min Deposit:</p>
-                      <p className="text-[#111111]">$10.00</p>
+                      <p className="text-[#111111]">
+                        ${MoneyFormat(activePaymentDetails?.minAmount ?? 0)}
+                      </p>
                     </div>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
                       <p className="text-[#404040]">Max Deposit:</p>
-                      <p className="text-[#111111]">$50,000,000.00</p>
+                      <p className="text-[#111111]">
+                        ${MoneyFormat(activePaymentDetails?.maxAmount ?? 0)}
+                      </p>
                     </div>
                   </Col>
                   <Col xs={12}>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
                       <p className="text-[#404040]">Commission:</p>
-                      <p className="text-[#111111]">From $0.00 to $01.00</p>
+                      <p className="text-[#111111]">{0}</p>
                     </div>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
                       <p className="text-[#404040]">Deposit Time:</p>
-                      <p className="text-[#111111]">Instant</p>
+                      <p className="text-[#111111]">
+                        {activePaymentDetails?.time}
+                      </p>
                     </div>
                   </Col>
                 </Row>

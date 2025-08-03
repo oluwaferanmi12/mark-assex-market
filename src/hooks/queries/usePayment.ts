@@ -3,9 +3,11 @@ import {
   getPaymentHistory,
   getPaymentMethodDetails,
   paymentMethods,
+  withdraw,
 } from "@/services";
 import {
   CreateDepositInterface,
+  CreateWithdrawalInterface,
   Payment,
   PaymentMethod,
   PaymentResponseInterface,
@@ -47,5 +49,16 @@ export const useGetPaymentMethodDetails = (slug: string) => {
       return getPaymentMethodDetails(slug as string);
     },
     enabled: !!slug, // only run if slug is provided
+  });
+};
+
+export const useSaveWithdraw = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: CreateWithdrawalInterface) => {
+      return withdraw(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
   });
 };

@@ -30,3 +30,8 @@ export interface Account {
   user: UserProfileInterface;
   accountGroup: AccountGroup;
 }
+
+export interface GenericVerifyOtpInterface {
+  otp: string;
+  withToken: boolean;
+}

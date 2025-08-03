@@ -52,3 +52,20 @@ export interface Payment {
   user: PaymentUser;
   method: TransactionPaymentMethod;
 }
+
+export interface CreateWithdrawalInterface {
+  fromAccount: string;
+  currency: string;
+  amount: number;
+  methodSlug: string;
+  paymentAccountId: string;
+  accountNumber: string;
+  bank: string;
+  bankCode: string;
+  accountName: string;
+  routingNo: string;
+  walletAddress: string;
+  coin: string;
+  network: string;
+  token: string;
+}

@@ -1,5 +1,10 @@
 import { axiosInstance } from "@/api/axios";
-import { CreateDepositInterface, Payment, PaymentMethod } from "@/types";
+import {
+  CreateDepositInterface,
+  CreateWithdrawalInterface,
+  Payment,
+  PaymentMethod,
+} from "@/types";
 
 export const paymentMethods = async (): Promise<PaymentMethod[]> => {
   const { data } = await axiosInstance.get("/payments/methods");
@@ -21,4 +26,9 @@ export const getPaymentMethodDetails = async (
 ): Promise<PaymentMethod> => {
   const { data } = await axiosInstance.get(`/payments/method/${slug}`);
   return data.data;
+};
+
+export const withdraw = async (payload: CreateWithdrawalInterface) => {
+  const { data } = await axiosInstance.post("/payments/withdraw", payload);
+  return data;
 };
