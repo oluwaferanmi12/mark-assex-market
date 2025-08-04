@@ -5,11 +5,17 @@ export const TransferInput = ({
   icon,
   greyBg,
   disabled,
+  placeholder,
+  handleInput,
+  inputVal,
 }: {
   label: string;
   icon?: string;
   greyBg?: boolean;
   disabled?: boolean;
+  placeholder?: string;
+  handleInput?: (val: string) => void;
+  inputVal?: string;
 }) => {
   return (
     <div className="w-full">
@@ -18,10 +24,17 @@ export const TransferInput = ({
       </p>
       <div className="relative">
         <input
+          value={inputVal}
+          placeholder={placeholder}
           disabled={disabled}
           className={` ${
             greyBg ? "bg-[#F2F4F7] border border-[#BEBEBE80]" : ""
-          } border w-full h-[36px] lg:h-[48px] border-[#BEBEBE80] rounded-sm`}
+          } border w-full h-[36px] lg:h-[48px] border-[#BEBEBE80] rounded-sm px-4`}
+          onChange={(e) => {
+            if (handleInput) {
+              handleInput(e.target.value);
+            }
+          }}
         />
         {icon && (
           <span className="bg-[#E7F7F4] absolute right-2 top-[4px] lg:top-[8px]  border border-[#0DAE94] p-1 rounded-lg">

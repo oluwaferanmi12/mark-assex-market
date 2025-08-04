@@ -2,15 +2,21 @@ import {
   deposit,
   getPaymentHistory,
   getPaymentMethodDetails,
+  paymentAccounts,
+  paymentBanks,
   paymentMethods,
+  resolveAccount,
   withdraw,
 } from "@/services";
 import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
   Payment,
+  PaymentBank,
   PaymentMethod,
   PaymentResponseInterface,
+  ResolveAccountPayload,
+  UserBankAccountDetails,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -56,6 +62,33 @@ export const useSaveWithdraw = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: CreateWithdrawalInterface) => {
       return withdraw(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const usePaymentBanks = () => {
+  return useQuery<PaymentBank[]>({
+    queryFn: paymentBanks,
+    queryKey: ["payment-bank"],
+  });
+};
+
+export const usePaymentAccount = () => {
+  return useQuery({
+    queryFn: paymentAccounts,
+    queryKey: ["payment-accounts"],
+  });
+};
+
+export const useResolvePaymentAccount = (
+  sc: (val: UserBankAccountDetails) => void
+) => {
+  return useMutation({
+    mutationFn: (payload: ResolveAccountPayload) => {
+      return resolveAccount(payload);
     },
     onSuccess: (data) => {
       sc(data);

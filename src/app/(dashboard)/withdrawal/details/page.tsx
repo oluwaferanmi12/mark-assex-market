@@ -5,7 +5,7 @@ import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile"
 import { Button } from "@/components/ui/buttons/button";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { TransferInput } from "@/components/ui/inputs/transfer-input";
-import { Col, Row } from "antd";
+import { Col, Dropdown, MenuProps, Row } from "antd";
 import Image from "next/image";
 import walletDollarIcon from "@/assets/svgs/wallet-dollar-icon.svg";
 import { useEffect, useState } from "react";
@@ -23,6 +23,8 @@ import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 import {
   useGetPaymentMethodDetails,
   useGetPaymentMethods,
+  usePaymentBanks,
+  useResolvePaymentAccount,
   useSaveWithdraw,
 } from "@/hooks/queries/usePayment";
 import { data } from "framer-motion/client";
@@ -30,15 +32,20 @@ import { useRouter } from "next/navigation";
 import { useGetAccount, useGetAccountDetail } from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
 import { MoneyFormat } from "@/utils/money-format";
-import { CreateWithdrawalInterface } from "@/types";
+import {
+  CreateWithdrawalInterface,
+  PaymentBank,
+  UserBankAccountDetails,
+} from "@/types";
 import {
   useSendGenericOtp,
   useVerifyGenericOtp,
 } from "@/hooks/queries/useGeneric";
+import arrowDown from "@/assets/svgs/arrow-down-black.svg";
+import accessPlaceholder from "@/assets/svgs/access-placeholder.svg";
 
 const WithdrawalDetails = () => {
   const [accountType, setAccountType] = useState("");
-
   const [paymentMethod, setPaymentMethod] = useState("");
   const [verificationModal, setVerificationModal] = useState(false);
   const [showDepositDetails, setShowDepositDetails] = useState(false);
@@ -46,9 +53,22 @@ const WithdrawalDetails = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPaymentSetup, setShowPaymentSetup] = useState(false);
   const { data: paymentMethods } = useGetPaymentMethods();
+  const [selectedAccount, setSelectedAccount] = useState("");
   const { data: accounts } = useGetAccount();
+  const { data: banks } = usePaymentBanks();
   const [amount, setAmount] = useState(0);
-  const mutateVerifyOtp = useVerifyGenericOtp();
+  const [selectedBank, setSelectedBank] = useState<PaymentBank>();
+  const [obtainedDetails, setObtainedDetails] =
+    useState<UserBankAccountDetails | null>(null);
+  const mutateVerifyOtp = useVerifyGenericOtp((data) => {
+    console.log(data, "Data value here");
+    setWithdrawPayload((prev) => ({ ...prev, token: data }));
+  });
+  const mutateResolveAccount = useResolvePaymentAccount((data) => {
+    setWithdrawPayload((prev) => ({ ...prev, accountName: data.account_name }));
+    setObtainedDetails(data);
+  });
+
   const [fromAccount, setFromAccount] = useState("");
   const [otpValue, setOtpValue] = useState("");
   const sendGenericOtp = useSendGenericOtp();
@@ -77,14 +97,112 @@ const WithdrawalDetails = () => {
     toast.success("Withdraw successful");
   });
   const router = useRouter();
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <div className="flex items-center gap-2">
+          <Image src={accessPlaceholder} alt="" />
+          <div>
+            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
+            <p className="text-xs">
+              <span className="text-[#0DAE94]">0223234576 </span>
+              Providus Bank
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <div className="flex items-center gap-2">
+          <Image src={accessPlaceholder} alt="" />
+          <div>
+            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
+            <p className="text-xs">
+              <span className="text-[#0DAE94]">0223234576 </span>
+              Providus Bank
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <div className="flex items-center gap-2">
+          <Image src={accessPlaceholder} alt="" />
+          <div>
+            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
+            <p className="text-xs">
+              <span className="text-[#0DAE94]">0223234576 </span>
+              Providus Bank
+            </p>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  const bankDropDown: MenuProps["items"] = banks?.map((item, index) => {
+    return {
+      key: index,
+      label: (
+        <div
+          onClick={() => {
+            setSelectedBank(item);
+          }}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <div>
+            <p className="font-work-sans-regular">{item.name}</p>
+          </div>
+        </div>
+      ),
+    };
+  });
+
+  const customMethods: MenuProps["items"] = paymentMethods?.map(
+    (item, index) => {
+      return {
+        key: index,
+        label: (
+          <div
+            onClick={() => {
+              setAccountType(item.slug);
+            }}
+            className="flex items-center gap-2 cursor-pointer"
+          >
+            <Image src={item.image} width={18} height={18} alt="" />
+            <div>
+              <p className="font-work-sans-regular">{item.name}</p>
+            </div>
+          </div>
+        ),
+      };
+    }
+  );
 
   const getMethodName = () => {
     const result = paymentMethods?.find((item) => item.slug === accountType);
     return result?.name;
   };
-  console.log(accounts, "Account s hereee");
+
+  const getSelectedAccountDetails = () => {
+    if (selectedAccount) {
+      const result = accounts?.find((item) => item.id === selectedAccount);
+      return result;
+    }
+    return null;
+  };
 
   const handleAddWithdraw = async () => {
+    const payload = { ...withdrawPayload };
+    if (selectedBank) {
+      payload.bank = selectedBank.name;
+      payload.bankCode = selectedBank.nibss_bank_code;
+    }
     mutateWithdraw.mutate(withdrawPayload);
   };
 
@@ -92,15 +210,32 @@ const WithdrawalDetails = () => {
     const urlVal = new URLSearchParams(window.location.search);
     const val_ = urlVal.get("val");
     if (val_) {
+      setWithdrawPayload((prev) => ({ ...prev, methodSlug: val_ }));
       setAccountType(val_);
     }
   }, []);
 
   useEffect(() => {
     if (accountType) {
+      setWithdrawPayload((prev) => ({ ...prev, methodSlug: accountType }));
       router.push(`/withdrawal/details?val=${accountType}`);
     }
   }, [accountType]);
+
+  useEffect(() => {
+    if (
+      withdrawPayload.accountNumber &&
+      withdrawPayload.accountNumber.length === 10 &&
+      selectedBank
+    ) {
+      mutateResolveAccount.mutate({
+        accountNumber: withdrawPayload.accountNumber,
+        bankCode: selectedBank.nibss_bank_code,
+      });
+    } else {
+      setObtainedDetails(null);
+    }
+  }, [withdrawPayload.accountNumber, selectedBank]);
 
   return (
     <>
@@ -169,7 +304,7 @@ const WithdrawalDetails = () => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      ₦7,820
+                      ${MoneyFormat(amount)}
                     </p>
                   </div>
 
@@ -212,7 +347,9 @@ const WithdrawalDetails = () => {
                       From Account
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      1232321
+                      {getSelectedAccountDetails()
+                        ? getSelectedAccountDetails()?.mt5Id
+                        : "No account selected"}
                     </p>
                   </div>
 
@@ -274,7 +411,7 @@ const WithdrawalDetails = () => {
                         setShowPaymentSetup(true);
                         mutateVerifyOtp.mutate({
                           otp: otpValue,
-                          withToken: false,
+                          withToken: true,
                         });
                       }
                       sendGenericOtp.mutate();
@@ -304,56 +441,115 @@ const WithdrawalDetails = () => {
                     Withdraw instantly to accounts you've previously sent funds
                     to. Fast, secure, and convenient.
                   </p>
-                  <Row gutter={28}>
-                    <Col xs={12}>
-                      <div className="mt-6">
-                        <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                          Choose from accounts you've previously withdrawn from
-                        </p>
-                        <select
-                          style={{
-                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                          }}
-                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                        >
-                          <option>Select Account</option>
-                        </select>
-                      </div>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={28} className="mt-4">
-                    <Col xs={24} lg={12}>
-                      <div>
-                        <TransferInput greyBg label="Account number" />
-                      </div>
-                    </Col>
-                    <Col xs={24} lg={12}>
-                      <div>
-                        <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                          Bank
-                        </p>
-                        <div>
-                          <input
-                            placeholder="Select bank account"
-                            style={{
-                              boxShadow:
-                                "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                  {accountType.includes("tether") ||
+                  accountType.includes("btc") ||
+                  accountType.includes("eth") ||
+                  accountType.includes("trx") ? (
+                    <div>
+                      <Row gutter={12} className="my-4">
+                        <Col xs={24} lg={12}>
+                          <TransferInput
+                            placeholder="Enter your wallet address"
+                            greyBg
+                            label="Wallet Address"
+                            handleInput={(e) => {
+                              setWithdrawPayload((prev) => ({
+                                ...prev,
+                                walletAddress: e,
+                              }));
                             }}
-                            className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                           />
-                        </div>
+                        </Col>
+                        <Col xs={24} lg={12}>
+                          <TransferInput
+                            disabled
+                            placeholder={getMethodName()}
+                            greyBg
+                            label="Network"
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+                  ) : (
+                    <>
+                      <Row gutter={28}>
+                        <Col xs={12}>
+                          <div className="mt-6">
+                            <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                              Choose from accounts you've previously withdrawn
+                              from
+                            </p>
+                            <Dropdown menu={{ items }}>
+                              <div
+                                style={{
+                                  boxShadow:
+                                    "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                                }}
+                                className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular flex items-center justify-between"
+                              >
+                                <p>Select Account</p>
+                                <Image src={arrowDown} alt="" />
+                              </div>
+                            </Dropdown>
+                          </div>
+                        </Col>
+                      </Row>
+
+                      <Row gutter={28} className="mt-4">
+                        <Col xs={24} lg={12}>
+                          <div>
+                            <TransferInput
+                              handleInput={(e) => {
+                                if (e.length < 11) {
+                                  setWithdrawPayload((prev) => ({
+                                    ...prev,
+                                    accountNumber: e,
+                                  }));
+                                }
+                              }}
+                              inputVal={withdrawPayload.accountNumber}
+                              greyBg
+                              label="Account number"
+                            />
+                          </div>
+                        </Col>
+                        <Col xs={24} lg={12}>
+                          <div>
+                            <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                              Bank
+                            </p>
+                            <Dropdown menu={{ items: bankDropDown }}>
+                              <div
+                                style={{
+                                  boxShadow:
+                                    "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                                }}
+                                className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular flex items-center justify-between"
+                              >
+                                <p>{selectedBank?.name ?? "Select Bank"}</p>
+                                <Image src={arrowDown} alt="" />
+                              </div>
+                            </Dropdown>
+                          </div>
+                        </Col>
+                      </Row>
+                      {obtainedDetails && (
+                        <p className="font-work-sans-regular text-[#34C659] mt-2">
+                          {obtainedDetails?.account_name}
+                        </p>
+                      )}
+
+                      <div className="my-3 flex items-center gap-2">
+                        <p className="text-[#404040] font-work-sans-regular text-lg">
+                          To be recieved:
+                        </p>
+                        <p className="text-[#111111] text-lg font-work-sans-semi-bold">
+                          ${amount}
+                        </p>
                       </div>
-                    </Col>
-                  </Row>
-                  <div className="my-3 flex items-center gap-2">
-                    <p className="text-[#404040] font-work-sans-regular text-lg">
-                      To be recieved:
-                    </p>
-                    <p className="text-[#111111] text-lg font-work-sans-semi-bold">
-                      $10
-                    </p>
-                  </div>
+                    </>
+                  )}
+
                   <Button
                     action={() => {
                       setShowSuccessModal(true);
@@ -376,7 +572,7 @@ const WithdrawalDetails = () => {
                               Amount
                             </p>
                             <p className="text-[#111111] font-work-sans-regular text-base">
-                              ₦7,820
+                              ${MoneyFormat(amount)}
                             </p>
                           </div>
                           <div className="flex items-center my-2 justify-between">
@@ -400,7 +596,9 @@ const WithdrawalDetails = () => {
                               From account{" "}
                             </p>
                             <p className="text-[#111111] font-work-sans-regular text-base">
-                              1232321
+                              {getSelectedAccountDetails()
+                                ? getSelectedAccountDetails()?.mt5Id
+                                : "No account selected"}
                             </p>
                           </div>
                         </div>
@@ -421,26 +619,17 @@ const WithdrawalDetails = () => {
                   <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
                     Payment Method
                   </p>
-                  <select
-                    value={accountType}
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    onChange={(e) => {
-                      setAccountType(e.target.value);
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                  >
-                    <option>Select Method</option>
-                    {paymentMethods &&
-                      paymentMethods.map((item, index) => {
-                        return (
-                          <option value={item.slug} key={index}>
-                            {item.name}
-                          </option>
-                        );
-                      })}
-                  </select>
+
+                  <Dropdown menu={{ items: customMethods }}>
+                    <div
+                      style={{
+                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                      }}
+                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                    >
+                      {getMethodName()}
+                    </div>
+                  </Dropdown>
                 </div>
               </Col>
               <Col lg={12} xs={24}>
@@ -469,13 +658,17 @@ const WithdrawalDetails = () => {
                     style={{
                       boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                     }}
+                    onChange={(e) => {
+                      console.log(e.target.value, "VAlue heree");
+                      setSelectedAccount(e.target.value);
+                    }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
                     {accounts &&
                       accounts.length &&
                       accounts.map((item, index) => {
                         return (
-                          <option key={item.id}>
+                          <option value={item.id} key={item.id}>
                             {item.server}: {item.mt5Id} ($
                             {item.balance})
                           </option>

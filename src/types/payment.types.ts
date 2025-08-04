@@ -69,3 +69,23 @@ export interface CreateWithdrawalInterface {
   network: string;
   token: string;
 }
+
+export interface PaymentBank {
+  name: string;
+  slug: string;
+  code: string;
+  country: string;
+  nibss_bank_code: string;
+}
+
+export interface ResolveAccountPayload {
+  bankCode: string;
+  accountNumber: string;
+}
+
+export interface UserBankAccountDetails {
+  bank_name: string;
+  bank_code: string;
+  account_number: string;
+  account_name: string;
+}

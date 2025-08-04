@@ -3,7 +3,10 @@ import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
   Payment,
+  PaymentBank,
   PaymentMethod,
+  ResolveAccountPayload,
+  UserBankAccountDetails,
 } from "@/types";
 
 export const paymentMethods = async (): Promise<PaymentMethod[]> => {
@@ -31,4 +34,24 @@ export const getPaymentMethodDetails = async (
 export const withdraw = async (payload: CreateWithdrawalInterface) => {
   const { data } = await axiosInstance.post("/payments/withdraw", payload);
   return data;
+};
+
+export const paymentAccounts = async () => {
+  const { data } = await axiosInstance.get(`/payments/payment-accounts`);
+  return data.data;
+};
+
+export const paymentBanks = async (): Promise<PaymentBank[]> => {
+  const { data } = await axiosInstance.get(`/payments/banks`);
+  return data.data;
+};
+
+export const resolveAccount = async (
+  payload: ResolveAccountPayload
+): Promise<UserBankAccountDetails> => {
+  const { data } = await axiosInstance.post(
+    `/payments/resolve-account`,
+    payload
+  );
+  return data.data
 };

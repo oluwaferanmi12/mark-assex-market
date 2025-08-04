@@ -14,13 +14,14 @@ export const useSendGenericOtp = () => {
   });
 };
 
-export const useVerifyGenericOtp = () => {
+export const useVerifyGenericOtp = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: GenericVerifyOtpInterface) => {
       return verifyGenericOtp(payload);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Otp sent");
+      sc(data);
     },
   });
 };
