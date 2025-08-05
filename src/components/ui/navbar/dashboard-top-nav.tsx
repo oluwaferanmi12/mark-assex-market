@@ -520,7 +520,7 @@ export const DashboardTopNav = () => {
       <div className="absolute hidden lg:flex items-center justify-between bg-[#FFFFFF4D] top-0 border-b px-8 py-4 w-full border-[#BEBEBE80]">
         <div>
           <p className="text-[#111111] text-lg font-work-sans-medium">
-            Hello,{userDetails.user.firstName}
+            Hello,{userDetails?.user?.firstName}
           </p>
           <p className="text-xs text-[#666666] font-work-sans-regular">
             Welcome back! The market awaits.
