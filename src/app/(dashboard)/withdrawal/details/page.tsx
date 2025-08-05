@@ -53,15 +53,15 @@ const WithdrawalDetails = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPaymentSetup, setShowPaymentSetup] = useState(false);
   const { data: paymentMethods } = useGetPaymentMethods();
-  const [selectedAccount, setSelectedAccount] = useState("");
   const { data: accounts } = useGetAccount();
   const { data: banks } = usePaymentBanks();
-  const [amount, setAmount] = useState(0);
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
   const [obtainedDetails, setObtainedDetails] =
     useState<UserBankAccountDetails | null>(null);
   const mutateVerifyOtp = useVerifyGenericOtp((data) => {
-    console.log(data, "Data value here");
+    setShowOtp(false);
+    setShowDepositDetails(false);
+    setShowPaymentSetup(true);
     setWithdrawPayload((prev) => ({ ...prev, token: data }));
   });
   const mutateResolveAccount = useResolvePaymentAccount((data) => {
@@ -94,7 +94,7 @@ const WithdrawalDetails = () => {
       walletAddress: "",
     });
   const mutateWithdraw = useSaveWithdraw((data) => {
-    toast.success("Withdraw successful");
+    setShowSuccessModal(true);
   });
   const router = useRouter();
   const items: MenuProps["items"] = [
@@ -190,8 +190,10 @@ const WithdrawalDetails = () => {
   };
 
   const getSelectedAccountDetails = () => {
-    if (selectedAccount) {
-      const result = accounts?.find((item) => item.id === selectedAccount);
+    if (withdrawPayload.fromAccount) {
+      const result = accounts?.find(
+        (item) => item.id === withdrawPayload.fromAccount
+      );
       return result;
     }
     return null;
@@ -304,7 +306,7 @@ const WithdrawalDetails = () => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      ${MoneyFormat(amount)}
+                      ${MoneyFormat(withdrawPayload.amount)}
                     </p>
                   </div>
 
@@ -358,7 +360,7 @@ const WithdrawalDetails = () => {
                       To be withdrawn:
                     </p>
                     <p className="text-[#111111]  font-work-sans-semi-bold">
-                      ${MoneyFormat(amount)}
+                      ${MoneyFormat(withdrawPayload.amount)}
                     </p>
                   </div>
                 </div>
@@ -400,24 +402,22 @@ const WithdrawalDetails = () => {
                   </div>
                 )}
 
-                <div className="my-4">
+                <div className="my-4 ">
                   <Button
                     action={() => {
                       //   setVerificationModal(true);
                       if (showOtp) {
                         // setShowSuccessModal(true);
-                        setShowOtp(false);
-                        setShowDepositDetails(false);
-                        setShowPaymentSetup(true);
                         mutateVerifyOtp.mutate({
                           otp: otpValue,
                           withToken: true,
                         });
+                        return;
                       }
                       sendGenericOtp.mutate();
                       setShowOtp(true);
                     }}
-                    loading={false}
+                    loading={mutateVerifyOtp.isPending}
                     text="Proceed"
                     variant="green-bg"
                     icon={arrowRightMultiple}
@@ -544,7 +544,7 @@ const WithdrawalDetails = () => {
                           To be recieved:
                         </p>
                         <p className="text-[#111111] text-lg font-work-sans-semi-bold">
-                          ${amount}
+                          ${withdrawPayload.amount}
                         </p>
                       </div>
                     </>
@@ -552,7 +552,7 @@ const WithdrawalDetails = () => {
 
                   <Button
                     action={() => {
-                      setShowSuccessModal(true);
+                      handleAddWithdraw();
                     }}
                     loading={false}
                     text="Confirm"
@@ -572,7 +572,7 @@ const WithdrawalDetails = () => {
                               Amount
                             </p>
                             <p className="text-[#111111] font-work-sans-regular text-base">
-                              ${MoneyFormat(amount)}
+                              ${MoneyFormat(withdrawPayload.amount)}
                             </p>
                           </div>
                           <div className="flex items-center my-2 justify-between">
@@ -659,11 +659,14 @@ const WithdrawalDetails = () => {
                       boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                     }}
                     onChange={(e) => {
-                      console.log(e.target.value, "VAlue heree");
-                      setSelectedAccount(e.target.value);
+                      setWithdrawPayload((prev) => ({
+                        ...prev,
+                        fromAccount: e.target.value,
+                      }));
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
+                    <option value="">Select account</option>
                     {accounts &&
                       accounts.length &&
                       accounts.map((item, index) => {
@@ -693,7 +696,10 @@ const WithdrawalDetails = () => {
                     <input
                       placeholder="Enter amount"
                       onChange={(e) => {
-                        setAmount(+e.target.value);
+                        setWithdrawPayload((prev) => ({
+                          ...prev,
+                          amount: +e.target.value,
+                        }));
                       }}
                       style={{
                         boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
@@ -712,7 +718,14 @@ const WithdrawalDetails = () => {
             <div className="my-4">
               <Button
                 action={() => {
-                  setShowDepositDetails(true);
+                  if (withdrawPayload.amount && withdrawPayload.fromAccount) {
+                    setShowDepositDetails(true);
+                    return;
+                  } else if (!withdrawPayload.amount) {
+                    toast.error("Kindly enter an amount");
+                  } else {
+                    toast.error("kindly enter the account to withdraw");
+                  }
                 }}
                 loading={false}
                 text="Proceed"
