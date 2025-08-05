@@ -37,6 +37,7 @@ import { useGenerate2FA, useVerify2FA } from "@/hooks/queries/useSettings";
 import { Get2FA } from "@/types";
 import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
+import { getStoredUser } from "@/utils/auth-helper";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -49,6 +50,7 @@ export const DashboardTopNav = () => {
   const [show2fa, setShow2fa] = useState(true);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
+  const userDetails = getStoredUser();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
   const [generated2FA, setGenerated2FA] = useState<Get2FA>();
@@ -518,7 +520,7 @@ export const DashboardTopNav = () => {
       <div className="absolute hidden lg:flex items-center justify-between bg-[#FFFFFF4D] top-0 border-b px-8 py-4 w-full border-[#BEBEBE80]">
         <div>
           <p className="text-[#111111] text-lg font-work-sans-medium">
-            Hello,
+            Hello,{userDetails.user.firstName}
           </p>
           <p className="text-xs text-[#666666] font-work-sans-regular">
             Welcome back! The market awaits.
@@ -592,7 +594,7 @@ export const DashboardTopNav = () => {
                     />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
-                       User 
+                        User
                       </p>
                       <p className="text-[#707070] text-sm font-work-sans-regular">
                         user@gmail.com
