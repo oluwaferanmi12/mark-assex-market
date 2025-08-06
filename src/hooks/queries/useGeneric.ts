@@ -1,12 +1,16 @@
 import { sendGenericOtp, verifyGenericOtp } from "@/services";
-import { GenericVerifyOtpInterface, VerifyOtpInterface } from "@/types";
+import {
+  GenericVerifyOtpInterface,
+  SendGenericOtp,
+  VerifyOtpInterface,
+} from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useSendGenericOtp = () => {
   return useMutation({
-    mutationFn: () => {
-      return sendGenericOtp();
+    mutationFn: (payload: SendGenericOtp) => {
+      return sendGenericOtp(payload);
     },
     onSuccess: () => {
       toast.success("Otp sent");

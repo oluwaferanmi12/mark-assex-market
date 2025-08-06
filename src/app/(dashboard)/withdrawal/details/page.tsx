@@ -414,7 +414,7 @@ const WithdrawalDetails = () => {
                         });
                         return;
                       }
-                      sendGenericOtp.mutate();
+                      sendGenericOtp.mutate({ channel: "email" });
                       setShowOtp(true);
                     }}
                     loading={mutateVerifyOtp.isPending}

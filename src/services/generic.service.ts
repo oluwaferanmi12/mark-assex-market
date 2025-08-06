@@ -1,8 +1,12 @@
 import { axiosInstance } from "@/api/axios";
-import { GenericVerifyOtpInterface, VerifyOtpInterface } from "@/types";
+import {
+  GenericVerifyOtpInterface,
+  SendGenericOtp,
+  VerifyOtpInterface,
+} from "@/types";
 
-export const sendGenericOtp = async () => {
-  const { data } = await axiosInstance.post(`/otp/send`);
+export const sendGenericOtp = async (payload: SendGenericOtp) => {
+  const { data } = await axiosInstance.post(`/otp/send`, payload);
   return data.data;
 };
 

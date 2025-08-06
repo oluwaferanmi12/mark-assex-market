@@ -89,3 +89,5 @@ export interface UserBankAccountDetails {
   account_number: string;
   account_name: string;
 }
+
+
