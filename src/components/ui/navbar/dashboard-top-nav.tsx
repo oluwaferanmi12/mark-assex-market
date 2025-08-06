@@ -33,11 +33,16 @@ import twoFAIcon from "@/assets/svgs/two-fa-icon.svg";
 import phoneEmptyIcono from "@/assets/svgs/phone-empty-icon.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { CountDown } from "@/components/shared/timer/count-down";
-import { useGenerate2FA, useVerify2FA } from "@/hooks/queries/useSettings";
+import {
+  useGenerate2FA,
+  useGetUserProfile,
+  useVerify2FA,
+} from "@/hooks/queries/useSettings";
 import { Get2FA } from "@/types";
 import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
 import { getStoredUser } from "@/utils/auth-helper";
+import { MoneyFormat } from "@/utils/money-format";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -51,10 +56,12 @@ export const DashboardTopNav = () => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
   const userDetails = getStoredUser();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
   const [generated2FA, setGenerated2FA] = useState<Get2FA>();
   const [otp, setOtp] = useState("");
+  const { data: userProfile } = useGetUserProfile();
   const two2Fa = useGenerate2FA((data: Get2FA) => {
     setShowOTPInstruction(true);
     setShow2fa(false);
@@ -520,7 +527,7 @@ export const DashboardTopNav = () => {
       <div className="absolute hidden lg:flex items-center justify-between bg-[#FFFFFF4D] top-0 border-b px-8 py-4 w-full border-[#BEBEBE80]">
         <div>
           <p className="text-[#111111] text-lg font-work-sans-medium">
-            Hello,{userDetails?.user?.firstName}
+            Hello , {userProfile?.firstName}
           </p>
           <p className="text-xs text-[#666666] font-work-sans-regular">
             Welcome back! The market awaits.
@@ -541,7 +548,7 @@ export const DashboardTopNav = () => {
                 <Image src={wallet} alt="" />
               </span>
               <p className="text-[#202020] text-base font-work-sans-semi-bold">
-                $0
+                ${MoneyFormat(userProfile?.walletBalance ?? 0)}
               </p>
             </div>
           </div>
@@ -594,10 +601,10 @@ export const DashboardTopNav = () => {
                     />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
-                        User
+                        {userProfile?.firstName}
                       </p>
                       <p className="text-[#707070] text-sm font-work-sans-regular">
-                        user@gmail.com
+                        {userProfile?.email}
                       </p>
                     </div>
                   </div>
