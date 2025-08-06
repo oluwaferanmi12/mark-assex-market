@@ -15,6 +15,7 @@ import {
   PaymentBank,
   PaymentMethod,
   PaymentResponseInterface,
+  PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
   UserBankAccountDetails,
 } from "@/types";
@@ -77,7 +78,7 @@ export const usePaymentBanks = () => {
 };
 
 export const usePaymentAccount = () => {
-  return useQuery({
+  return useQuery<PreviouslyUsedBankAccounts[]>({
     queryFn: paymentAccounts,
     queryKey: ["payment-accounts"],
   });

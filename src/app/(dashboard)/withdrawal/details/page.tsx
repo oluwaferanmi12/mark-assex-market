@@ -23,6 +23,7 @@ import { SuccessModal } from "@/components/shared/response-modal/success-modal";
 import {
   useGetPaymentMethodDetails,
   useGetPaymentMethods,
+  usePaymentAccount,
   usePaymentBanks,
   useResolvePaymentAccount,
   useSaveWithdraw,
@@ -55,6 +56,7 @@ const WithdrawalDetails = () => {
   const { data: paymentMethods } = useGetPaymentMethods();
   const { data: accounts } = useGetAccount();
   const { data: banks } = usePaymentBanks();
+  const { data: previousAccts } = usePaymentAccount();
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
   const [obtainedDetails, setObtainedDetails] =
     useState<UserBankAccountDetails | null>(null);
@@ -97,53 +99,24 @@ const WithdrawalDetails = () => {
     setShowSuccessModal(true);
   });
   const router = useRouter();
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <div className="flex items-center gap-2">
-          <Image src={accessPlaceholder} alt="" />
-          <div>
-            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
-            <p className="text-xs">
-              <span className="text-[#0DAE94]">0223234576 </span>
-              Providus Bank
-            </p>
+  const items: MenuProps["items"] =
+    previousAccts &&
+    previousAccts?.map((item, index) => {
+      return {
+        key: index,
+        label: (
+          <div className="flex items-center gap-2">
+            <div>
+              <p className="font-work-sans-regular">{item.accountName}</p>
+              <p className="text-xs">
+                <span className="text-[#0DAE94]">{item.accountNumber} </span>
+                {item.bank}
+              </p>
+            </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <div className="flex items-center gap-2">
-          <Image src={accessPlaceholder} alt="" />
-          <div>
-            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
-            <p className="text-xs">
-              <span className="text-[#0DAE94]">0223234576 </span>
-              Providus Bank
-            </p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <div className="flex items-center gap-2">
-          <Image src={accessPlaceholder} alt="" />
-          <div>
-            <p className="font-work-sans-regular">Olumide Eze Chukwu</p>
-            <p className="text-xs">
-              <span className="text-[#0DAE94]">0223234576 </span>
-              Providus Bank
-            </p>
-          </div>
-        </div>
-      ),
-    },
-  ];
+        ),
+      };
+    });
 
   const bankDropDown: MenuProps["items"] = banks?.map((item, index) => {
     return {
@@ -184,6 +157,13 @@ const WithdrawalDetails = () => {
     }
   );
 
+  const resolvePreviousAccountDetails = () => {
+    const result = previousAccts?.find(
+      (item) => item.id === withdrawPayload.paymentAccountId
+    );
+    return result;
+  };
+
   const getMethodName = () => {
     const result = paymentMethods?.find((item) => item.slug === accountType);
     return result?.name;
@@ -205,7 +185,7 @@ const WithdrawalDetails = () => {
       payload.bank = selectedBank.name;
       payload.bankCode = selectedBank.nibss_bank_code;
     }
-    mutateWithdraw.mutate(withdrawPayload);
+    mutateWithdraw.mutate(payload);
   };
 
   useEffect(() => {
@@ -247,8 +227,10 @@ const WithdrawalDetails = () => {
           setShowSuccessModal(false);
         }}
         buttonText="Close"
-        mainText="Funds Deposited Successfully"
-        subText="Your trading account has been funded with $4,000 successfully"
+        mainText="Funds Withdraw In Progress"
+        subText={`Request for the withdraw of ${MoneyFormat(
+          withdrawPayload.amount
+        )} in progress `}
       />
       <ModalContainer
         active={verificationModal}
@@ -487,7 +469,16 @@ const WithdrawalDetails = () => {
                                 }}
                                 className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular flex items-center justify-between"
                               >
-                                <p>Select Account</p>
+                                {withdrawPayload.paymentAccountId ? (
+                                  <p>
+                                    {
+                                      resolvePreviousAccountDetails()
+                                        ?.accountName
+                                    }
+                                  </p>
+                                ) : (
+                                  "Select account"
+                                )}
                                 <Image src={arrowDown} alt="" />
                               </div>
                             </Dropdown>

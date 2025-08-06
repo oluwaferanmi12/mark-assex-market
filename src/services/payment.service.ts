@@ -5,6 +5,7 @@ import {
   Payment,
   PaymentBank,
   PaymentMethod,
+  PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
   UserBankAccountDetails,
 } from "@/types";
@@ -36,9 +37,12 @@ export const withdraw = async (payload: CreateWithdrawalInterface) => {
   return data;
 };
 
-export const paymentAccounts = async () => {
+export const paymentAccounts = async (): Promise<
+  PreviouslyUsedBankAccounts[]
+> => {
   const { data } = await axiosInstance.get(`/payments/payment-accounts`);
-  return data.data;
+  
+  return data.data.data
 };
 
 export const paymentBanks = async (): Promise<PaymentBank[]> => {
@@ -53,5 +57,5 @@ export const resolveAccount = async (
     `/payments/resolve-account`,
     payload
   );
-  return data.data
+  return data.data;
 };

@@ -90,4 +90,18 @@ export interface UserBankAccountDetails {
   account_name: string;
 }
 
-
+export interface PreviouslyUsedBankAccounts {
+  id: string;
+  userId: string;
+  methodId: string;
+  accountNumber: string;
+  bank: string;
+  bankCode: string;
+  accountName: string;
+  routingNo: string;
+  walletAddress: string;
+  coin: string;
+  network: string;
+  createdAt: string;
+  updatedAt: string;
+}
