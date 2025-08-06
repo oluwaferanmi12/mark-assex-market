@@ -20,11 +20,14 @@ import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
 import { useRouter } from "next/navigation";
 import { useGetPayments } from "@/hooks/queries/usePayment";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import { MoneyFormat } from "@/utils/money-format";
 
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
+  const { data: user } = useGetUserProfile();
   const { data } = useGetPayments();
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -59,7 +62,9 @@ const Wallet = () => {
                 </div>
               </div>
             </div>
-            <p className="lg:text-3xl text-xl font-work-sans-semi-bold">$0</p>
+            <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
+              $ {MoneyFormat(user?.walletBalance ?? 0)}
+            </p>
           </div>
         </div>
         <VisibleOnDesktop>
