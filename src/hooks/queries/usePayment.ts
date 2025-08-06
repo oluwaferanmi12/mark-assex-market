@@ -21,6 +21,8 @@ import {
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+
+
 export const useGetPaymentMethods = () => {
   return useQuery<PaymentMethod[]>({
     queryFn: paymentMethods,
@@ -66,6 +68,7 @@ export const useSaveWithdraw = (sc: (val: any) => void) => {
     },
     onSuccess: (data) => {
       sc(data);
+      
     },
   });
 };

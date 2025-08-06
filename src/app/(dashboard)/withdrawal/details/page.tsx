@@ -44,8 +44,10 @@ import {
 } from "@/hooks/queries/useGeneric";
 import arrowDown from "@/assets/svgs/arrow-down-black.svg";
 import accessPlaceholder from "@/assets/svgs/access-placeholder.svg";
+import { useQueryClient } from "@tanstack/react-query";
 
 const WithdrawalDetails = () => {
+  const queryClient = useQueryClient();
   const [accountType, setAccountType] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [verificationModal, setVerificationModal] = useState(false);
@@ -97,6 +99,7 @@ const WithdrawalDetails = () => {
     });
   const mutateWithdraw = useSaveWithdraw((data) => {
     setShowSuccessModal(true);
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
   });
   const router = useRouter();
   const items: MenuProps["items"] =

@@ -21,7 +21,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetUserProfile = () => {
   return useQuery<UserProfileInterface>({
-    queryKey: ["test"],
+    queryKey: ["user-profile"],
     queryFn: getUserProfile,
   });
 };
