@@ -4,6 +4,8 @@ import {
   Get2FA,
   GetKycResponse,
   NotificationPreference,
+  PhoneRequest,
+  PhoneVerify,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -58,5 +60,15 @@ export const generate2FA = async (): Promise<Get2FA> => {
 
 export const verify2FA = async (payload: Verify2fa) => {
   const { data } = await axiosInstance.post("/security/2fa/verify");
+  return data.data;
+};
+
+export const phoneRequest = async (payload: PhoneRequest) => {
+  const { data } = await axiosInstance.post(`/kyc/phone-request`, payload);
+  return data.data;
+};
+
+export const phoneVerify = async (payload: PhoneVerify) => {
+  const { data } = await axiosInstance.post(`/kyc/phone-verify`, payload);
   return data.data;
 };

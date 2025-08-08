@@ -4,6 +4,8 @@ import {
   getNotification,
   getNotificationPreference,
   getUserProfile,
+  phoneRequest,
+  phoneVerify,
   saveNotificationPreference,
   saveUserProfile,
   submitKyc,
@@ -14,6 +16,8 @@ import {
   Get2FA,
   GetKycResponse,
   NotificationPreference,
+  PhoneRequest,
+  PhoneVerify,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -100,6 +104,28 @@ export const useVerify2FA = (sc: (data: any) => void) => {
       return verify2FA(payload);
     },
     onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const usePhoneRequest = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: PhoneRequest) => {
+      return phoneRequest(payload);
+    },
+    onSuccess: (data: any) => {
+      sc(data);
+    },
+  });
+};
+
+export const usePhoneRequestVerify = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: PhoneVerify) => {
+      return phoneVerify(payload);
+    },
+    onSuccess: (data: any) => {
       sc(data);
     },
   });

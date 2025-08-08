@@ -29,3 +29,14 @@ export interface Get2FA {
 export interface Verify2fa {
   code: string;
 }
+
+export interface PhoneRequest {
+  phone: string;
+  phoneCode: string;
+}
+
+export interface PhoneVerify {
+  phone: string;
+  phoneCode: string;
+  otp: string;
+}
