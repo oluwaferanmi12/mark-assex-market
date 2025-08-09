@@ -26,7 +26,7 @@ export const VerifyPhoneNumber = ({
   resolveNextStatus: (val: VerificationIdtype) => void;
 }) => {
   const [showOtp, setShowOtp] = useState(false);
-  const [countryCallingCode, setCopuntryCallingCode] = useState(
+  const [countryCallingCode, setCountryCallingCode] = useState(
     countryCodes?.customList
       ? countryCodes?.customList("countryCallingCode")
       : null
@@ -39,7 +39,7 @@ export const VerifyPhoneNumber = ({
     setShowOtp(true);
   });
   const { data: userProfile } = useGetUserProfile();
-  
+
   const verifyPhoneNumber = usePhoneRequestVerify((data) => {
     toast.success("Phone number verifieid");
     resolveNextStatus(id);
@@ -58,6 +58,14 @@ export const VerifyPhoneNumber = ({
       setPhoneNumber(userProfile.phone ?? "");
     }
   }, [userProfile]);
+
+  useEffect(() => {
+    setCountryCallingCode(
+      countryCodes?.customList
+        ? countryCodes?.customList("countryCallingCode")
+        : null
+    );
+  }, []);
 
   return (
     <>
