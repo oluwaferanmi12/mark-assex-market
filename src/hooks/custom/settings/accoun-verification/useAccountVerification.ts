@@ -4,6 +4,7 @@ import {
   VerificationIdtype,
 } from "@/interfaces/ui-interfac";
 import { UserProfileInterface } from "@/types";
+import { data } from "framer-motion/client";
 import { useEffect, useState } from "react";
 
 export const useAccountVerification = () => {
@@ -26,6 +27,8 @@ export const useAccountVerification = () => {
     },
     { text: "Document Verification", status: "not-verified", id: "document" },
   ]);
+  const { data: userProfile } = useGetUserProfile();
+  console.log(userProfile);
 
   const resolveNextState = (currentState: typeof activeState) => {
     // now what should be done here is to see the next content that is not-verified and then set it to verifying and resolve every toher state
@@ -43,28 +46,54 @@ export const useAccountVerification = () => {
   const { data: kycDetails } = useGetKyc();
 
   useEffect(() => {
-    if (kycDetails) {
-      if (!kycDetails.phoneStatus || kycDetails.phoneStatus === "PENDING") {
-        setActiveState("phone");
-      } else if (kycDetails.phoneStatus === "APPROVED") {
-        setActiveState("personal-info");
-      }
+    if (kycDetails && userProfile) {
       const payload = verifyRequirements.map((item) => ({ ...item }));
-      payload[1].status =
+      if (kycDetails.phoneStatus && kycDetails.phoneStatus === "APPROVED") {
+        payload[1].status = "verified";
+        if (userProfile?.firstName) {
+          payload[2].status = "verified";
+          if (
+            kycDetails.accountPurpose ||
+            kycDetails.annualIncome ||
+            kycDetails.businessNature ||
+            kycDetails.currentWork ||
+            kycDetails.educationLevel ||
+            kycDetails.annualInvestment ||
+            kycDetails.financialObligation ||
+            kycDetails.fundsSource ||
+            kycDetails.netCapital
+          ) {
+            payload[3].status = "verified";
+            setActiveState("document");
+          } else {
+            payload[3].status = "verifying";
+            setActiveState("personal-finance");
+          }
+        } else {
+          payload[2].status = "verifying";
+          setActiveState("personal-info");
+        }
+      } else {
+        payload[1].status = "verifying";
+        setActiveState("phone");
+      }
+
+      //   payload[1].status =
+      //     kycDetails.phoneStatus === "APPROVED"
+      //       ? "verified"
+      //       : kycDetails.phoneStatus === "REJECTED"
+      //       ? "not-verified"
+      //       : "verifying";
+      payload[2].status =
         kycDetails.phoneStatus === "APPROVED"
           ? "verified"
           : kycDetails.phoneStatus === "REJECTED"
           ? "not-verified"
           : "verifying";
-      payload[1].status =
-        kycDetails.phoneStatus === "APPROVED"
-          ? "verified"
-          : kycDetails.phoneStatus === "REJECTED"
-          ? "not-verified"
-          : "verifying";
+
       setVerifyRequirements(payload);
     }
-  }, [kycDetails]);
+  }, [kycDetails, userProfile]);
 
   return {
     activeState,

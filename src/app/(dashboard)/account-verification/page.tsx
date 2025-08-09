@@ -15,6 +15,7 @@ import React, { useState } from "react";
 const AccountVerification = () => {
   const { activeState, verifyRequirements, resolveNextState } =
     useAccountVerification();
+  console.log(activeState, "Active State value");
 
   return (
     <>

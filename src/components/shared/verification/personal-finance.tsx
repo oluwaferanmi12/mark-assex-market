@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import arrowDown from "@/assets/svgs/arrow-down-black.svg";
 import arrowRightBlack from "@/assets/svgs/arrow-right-small.svg";
 import { SettingsInput } from "@/components/ui/inputs/settings-input";
@@ -11,6 +11,8 @@ import checkedBox from "@/assets/svgs/checked-square.svg";
 import unCheckedBox from "@/assets/svgs/unchecked-square.svg";
 import { VerificationIdtype } from "@/interfaces/ui-interfac";
 import { CreateKycFinance } from "@/types";
+import { useSaveFinanceInfo } from "@/hooks/queries/useSettings";
+import { toast } from "sonner";
 
 export const PersonalFinanceVerification = ({
   id,
@@ -33,6 +35,7 @@ export const PersonalFinanceVerification = ({
     accountPurpose: "",
     tradingInstruments: "",
   });
+
   const widthPercent = activeStep === 11 ? 100 : currentWidth;
   useEffect(() => {
     // Get the number of steps we have
@@ -94,7 +97,11 @@ export const PersonalFinanceVerification = ({
         <AnimatePresence>
           {activeStep === 1 && (
             <FadeIn>
-              <StepOne activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepOne
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
@@ -102,7 +109,11 @@ export const PersonalFinanceVerification = ({
         <AnimatePresence>
           {activeStep === 2 && (
             <FadeIn>
-              <StepTwo activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepTwo
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
@@ -111,6 +122,7 @@ export const PersonalFinanceVerification = ({
           {activeStep === 3 && (
             <FadeIn>
               <StepThree
+                setPayload={setPayload}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
               />
@@ -120,21 +132,33 @@ export const PersonalFinanceVerification = ({
         <AnimatePresence>
           {activeStep === 4 && (
             <FadeIn>
-              <StepFour activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepFour
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
         <AnimatePresence>
           {activeStep === 5 && (
             <FadeIn>
-              <StepFive activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepFive
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
         <AnimatePresence>
           {activeStep === 6 && (
             <FadeIn>
-              <StepSix activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepSix
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
@@ -142,6 +166,7 @@ export const PersonalFinanceVerification = ({
           {activeStep === 7 && (
             <FadeIn>
               <StepSeven
+                setPayload={setPayload}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
               />
@@ -153,6 +178,7 @@ export const PersonalFinanceVerification = ({
           {activeStep === 8 && (
             <FadeIn>
               <StepEight
+                setPayload={setPayload}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
               />
@@ -162,14 +188,22 @@ export const PersonalFinanceVerification = ({
         <AnimatePresence>
           {activeStep === 9 && (
             <FadeIn>
-              <StepNine activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepNine
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
         <AnimatePresence>
           {activeStep === 10 && (
             <FadeIn>
-              <StepTen activeStep={activeStep} setActiveStep={setActiveStep} />
+              <StepTen
+                setPayload={setPayload}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
             </FadeIn>
           )}
         </AnimatePresence>
@@ -181,6 +215,7 @@ export const PersonalFinanceVerification = ({
                 id={id}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
+                payload={payload}
               />
             </FadeIn>
           )}
@@ -195,12 +230,21 @@ const StepEleven = ({
   setActiveStep,
   resolveNextStatus,
   id,
+  payload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
   resolveNextStatus: (val: VerificationIdtype) => void;
   id: VerificationIdtype;
+  payload: CreateKycFinance;
 }) => {
+  const mutateKyc = useSaveFinanceInfo(() => {
+    resolveNextStatus(id);
+    toast.success("Details saved");
+  });
+  const handleUpdateFinance = () => {
+    mutateKyc.mutate(payload);
+  };
   return (
     <div className="">
       <div>
@@ -257,9 +301,9 @@ const StepEleven = ({
         </div>
         <div className="flex justify-end">
           <Button
-            loading={false}
+            loading={mutateKyc.isPending}
             action={() => {
-              resolveNextStatus(id);
+              handleUpdateFinance();
             }}
             text="Proceed"
             variant="green-bg"
@@ -275,9 +319,11 @@ const StepEleven = ({
 const StepTen = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -299,7 +345,10 @@ const StepTen = ({
           return (
             // Set the correct value here too , liek the value selected
             <StepContentWithCheckbox
-              clickHandler={() => setActiveStep(11)}
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, tradingInstruments: item }));
+                setActiveStep(11);
+              }}
               text={item}
             />
           );
@@ -324,9 +373,11 @@ const StepTen = ({
 const StepNine = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -343,7 +394,13 @@ const StepNine = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(10)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, accountPurpose: item }));
+                setActiveStep(10);
+              }}
+              text={item}
+            />
           );
         })}
         <OthersSpecify
@@ -359,9 +416,11 @@ const StepNine = ({
 const StepEight = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -379,7 +438,13 @@ const StepEight = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(9)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, annualInvestment: item }));
+                setActiveStep(9);
+              }}
+              text={item}
+            />
           );
         })}
       </div>
@@ -390,9 +455,11 @@ const StepEight = ({
 const StepSeven = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -410,7 +477,13 @@ const StepSeven = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(8)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, financialObligation: item }));
+                setActiveStep(8);
+              }}
+              text={item}
+            />
           );
         })}
       </div>
@@ -421,9 +494,11 @@ const StepSeven = ({
 const StepSix = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -441,7 +516,13 @@ const StepSix = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(7)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, annualIncome: item }));
+                setActiveStep(7);
+              }}
+              text={item}
+            />
           );
         })}
       </div>
@@ -452,9 +533,11 @@ const StepSix = ({
 const StepFive = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -472,7 +555,13 @@ const StepFive = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(6)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, netCapital: item }));
+                setActiveStep(6);
+              }}
+              text={item}
+            />
           );
         })}
       </div>
@@ -483,9 +572,11 @@ const StepFive = ({
 const StepFour = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -509,7 +600,10 @@ const StepFour = ({
           return (
             // Set the correct value here too , liek the value selected
             <StepContentWithCheckbox
-              clickHandler={() => setActiveStep(2)}
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, fundsSource: item }));
+                setActiveStep(5);
+              }}
               text={item}
             />
           );
@@ -518,7 +612,9 @@ const StepFour = ({
           proceedHandler={() => {
             setActiveStep(5);
           }}
-          setValue={setSelectedValue}
+          setValue={(e) => {
+            setPayload((prev) => ({ ...prev, currentWork: e }));
+          }}
           value={selectedValue}
           opened
         />
@@ -530,9 +626,11 @@ const StepFour = ({
 const StepThree = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -555,7 +653,13 @@ const StepThree = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(4)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, educationLevel: item }));
+                setActiveStep(4);
+              }}
+              text={item}
+            />
           );
         })}
       </div>
@@ -566,9 +670,11 @@ const StepThree = ({
 const StepTwo = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -603,14 +709,22 @@ const StepTwo = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(3)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, businessNature: item }));
+                setActiveStep(3);
+              }}
+              text={item}
+            />
           );
         })}
         <OthersSpecify
           proceedHandler={() => {
             setActiveStep(3);
           }}
-          setValue={setSelectedValue}
+          setValue={(e) => {
+            setPayload((prev) => ({ ...prev, currentWork: e }));
+          }}
           value={selectedValue}
         />
       </div>
@@ -621,9 +735,11 @@ const StepTwo = ({
 const StepOne = ({
   activeStep,
   setActiveStep,
+  setPayload,
 }: {
   activeStep: number;
   setActiveStep: (val: number) => void;
+  setPayload: Dispatch<SetStateAction<CreateKycFinance>>;
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const stepList = [
@@ -646,14 +762,22 @@ const StepOne = ({
         {stepList.map((item) => {
           return (
             // Set the correct value here too , liek the value selected
-            <StepContent clickHandler={() => setActiveStep(2)} text={item} />
+            <StepContent
+              clickHandler={() => {
+                setPayload((prev) => ({ ...prev, currentWork: item }));
+                setActiveStep(2);
+              }}
+              text={item}
+            />
           );
         })}
         <OthersSpecify
           proceedHandler={() => {
             setActiveStep(2);
           }}
-          setValue={setSelectedValue}
+          setValue={(e) => {
+            setPayload((prev) => ({ ...prev, currentWork: e }));
+          }}
           value={selectedValue}
         />
       </div>
@@ -689,7 +813,12 @@ const StepContentWithCheckbox = ({
   const [checked, setChecked] = useState(false);
   return (
     <div
-      onClick={() => setChecked((prev) => !prev)}
+      onClick={() => {
+        setChecked((prev) => !prev);
+        if (clickHandler) {
+          clickHandler();
+        }
+      }}
       style={{ borderBottom: "0.5px solid #1F0D3F80" }}
       className="cursor-pointer flex items-center gap-2 py-3 px-2"
     >
@@ -744,7 +873,12 @@ const OthersSpecify = ({
         <AnimatePresence>
           {showInput && (
             <FadeIn>
-              <SettingsInput label="" placeholder="specify" readOnly={false} />
+              <SettingsInput
+                setValue={setValue}
+                label=""
+                placeholder="specify"
+                readOnly={false}
+              />
               <div className="mt-2 w-full flex justify-end">
                 <Button
                   loading={false}
