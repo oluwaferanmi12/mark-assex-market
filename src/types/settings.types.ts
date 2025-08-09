@@ -4,12 +4,30 @@ export interface SubmitKycInterface {
   otherDocs: string[];
 }
 
+type StatusType = "PENDING" | "REJECTED" | "APPROVED";
+
 export interface GetKycResponse {
   addressDocumentUrl: string;
   identityDocumentUrl: string;
-  otherDocumentUrl: string | null;
+  otherDocumentUrl: null | string;
   id: string;
-  status: "PENDING";
+  currentWork: null | string;
+  businessNature: null | string;
+  educationLevel: null | string;
+  fundsSource: null | string;
+  netCapital: null | string;
+  annualIncome: null | string;
+  financialObligation: null | string;
+  annualInvestment: null | string;
+  accountPurpose: null | string;
+  tradingInstruments: null | string;
+  phoneCode: null | string;
+  phone: null | string;
+  status: StatusType;
+  addressStatus: StatusType;
+  identityStatus: StatusType;
+  otherStatus: StatusType;
+  phoneStatus: StatusType;
 }
 
 export interface NotificationPreference {

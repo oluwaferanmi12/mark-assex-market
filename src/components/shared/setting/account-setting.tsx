@@ -48,6 +48,7 @@ export const AccountSetting = () => {
     profileStatus: "ACTIVE",
     createdAt: "",
     updatedAt: "",
+    phoneCode: "",
   });
   const { data, isSuccess } = useGetUserProfile();
   useEffect(() => {

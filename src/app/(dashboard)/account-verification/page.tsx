@@ -7,49 +7,14 @@ import { PersonalFinanceVerification } from "@/components/shared/verification/pe
 import { VerifyPhoneNumber } from "@/components/shared/verification/verify-phone-number";
 import { ModuleVerified } from "@/components/shared/wrappers/account-verified-module";
 import { PageHeader } from "@/components/ui/text/page-header";
-import {
-  ModuleVerifiedStatus,
-  VerificationIdtype,
-} from "@/interfaces/ui-interfac";
+import { useAccountVerification } from "@/hooks/custom/settings/accoun-verification/useAccountVerification";
 import { Col, Row } from "antd";
 import { AnimatePresence } from "framer-motion";
-import { resolve } from "path";
 import React, { useState } from "react";
 
 const AccountVerification = () => {
-  const [activeState, setActiveState] = useState<VerificationIdtype>("phone");
-
-  const [verifyRequirements, setVerifyRequirements] = useState<
-    { text: string; status: ModuleVerifiedStatus; id: VerificationIdtype }[]
-  >([
-    { text: "Verify Email Address", status: "verified", id: "email" },
-    { text: "Verify Phone Number", status: "verifying", id: "phone" },
-    {
-      text: "Personal Information",
-      status: "not-verified",
-      id: "personal-info",
-    },
-    {
-      text: "Personal Finance Info",
-      status: "not-verified",
-      id: "personal-finance",
-    },
-    { text: "Document Verification", status: "not-verified", id: "document" },
-  ]);
-
-  const resolveNextState = (currentState: typeof activeState) => {
-    // now what should be done here is to see the next content that is not-verified and then set it to verifying and resolve every toher state
-    const clonedObject = [...verifyRequirements];
-    const objectFound = clonedObject.find((item) => item.id === currentState)!;
-
-    objectFound.status = "verified";
-    const nextObject = clonedObject.find((item) => {
-      return item.status === "not-verified";
-    })!;
-    nextObject.status = "verifying";
-    setActiveState(nextObject.id);
-    setVerifyRequirements(clonedObject);
-  };
+  const { activeState, verifyRequirements, resolveNextState } =
+    useAccountVerification();
 
   return (
     <>

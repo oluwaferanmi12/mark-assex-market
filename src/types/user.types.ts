@@ -20,6 +20,7 @@ export interface UserProfileInterface {
   profileStatus: ProfileStatus;
   createdAt: string;
   updatedAt: string;
+  phoneCode: string | null;
 }
 
 export interface UpdateUserInterface {

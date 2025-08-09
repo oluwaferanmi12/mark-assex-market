@@ -3,7 +3,7 @@ import { InputErrorText } from "@/components/ui/text/input-error-text";
 import { Col, Row } from "antd";
 import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import { Button } from "@/components/ui/buttons/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Otp from "@/app/(auth)/otp/page";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { VerificationIdtype } from "@/interfaces/ui-interfac";
@@ -11,6 +11,8 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import countryCodes from "country-codes-list";
 import {
+  useGetKyc,
+  useGetUserProfile,
   usePhoneRequest,
   usePhoneRequestVerify,
 } from "@/hooks/queries/useSettings";
@@ -25,7 +27,9 @@ export const VerifyPhoneNumber = ({
 }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [countryCallingCode, setCopuntryCallingCode] = useState(
-    countryCodes.customList("countryCallingCode")
+    countryCodes.customList
+      ? countryCodes.customList("countryCallingCode")
+      : null
   );
   const [selectedCode, setSelectedCode] = useState("234");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -34,6 +38,8 @@ export const VerifyPhoneNumber = ({
   const phoneRequestMutate = usePhoneRequest((data) => {
     setShowOtp(true);
   });
+  const { data: userProfile } = useGetUserProfile();
+  
   const verifyPhoneNumber = usePhoneRequestVerify((data) => {
     toast.success("Phone number verifieid");
     resolveNextStatus(id);
@@ -45,6 +51,13 @@ export const VerifyPhoneNumber = ({
       phoneCode: selectedCode,
     });
   };
+
+  useEffect(() => {
+    if (userProfile) {
+      setSelectedCode(userProfile.phoneCode ? userProfile.phoneCode : "234");
+      setPhoneNumber(userProfile.phone ?? "");
+    }
+  }, [userProfile]);
 
   return (
     <>
@@ -91,17 +104,6 @@ export const VerifyPhoneNumber = ({
               </>
             ) : (
               <>
-                <select
-                  value={selectedCode}
-                  onChange={(e) => {
-                    setSelectedCode(e.target.value);
-                  }}
-                  className=""
-                >
-                  {Object.entries(countryCallingCode).map(([key, val]) => {
-                    return <option value={key}>+{key}</option>;
-                  })}
-                </select>
                 <div>
                   <p className="text-[#606060] mb-1 font-work-sans-regular text-xs lg:text-sm">
                     Phone Number
@@ -114,9 +116,10 @@ export const VerifyPhoneNumber = ({
                       }}
                       className="border focus:border-none bg-[#F2F4F7] border-[#BEBEBE59] rounded-tl-lg rounded-bl-lg font-work-sans-regular py-[9px]"
                     >
-                      {Object.entries(countryCallingCode).map(([key, val]) => {
-                        return <option value={key}>+{key}</option>;
-                      })}
+                      {countryCallingCode &&
+                        Object.entries(countryCallingCode).map(([key, val]) => {
+                          return <option value={key}>+{key}</option>;
+                        })}
                     </select>
                     <input
                       placeholder={"9123435433"}
@@ -134,7 +137,10 @@ export const VerifyPhoneNumber = ({
                   label="Phone Number"
                   placeholder="+234"
                 /> */}
-                <InputErrorText text="A verification code will be sent to this number" />
+                {!userProfile?.phone && (
+                  <InputErrorText text="A verification code will be sent to this number" />
+                )}
+
                 <div className="mt-8 flex justify-end">
                   <Button
                     loading={phoneRequestMutate.isPending}

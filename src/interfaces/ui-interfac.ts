@@ -109,7 +109,8 @@ export type VerificationIdtype =
   | "phone"
   | "personal-info"
   | "personal-finance"
-  | "document";
+  | "document"
+  | "loading";
 export interface SettingsTabInterface {
   text: string;
   id: SettingsIdType;
