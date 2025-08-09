@@ -11,10 +11,9 @@ export const Avatar = ({
   width?: number;
 }) => {
   return (
-    <Image
-      height={height}
-      width={width}
-      className="rounded-full"
+    <img
+      style={{ height: `${height}px`, width: `${width}px` }}
+      className="rounded-full object-cover"
       src={avatar ? avatar : defaultAvatar}
       alt="Avatar"
     />
