@@ -87,6 +87,10 @@ export const AccountSetting = () => {
       country: country ?? "",
     });
   };
+
+  const handleImageUpload = () => {
+    
+  }
   return (
     <>
       <ModalContainer

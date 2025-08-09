@@ -71,3 +71,7 @@ export interface CreateKycFinance {
   accountPurpose: string;
   tradingInstruments: string;
 }
+
+export interface ProfilePicture {
+  picture: string;
+}

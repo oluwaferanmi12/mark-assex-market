@@ -7,6 +7,7 @@ import {
   NotificationPreference,
   PhoneRequest,
   PhoneVerify,
+  ProfilePicture,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -76,5 +77,10 @@ export const phoneVerify = async (payload: PhoneVerify) => {
 
 export const saveFinanceInfo = async (payload: CreateKycFinance) => {
   const { data } = await axiosInstance.post(`/kyc/finance`, payload);
+  return data.data;
+};
+
+export const manangeProfilePicture = async (payload: ProfilePicture) => {
+  const { data } = await axiosInstance.patch(`/users/picture`, payload);
   return data.data;
 };

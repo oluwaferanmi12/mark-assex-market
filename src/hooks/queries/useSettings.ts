@@ -4,6 +4,7 @@ import {
   getNotification,
   getNotificationPreference,
   getUserProfile,
+  manangeProfilePicture,
   phoneRequest,
   phoneVerify,
   saveFinanceInfo,
@@ -20,6 +21,7 @@ import {
   NotificationPreference,
   PhoneRequest,
   PhoneVerify,
+  ProfilePicture,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -137,6 +139,17 @@ export const useSaveFinanceInfo = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: CreateKycFinance) => {
       return saveFinanceInfo(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useManageProfilePicture = async (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: ProfilePicture) => {
+      return manangeProfilePicture(payload);
     },
     onSuccess: (data) => {
       sc(data);
