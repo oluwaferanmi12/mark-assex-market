@@ -20,6 +20,7 @@ import { GSelect } from "@/components/ui/inputs/general-select";
 import moment from "moment";
 import { countryList } from "@/utils/country-list";
 import userRoundPen from "@/assets/svgs/user-round-pen.svg";
+import { Avatar } from "../avatar/avatar";
 
 export const AccountSetting = () => {
   const [readOnly, setReadOnly] = useState(true);
@@ -164,7 +165,12 @@ export const AccountSetting = () => {
                   Or click to browse (8mb Max)
                 </p>
               </div>
-              <div>
+              <div className="relative">
+                <input
+                  className="absolute w-[200px] opacity-0"
+                  type="file"
+                  accept="images/*"
+                />
                 <Button
                   variant="green-bg-faded"
                   text="Browse Files"
@@ -198,7 +204,7 @@ export const AccountSetting = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 ">
           <span>
-            <Image src={placeholderImage} alt="" />
+            <Avatar width={80} height={80} />
           </span>
           <div className="flex items-center gap-2">
             <Button

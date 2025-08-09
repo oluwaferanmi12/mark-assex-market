@@ -2,6 +2,7 @@ import placeholder from "@/assets/svgs/profile-placeholder.svg";
 import { getStoredUser } from "@/utils/auth-helper";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Avatar } from "../avatar/avatar";
 
 export const DashboardUserDetails = () => {
   const [userName, setUserName] = useState("");
@@ -17,7 +18,7 @@ export const DashboardUserDetails = () => {
     <>
       <div className="flex items-center gap-2 mt-4">
         <span>
-          <Image src={placeholder} alt="" />
+          <Avatar />
         </span>
         <div>
           <p className="text-[#202020] font-work-sans-medium">

@@ -43,6 +43,7 @@ import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
 import { getStoredUser } from "@/utils/auth-helper";
 import { MoneyFormat } from "@/utils/money-format";
+import { Avatar } from "@/components/shared/avatar/avatar";
 
 export const DashboardTopNav = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -576,11 +577,7 @@ export const DashboardTopNav = () => {
               }}
               className="flex cursor-pointer items-center gap-2"
             >
-              <Image
-                src={profilePlaceholder}
-                className="w-[30px] h-[30px]"
-                alt=""
-              />
+              <Avatar width={30} height={30} />
               <Image src={arrowDown} alt="" />
             </div>
             <AnimatePresence>
@@ -594,11 +591,7 @@ export const DashboardTopNav = () => {
                   className="absolute right-0 mt-2 w-[300px] rounded-md border border-gray-300 bg-white shadow-lg z-50 p-4"
                 >
                   <div className="p-2 rounded-lg border border-[#BEBEBE59] flex items-center gap-2">
-                    <Image
-                      alt=""
-                      src={profilePlaceholder}
-                      className="w-[50px] h-[50px]"
-                    />
+                    <Avatar />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
                         {userProfile?.firstName}
