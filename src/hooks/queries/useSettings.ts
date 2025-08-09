@@ -6,6 +6,7 @@ import {
   getUserProfile,
   phoneRequest,
   phoneVerify,
+  saveFinanceInfo,
   saveNotificationPreference,
   saveUserProfile,
   submitKyc,
@@ -13,6 +14,7 @@ import {
 } from "@/services/setting.service";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
 import {
+  CreateKycFinance,
   Get2FA,
   GetKycResponse,
   NotificationPreference,
@@ -126,6 +128,17 @@ export const usePhoneRequestVerify = (sc: (val: any) => void) => {
       return phoneVerify(payload);
     },
     onSuccess: (data: any) => {
+      sc(data);
+    },
+  });
+};
+
+export const useSaveFinanceInfo = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: CreateKycFinance) => {
+      return saveFinanceInfo(payload);
+    },
+    onSuccess: (data) => {
       sc(data);
     },
   });

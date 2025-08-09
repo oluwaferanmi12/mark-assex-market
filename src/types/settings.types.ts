@@ -58,3 +58,16 @@ export interface PhoneVerify {
   phoneCode: string;
   otp: string;
 }
+
+export interface CreateKycFinance {
+  currentWork: string;
+  businessNature: string;
+  educationLevel: string;
+  fundsSource: string;
+  netCapital: string;
+  annualIncome: string;
+  financialObligation: string;
+  annualInvestment: string;
+  accountPurpose: string;
+  tradingInstruments: string;
+}

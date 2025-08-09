@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/axios";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
 import {
+  CreateKycFinance,
   Get2FA,
   GetKycResponse,
   NotificationPreference,
@@ -70,5 +71,10 @@ export const phoneRequest = async (payload: PhoneRequest) => {
 
 export const phoneVerify = async (payload: PhoneVerify) => {
   const { data } = await axiosInstance.post(`/kyc/phone-verify`, payload);
+  return data.data;
+};
+
+export const saveFinanceInfo = async (payload: CreateKycFinance) => {
+  const { data } = await axiosInstance.post(`/kyc/finance`, payload);
   return data.data;
 };

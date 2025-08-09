@@ -64,7 +64,7 @@ export const VerifyPersonalDetails = ({
       lastName: lastName ?? "",
       middleName: middleName ?? "",
       gender: gender ?? "",
-      dateOfBirth: dateOfBirth ?? "",
+      dateOfBirth: dateOfBirth ? moment(dateOfBirth).format("YYYY-MM-DD") : "",
       address: address ?? "",
       city: city ?? "",
       state: state ?? "",

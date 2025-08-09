@@ -10,6 +10,7 @@ import chevroletWhite from "@/assets/svgs/chevron-right-white.svg";
 import checkedBox from "@/assets/svgs/checked-square.svg";
 import unCheckedBox from "@/assets/svgs/unchecked-square.svg";
 import { VerificationIdtype } from "@/interfaces/ui-interfac";
+import { CreateKycFinance } from "@/types";
 
 export const PersonalFinanceVerification = ({
   id,
@@ -20,9 +21,19 @@ export const PersonalFinanceVerification = ({
 }) => {
   const [currentWidth, setCurrentWidth] = useState(0);
   const [activeStep, setActiveStep] = useState(1);
-
+  const [payload, setPayload] = useState<CreateKycFinance>({
+    currentWork: "",
+    businessNature: "",
+    educationLevel: "",
+    fundsSource: "",
+    netCapital: "",
+    annualIncome: "",
+    financialObligation: "",
+    annualInvestment: "",
+    accountPurpose: "",
+    tradingInstruments: "",
+  });
   const widthPercent = activeStep === 11 ? 100 : currentWidth;
-
   useEffect(() => {
     // Get the number of steps we have
     if (activeStep > 1) {
@@ -687,7 +698,9 @@ const StepContentWithCheckbox = ({
         src={checked ? checkedBox : unCheckedBox}
         alt=""
       />
-      <p className="text-[#111111] font-work-sans-regular lg:text-sm text-xs ">{text}</p>
+      <p className="text-[#111111] font-work-sans-regular lg:text-sm text-xs ">
+        {text}
+      </p>
     </div>
   );
 };
