@@ -71,7 +71,11 @@ export const AccountSetting = () => {
   function fileToDataUrl(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string); // "data:image/png;base64,AAAA..."
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(",")[1]; // remove "data:image/png;base64,"
+        resolve(base64);
+      };
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
@@ -106,6 +110,9 @@ export const AccountSetting = () => {
         ...data,
         dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
       });
+      if (data.picture) {
+        setPreviewUrl(data.picture);
+      }
     }
   }, [data, isSuccess]);
 
@@ -285,7 +292,7 @@ export const AccountSetting = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 ">
           <span>
-            <Avatar width={80} height={80} />
+            <Avatar avatar={userData.picture!} width={80} height={80} />
           </span>
           <div className="flex items-center gap-2">
             <Button

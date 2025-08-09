@@ -38,14 +38,18 @@ import {
   useGetUserProfile,
   useVerify2FA,
 } from "@/hooks/queries/useSettings";
-import { Get2FA } from "@/types";
+import { Get2FA, UserProfileInterface } from "@/types";
 import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
 import { getStoredUser } from "@/utils/auth-helper";
 import { MoneyFormat } from "@/utils/money-format";
 import { Avatar } from "@/components/shared/avatar/avatar";
 
-export const DashboardTopNav = () => {
+export const DashboardTopNav = ({
+  userProfile,
+}: {
+  userProfile?: UserProfileInterface;
+}) => {
   const [showSideNav, setShowSideNav] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [activeNotificationTab, setActiveNotificationTab] = useState(0);
@@ -56,13 +60,11 @@ export const DashboardTopNav = () => {
   const [show2fa, setShow2fa] = useState(true);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
-  const userDetails = getStoredUser();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
   const [generated2FA, setGenerated2FA] = useState<Get2FA>();
   const [otp, setOtp] = useState("");
-  const { data: userProfile } = useGetUserProfile();
   const two2Fa = useGenerate2FA((data: Get2FA) => {
     setShowOTPInstruction(true);
     setShow2fa(false);

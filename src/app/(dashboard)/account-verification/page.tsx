@@ -27,6 +27,7 @@ const AccountVerification = () => {
         {verifyRequirements.map((item, index) => {
           return (
             <ModuleVerified
+              key={item.id}
               status={item.id === activeState ? "verifying" : item.status}
               text={item.text}
             />

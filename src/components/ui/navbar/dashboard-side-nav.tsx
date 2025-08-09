@@ -31,11 +31,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import navCloseIcon from "@/assets/svgs/nav-x-button.svg";
 import { getStoredUser } from "@/utils/auth-helper";
+import { UserProfileInterface } from "@/types";
 
 export const DashboardSideNav = ({
   handleCloseAsModal,
+  userProfile,
 }: {
   handleCloseAsModal?: () => void;
+  userProfile?: UserProfileInterface;
 }) => {
   //Slug used here basically implies the folder name and is usually the expected path name that would be on the url tab
   const [showInsightDropDown, setShowInsightDropdown] = useState(false);
@@ -167,7 +170,6 @@ export const DashboardSideNav = ({
     }
   }, [pathName]);
 
-  
   return (
     <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col lg:justify-between">
       <div>
@@ -222,7 +224,7 @@ export const DashboardSideNav = ({
           })}
         </div>
 
-        <DashboardUserDetails />
+        <DashboardUserDetails userProfile={userProfile} />
         <div className=" lg:hidden">
           {nav2object.map((item, index) => {
             return <DashboardNavWrapper key={index} item={item} />;

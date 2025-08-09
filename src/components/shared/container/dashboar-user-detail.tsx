@@ -3,8 +3,13 @@ import { getStoredUser } from "@/utils/auth-helper";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Avatar } from "../avatar/avatar";
+import { UserProfileInterface } from "@/types";
 
-export const DashboardUserDetails = () => {
+export const DashboardUserDetails = ({
+  userProfile,
+}: {
+  userProfile?: UserProfileInterface;
+}) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   useEffect(() => {
@@ -18,13 +23,13 @@ export const DashboardUserDetails = () => {
     <>
       <div className="flex items-center gap-2 mt-4">
         <span>
-          <Avatar />
+          <Avatar avatar={userProfile?.picture!} />
         </span>
         <div>
           <p className="text-[#202020] font-work-sans-medium">
-            {userName ?? "User"}
+            {userProfile?.firstName ?? "User"}
           </p>
-          <p className="text-xs font-work-sans-light">{email ?? ""}</p>
+          <p className="text-xs font-work-sans-light">{userProfile?.email ?? ""}</p>
         </div>
       </div>
     </>

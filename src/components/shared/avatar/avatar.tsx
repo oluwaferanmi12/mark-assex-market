@@ -10,12 +10,18 @@ export const Avatar = ({
   height?: number;
   width?: number;
 }) => {
+  console.log(avatar, "Avatar");
   return (
-    <img
+    <div
+      className="relative"
       style={{ height: `${height}px`, width: `${width}px` }}
-      className="rounded-full object-cover"
-      src={avatar ? avatar : defaultAvatar}
-      alt="Avatar"
-    />
+    >
+      <Image
+        fill
+        className="rounded-full object-cover"
+        src={avatar ? avatar : defaultAvatar}
+        alt="Avatar"
+      />
+    </div>
   );
 };
