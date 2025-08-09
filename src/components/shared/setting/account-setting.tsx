@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/buttons/button";
 import uploadGreenIcon from "@/assets/svgs/upload-icon-green.svg";
 import trashIconRed from "@/assets/svgs/trash-icon-red.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SettingsInput } from "@/components/ui/inputs/settings-input";
 import { Col, Row } from "antd";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
@@ -13,7 +13,11 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import cloudIcon from "@/assets/svgs/upload-cloud-icon-green.svg";
 import deleteIcon from "@/assets/svgs/border-bin-icon.svg";
-import { useGetUserProfile, useSaveProfile } from "@/hooks/queries/useSettings";
+import {
+  useGetUserProfile,
+  useManageProfilePicture,
+  useSaveProfile,
+} from "@/hooks/queries/useSettings";
 import { UserProfileInterface } from "@/types";
 import { toast } from "sonner";
 import { GSelect } from "@/components/ui/inputs/general-select";
@@ -21,14 +25,25 @@ import moment from "moment";
 import { countryList } from "@/utils/country-list";
 import userRoundPen from "@/assets/svgs/user-round-pen.svg";
 import { Avatar } from "../avatar/avatar";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AccountSetting = () => {
+  const queryClient = useQueryClient();
   const [readOnly, setReadOnly] = useState(true);
   const [showUploadModal, setShowUploadmodal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { mutate, isPending } = useSaveProfile((data) => {
     toast.success("Profile Updated successfully");
   });
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // for <img src=...>
+  const [dataUrl, setDataUrl] = useState<string | null>(null); // full data URL
+  const [isUploading, setIsUploading] = useState(false);
+  const objectUrlRef = useRef<string | null>(null);
+  const mutateProfilePicture = useManageProfilePicture(() => {
+    toast.success("Profile updated");
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+  });
+
   const [userData, setUserData] = useState<UserProfileInterface>({
     id: "",
     firstName: "",
@@ -52,6 +67,39 @@ export const AccountSetting = () => {
     phoneCode: "",
   });
   const { data, isSuccess } = useGetUserProfile();
+
+  function fileToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string); // "data:image/png;base64,AAAA..."
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const onPick: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      e.target.value = "";
+      return;
+    }
+
+    // Preview with object URL (more efficient than base64 for <img>)
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    objectUrlRef.current = URL.createObjectURL(file);
+    setPreviewUrl(objectUrlRef.current);
+
+    // Convert to Base64 (Data URL) for API
+    const data = await fileToDataUrl(file);
+    setDataUrl(data);
+
+    // allow re-selecting the same file again
+    e.target.value = "";
+  };
+
   useEffect(() => {
     if (data && isSuccess) {
       setUserData({
@@ -87,10 +135,6 @@ export const AccountSetting = () => {
       country: country ?? "",
     });
   };
-
-  const handleImageUpload = () => {
-    
-  }
   return (
     <>
       <ModalContainer
@@ -156,33 +200,64 @@ export const AccountSetting = () => {
           }}
         />
         <ModalBody>
-          <div className="flex items-center justify-center">
-            <div className="w-[250px] rounded-full h-[250px] border border-dashed border-[#0DAE94] flex flex-col items-center justify-center">
-              <span>
-                <Image src={cloudIcon} alt="" />
-              </span>
-              <div className="my-3">
-                <p className="text-xs text-[#0DAE94] font-work-sans-regular">
-                  Drag and drop your image here
-                </p>
-                <p className="text-xs text-[#707070]  font-work-sans-regular">
-                  Or click to browse (8mb Max)
-                </p>
-              </div>
-              <div className="relative">
-                <input
-                  className="absolute w-[200px] opacity-0"
-                  type="file"
-                  accept="images/*"
+          <div className="flex items-center justify-center relative">
+            <div className="w-[250px] rounded-full h-[250px] border border-dashed border-[#0DAE94] flex flex-col items-center justify-center overflow-hidden ">
+              {previewUrl && (
+                <div className="absolute top-4 right-4">
+                  <div className="relative">
+                    <input
+                      onChange={onPick}
+                      className="absolute w-[200px] opacity-0"
+                      type="file"
+                      accept="images/*"
+                    />
+                    <Button
+                      variant="green-bg-faded"
+                      text="Browse Files"
+                      loading={false}
+                      action={() => {}}
+                      buttonSmaller
+                    />
+                  </div>
+                </div>
+              )}
+
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  className="object-cover w-full h-full "
+                  alt=""
                 />
-                <Button
-                  variant="green-bg-faded"
-                  text="Browse Files"
-                  loading={false}
-                  action={() => {}}
-                  buttonSmaller
-                />
-              </div>
+              ) : (
+                <>
+                  <span>
+                    <Image src={cloudIcon} alt="" />
+                  </span>
+                  <div className="my-3">
+                    <p className="text-xs text-[#0DAE94] font-work-sans-regular">
+                      Drag and drop your image here
+                    </p>
+                    <p className="text-xs text-[#707070]  font-work-sans-regular">
+                      Or click to browse (8mb Max)
+                    </p>
+                  </div>
+                  <div className="relative">
+                    <input
+                      onChange={onPick}
+                      className="absolute w-[200px] opacity-0"
+                      type="file"
+                      accept="images/*"
+                    />
+                    <Button
+                      variant="green-bg-faded"
+                      text="Browse Files"
+                      loading={false}
+                      action={() => {}}
+                      buttonSmaller
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </ModalBody>
@@ -199,8 +274,10 @@ export const AccountSetting = () => {
             <Button
               variant="green-bg"
               text="Save Changes"
-              loading={false}
-              action={() => {}}
+              loading={mutateProfilePicture.isPending}
+              action={() => {
+                mutateProfilePicture.mutate({ picture: dataUrl! });
+              }}
             />
           </div>
         </ModalFooter>

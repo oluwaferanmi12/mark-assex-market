@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/buttons/button";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
 
 export const SecuritySetting = () => {
+  const { data } = useGetUserProfile();
   return (
     <>
       <div className="mb-4">
@@ -13,9 +15,7 @@ export const SecuritySetting = () => {
           </p>
         </div>
         <div className="mt-2 bg-white border border-[#BEBEBE59] py-4 rounded-lg px-4 flex items-center justify-between">
-          <p className=" text-[#202020] lg:text-sm text-xs">
-            Sam*****2@Gmail.com
-          </p>
+          <p className=" text-[#202020] lg:text-sm text-xs">{data?.email}</p>
           <Button
             action={() => {}}
             loading={false}

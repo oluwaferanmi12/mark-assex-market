@@ -27,8 +27,8 @@ export const VerifyPhoneNumber = ({
 }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [countryCallingCode, setCopuntryCallingCode] = useState(
-    countryCodes.customList
-      ? countryCodes.customList("countryCallingCode")
+    countryCodes?.customList
+      ? countryCodes?.customList("countryCallingCode")
       : null
   );
   const [selectedCode, setSelectedCode] = useState("234");

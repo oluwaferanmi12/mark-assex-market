@@ -30,7 +30,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 const Account = () => {
-  const queryClient = useQueryClient();
+  
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
   const liveRef = useRef<HTMLParagraphElement>(null);
   const demoRef = useRef<HTMLParagraphElement>(null);
@@ -46,12 +46,11 @@ const Account = () => {
   const [newAccountName, setNewAccountName] = useState("");
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
   const { data: accounts } = useGetAccount();
+
   const router = useRouter();
 
-  const mutateProfilePicture = useManageProfilePicture(() => {
-    toast.success("Profile updated");
-    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
-  });
+  
+
   useEffect(() => {
     const targetRef = activeAccount === "live" ? liveRef : demoRef;
     if (targetRef.current) {

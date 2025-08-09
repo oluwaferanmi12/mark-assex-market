@@ -146,7 +146,7 @@ export const useSaveFinanceInfo = (sc: (val: any) => void) => {
   });
 };
 
-export const useManageProfilePicture = async (sc: (val: any) => void) => {
+export const useManageProfilePicture = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ProfilePicture) => {
       return manangeProfilePicture(payload);

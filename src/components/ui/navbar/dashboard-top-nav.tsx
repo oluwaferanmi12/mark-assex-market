@@ -577,7 +577,11 @@ export const DashboardTopNav = () => {
               }}
               className="flex cursor-pointer items-center gap-2"
             >
-              <Avatar width={30} height={30} />
+              <Avatar
+                avatar={userProfile?.picture ?? ""}
+                width={30}
+                height={30}
+              />
               <Image src={arrowDown} alt="" />
             </div>
             <AnimatePresence>
@@ -591,7 +595,7 @@ export const DashboardTopNav = () => {
                   className="absolute right-0 mt-2 w-[300px] rounded-md border border-gray-300 bg-white shadow-lg z-50 p-4"
                 >
                   <div className="p-2 rounded-lg border border-[#BEBEBE59] flex items-center gap-2">
-                    <Avatar />
+                    <Avatar avatar={userProfile?.picture ?? ""} />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
                         {userProfile?.firstName}
