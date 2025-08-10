@@ -75,3 +75,8 @@ export interface CreateKycFinance {
 export interface ProfilePicture {
   picture: string;
 }
+
+export interface ChangeUserPassword {
+  password: string;
+  confirmPassword: string;
+}

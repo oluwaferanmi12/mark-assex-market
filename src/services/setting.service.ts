@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/axios";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
 import {
+  ChangeUserPassword,
   CreateKycFinance,
   Get2FA,
   GetKycResponse,
@@ -82,5 +83,10 @@ export const saveFinanceInfo = async (payload: CreateKycFinance) => {
 
 export const manangeProfilePicture = async (payload: ProfilePicture) => {
   const { data } = await axiosInstance.patch(`/users/picture`, payload);
+  return data.data;
+};
+
+export const changeUserPassword = async (payload: ChangeUserPassword) => {
+  const { data } = await axiosInstance.patch(`/users/change-password`, payload);
   return data.data;
 };

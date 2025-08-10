@@ -1,4 +1,5 @@
 import {
+  changeUserPassword,
   generate2FA,
   getKyc,
   getNotification,
@@ -15,6 +16,7 @@ import {
 } from "@/services/setting.service";
 import { UpdateUserInterface, UserProfileInterface } from "@/types";
 import {
+  ChangeUserPassword,
   CreateKycFinance,
   Get2FA,
   GetKycResponse,
@@ -150,6 +152,17 @@ export const useManageProfilePicture = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ProfilePicture) => {
       return manangeProfilePicture(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useChangeUserPassword = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: ChangeUserPassword) => {
+      return changeUserPassword(payload);
     },
     onSuccess: (data) => {
       sc(data);

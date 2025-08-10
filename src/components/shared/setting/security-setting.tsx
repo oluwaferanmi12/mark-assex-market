@@ -1,10 +1,20 @@
 import { Button } from "@/components/ui/buttons/button";
-import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import {
+  useGetUserProfile,
+} from "@/hooks/queries/useSettings";
+import { ChangePassword } from "../modals/change-password";
+import { useState } from "react";
 
 export const SecuritySetting = () => {
   const { data } = useGetUserProfile();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  
   return (
     <>
+      <ChangePassword
+        modalActive={showPasswordModal}
+        setModalActive={setShowPasswordModal}
+      />
       <div className="mb-4">
         <div>
           <p className="font-work-sans-medium text-[#202020] text-base lg:text-lg">
@@ -17,7 +27,9 @@ export const SecuritySetting = () => {
         <div className="mt-2 bg-white border border-[#BEBEBE59] py-4 rounded-lg px-4 flex items-center justify-between">
           <p className=" text-[#202020] lg:text-sm text-xs">{data?.email}</p>
           <Button
-            action={() => {}}
+            action={() => {
+              setShowPasswordModal(true);
+            }}
             loading={false}
             text="Change Password"
             variant="green-bg"

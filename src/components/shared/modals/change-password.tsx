@@ -3,9 +3,10 @@ import { ModalContainer } from "../modal-wrapper/modal-wrapper";
 import padlockIcon from "@/assets/svgs/padlockIcon.svg";
 import { GInput } from "@/components/ui/inputs/general-input";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
-
 import Image from "next/image";
 import { useState } from "react";
+import { useChangeUserPassword } from "@/hooks/queries/useSettings";
+import { toast } from "sonner";
 
 export const ChangePassword = ({
   modalActive,
@@ -14,7 +15,23 @@ export const ChangePassword = ({
   modalActive: boolean;
   setModalActive: (val: boolean) => void;
 }) => {
+  const mutateChangePassword = useChangeUserPassword(() => {
+    toast.success("Password updated");
+    setModalActive(false);
+  });
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = () => {
+    if (!password) {
+      toast.error("Password is required");
+      return;
+    } else if (password !== confirmPassword) {
+      toast.error("Password mismatch");
+      return;
+    }
+    mutateChangePassword.mutate({ password, confirmPassword });
+  };
   return (
     <ModalContainer
       active={modalActive}
@@ -45,31 +62,39 @@ export const ChangePassword = ({
           />
           <GInput
             label="Confirm Password"
-            inputValue={password}
-            setInputValue={setPassword}
+            inputValue={confirmPassword}
+            setInputValue={setConfirmPassword}
             placeholder="Confirm password"
             type="password"
           />
-          <div className="mb-3">
-            <PasswordValidateText validated text="At least 8 characters" />
-            <PasswordValidateText
-              validated
-              text="At least one uppercase letter (A–Z)"
-            />
-            <PasswordValidateText
-              validated={false}
-              text="At least 8 characters"
-            />
-            <PasswordValidateText
-              validated={false}
-              text="At least one special character (e.g. !, @, #, $)"
-            />
-          </div>
+          {!!password.length && (
+            <div className="mb-3">
+              <PasswordValidateText
+                validated={password.length >= 8}
+                text="At least 8 characters"
+              />
+              <PasswordValidateText
+                validated={/[A-Z]/.test(password)}
+                text="At least one uppercase letter (A–Z)"
+              />
+              <PasswordValidateText
+                validated={/[0-9]/.test(password)}
+                text="At least one number (0–9)"
+              />
+              <PasswordValidateText
+                validated={/[^A-Za-z0-9]/.test(password)}
+                text="At least one special character (e.g. !, @, #, $)"
+              />
+            </div>
+          )}
+
           <Button
             text="Continue"
-            action={() => {}}
+            action={() => {
+              handleSubmit();
+            }}
             variant="green-bg"
-            loading={false}
+            loading={mutateChangePassword.isPending}
             fullWidth
           />
         </form>
