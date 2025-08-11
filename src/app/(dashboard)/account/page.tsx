@@ -28,9 +28,10 @@ import { useGetAccount } from "@/hooks/queries/useAccount";
 import { useManageProfilePicture } from "@/hooks/queries/useSettings";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { GenericEmptyState } from "@/components/states/generic-empty-state";
+import emptyAccountIcon from "@/assets/svgs/account-empty.svg";
 
 const Account = () => {
-  
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
   const liveRef = useRef<HTMLParagraphElement>(null);
   const demoRef = useRef<HTMLParagraphElement>(null);
@@ -48,8 +49,6 @@ const Account = () => {
   const { data: accounts } = useGetAccount();
 
   const router = useRouter();
-
-  
 
   useEffect(() => {
     const targetRef = activeAccount === "live" ? liveRef : demoRef;
@@ -411,9 +410,19 @@ const Account = () => {
                 );
               })
             ) : (
-              <div className="my-4 flex items-center w-full justify-center font-work-sans-medium">
-                No accounts created
-              </div>
+              <GenericEmptyState
+                text={`You have no ${activeAccount} account`}
+                icon={emptyAccountIcon}
+              >
+                <div>
+                  <Button
+                    action={() => {}}
+                    loading={false}
+                    text={`Open ${activeAccount} account`}
+                    variant="green-bg"
+                  />
+                </div>
+              </GenericEmptyState>
             )}
           </div>
         </div>
