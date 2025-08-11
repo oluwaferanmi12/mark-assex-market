@@ -46,6 +46,7 @@ import {
 import arrowDown from "@/assets/svgs/arrow-down-black.svg";
 import accessPlaceholder from "@/assets/svgs/access-placeholder.svg";
 import { useQueryClient } from "@tanstack/react-query";
+import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
 
 const WithdrawalDetails = () => {
   const queryClient = useQueryClient();
@@ -234,6 +235,7 @@ const WithdrawalDetails = () => {
         active={showSuccessModal}
         closeAction={() => {
           setShowSuccessModal(false);
+          router.push("/transactions");
         }}
         buttonText="Close"
         mainText="Funds Withdraw In Progress"
@@ -267,6 +269,16 @@ const WithdrawalDetails = () => {
           />
         </div>
       </ModalContainer>
+      <div className="my-4">
+        <PageGoBack
+          action={() => {
+            if (showDepositDetails) {
+              setShowDepositDetails(false);
+            }
+          }}
+        />
+      </div>
+
       <PageHeader text="Withdrawal" />
       {showDepositDetails ? (
         <div className="bg-white p-4 rounded-lg mt-6">
@@ -412,7 +424,9 @@ const WithdrawalDetails = () => {
                         amount: withdrawPayload.amount,
                       });
                     }}
-                    loading={mutateVerifyOtp.isPending}
+                    loading={
+                      mutateVerifyOtp.isPending || verifyMutate.isPending
+                    }
                     text="Proceed"
                     variant="green-bg"
                     icon={arrowRightMultiple}
@@ -670,7 +684,7 @@ const WithdrawalDetails = () => {
                     }}
                     className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                   >
-                    <option value="">Select account</option>
+                    <option value={""}>wallet</option>
                     {accounts &&
                       accounts.length &&
                       accounts.map((item, index) => {
@@ -681,7 +695,6 @@ const WithdrawalDetails = () => {
                           </option>
                         );
                       })}
-                    <option value={"wallet"}>wallet</option>
                   </select>
                 </div>
               </Col>
@@ -705,6 +718,7 @@ const WithdrawalDetails = () => {
                           amount: +e.target.value,
                         }));
                       }}
+                      value={withdrawPayload.amount}
                       style={{
                         boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                       }}
@@ -722,13 +736,11 @@ const WithdrawalDetails = () => {
             <div className="my-4">
               <Button
                 action={() => {
-                  if (withdrawPayload.amount && withdrawPayload.fromAccount) {
+                  if (withdrawPayload.amount) {
                     setShowDepositDetails(true);
                     return;
                   } else if (!withdrawPayload.amount) {
                     toast.error("Kindly enter an amount");
-                  } else {
-                    toast.error("kindly enter the account to withdraw");
                   }
                 }}
                 loading={false}
