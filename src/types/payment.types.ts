@@ -105,3 +105,8 @@ export interface PreviouslyUsedBankAccounts {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ValidateBalance {
+  accountId: string;
+  amount: number;
+}

@@ -27,6 +27,7 @@ import {
   usePaymentBanks,
   useResolvePaymentAccount,
   useSaveWithdraw,
+  useValidateBalance,
 } from "@/hooks/queries/usePayment";
 import { data } from "framer-motion/client";
 import { useRouter } from "next/navigation";
@@ -60,6 +61,9 @@ const WithdrawalDetails = () => {
   const { data: banks } = usePaymentBanks();
   const { data: previousAccts } = usePaymentAccount();
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
+  const verifyMutate = useValidateBalance(() => {
+    sendGenericOtp.mutate({ channel: "email" });
+  });
   const [obtainedDetails, setObtainedDetails] =
     useState<UserBankAccountDetails | null>(null);
   const mutateVerifyOtp = useVerifyGenericOtp((data) => {
@@ -75,7 +79,9 @@ const WithdrawalDetails = () => {
 
   const [fromAccount, setFromAccount] = useState("");
   const [otpValue, setOtpValue] = useState("");
-  const sendGenericOtp = useSendGenericOtp();
+  const sendGenericOtp = useSendGenericOtp(() => {
+    setShowOtp(true);
+  });
   const { data: activePaymentDetails } = useGetPaymentMethodDetails(
     accountType!
   );
@@ -399,8 +405,12 @@ const WithdrawalDetails = () => {
                         });
                         return;
                       }
-                      sendGenericOtp.mutate({ channel: "email" });
-                      setShowOtp(true);
+                      // sendGenericOtp.mutate({ channel: "email" });
+                      // setShowOtp(true);
+                      verifyMutate.mutate({
+                        accountId: withdrawPayload.fromAccount,
+                        amount: withdrawPayload.amount,
+                      });
                     }}
                     loading={mutateVerifyOtp.isPending}
                     text="Proceed"

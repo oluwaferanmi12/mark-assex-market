@@ -8,6 +8,7 @@ import {
   PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
   UserBankAccountDetails,
+  ValidateBalance,
 } from "@/types";
 
 export const paymentMethods = async (): Promise<PaymentMethod[]> => {
@@ -41,8 +42,8 @@ export const paymentAccounts = async (): Promise<
   PreviouslyUsedBankAccounts[]
 > => {
   const { data } = await axiosInstance.get(`/payments/payment-accounts`);
-  
-  return data.data.data
+
+  return data.data.data;
 };
 
 export const paymentBanks = async (): Promise<PaymentBank[]> => {
@@ -58,4 +59,12 @@ export const resolveAccount = async (
     payload
   );
   return data.data;
+};
+
+export const validateBalance = async (payload: ValidateBalance) => {
+  const result = await axiosInstance.post(
+    `/payments/validate-balance`,
+    payload
+  );
+  return result.data;
 };

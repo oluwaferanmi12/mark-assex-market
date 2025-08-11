@@ -7,13 +7,14 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useSendGenericOtp = () => {
+export const useSendGenericOtp = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: SendGenericOtp) => {
       return sendGenericOtp(payload);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Otp sent");
+      sc(data);
     },
   });
 };

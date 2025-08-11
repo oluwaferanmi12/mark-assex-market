@@ -6,6 +6,7 @@ import {
   paymentBanks,
   paymentMethods,
   resolveAccount,
+  validateBalance,
   withdraw,
 } from "@/services";
 import {
@@ -18,10 +19,9 @@ import {
   PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
   UserBankAccountDetails,
+  ValidateBalance,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-
 
 export const useGetPaymentMethods = () => {
   return useQuery<PaymentMethod[]>({
@@ -68,7 +68,6 @@ export const useSaveWithdraw = (sc: (val: any) => void) => {
     },
     onSuccess: (data) => {
       sc(data);
-      
     },
   });
 };
@@ -93,6 +92,17 @@ export const useResolvePaymentAccount = (
   return useMutation({
     mutationFn: (payload: ResolveAccountPayload) => {
       return resolveAccount(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useValidateBalance = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: ValidateBalance) => {
+      return validateBalance(payload);
     },
     onSuccess: (data) => {
       sc(data);
