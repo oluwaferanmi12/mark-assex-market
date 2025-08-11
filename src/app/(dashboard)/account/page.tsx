@@ -416,7 +416,9 @@ const Account = () => {
               >
                 <div>
                   <Button
-                    action={() => {}}
+                    action={() => {
+                      router.push(`/account/create-account?state=${activeAccount}`);
+                    }}
                     loading={false}
                     text={`Open ${activeAccount} account`}
                     variant="green-bg"
