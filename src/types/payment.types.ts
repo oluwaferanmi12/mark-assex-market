@@ -112,3 +112,30 @@ export interface ValidateBalance {
   accountId: string;
   amount: number;
 }
+
+export interface BankInterfaceForTransfer {
+  account_name: string;
+  account_number: string;
+  bank_name: string;
+  bank_code: string;
+  expiry_date_in_utc: string;
+}
+
+
+export interface DepositBankTransferResponse {
+  currency: string;
+  amount: number;
+  amount_expected: number;
+  fee: number;
+  vat: number;
+  reference: string;
+  payment_reference: string;
+  status: string;
+  narration: string;
+  merchant_bears_cost: boolean;
+  bank_account: BankInterfaceForTransfer;
+  customer: {
+    name: string;
+    email: string;
+  };
+}

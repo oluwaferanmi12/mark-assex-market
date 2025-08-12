@@ -68,3 +68,8 @@ export const validateBalance = async (payload: ValidateBalance) => {
   );
   return result.data;
 };
+
+export const verifyPayment = async (id: string) => {
+  const result = await axiosInstance.post(`/payments/${id}/verify`);
+  return result.data;
+};

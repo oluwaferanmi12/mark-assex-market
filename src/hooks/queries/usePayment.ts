@@ -7,6 +7,7 @@ import {
   paymentMethods,
   resolveAccount,
   validateBalance,
+  verifyPayment,
   withdraw,
 } from "@/services";
 import {
@@ -34,9 +35,7 @@ export const useGetPaymentMethods = (withdrawOnly = false) => {
   });
 };
 
-export const useDepositPayment = (
-  sc: (data: PaymentResponseInterface) => void
-) => {
+export const useDepositPayment = (sc: (data: any) => void) => {
   return useMutation({
     mutationFn: (payload: CreateDepositInterface) => {
       return deposit(payload);
@@ -107,6 +106,17 @@ export const useValidateBalance = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ValidateBalance) => {
       return validateBalance(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useVerifyPayment = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (id: string) => {
+      return verifyPayment(id);
     },
     onSuccess: (data) => {
       sc(data);

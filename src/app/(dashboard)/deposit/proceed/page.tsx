@@ -38,6 +38,8 @@ import navLogo from "@/assets/svgs/nav-logo.svg";
 import copyIcon from "@/assets/svgs/copy-blue-icon.svg";
 import arrowLeft from "@/assets/svgs/arrow-left.svg";
 import timerYellow from "@/assets/svgs/timer-yellow.svg";
+import { DepositBankTransferResponse } from "@/types";
+import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -69,6 +71,14 @@ const Proceed = () => {
     checkoutUrl.current = data.checkout_url;
     setShowRedirectModal(true);
     toast.success("Deposit initiated successfully");
+  });
+  const [selectedAccountId, setSelectedAccountId] = useState("");
+  const [bankTransferDetails, setBankTransferDetails] =
+    useState<DepositBankTransferResponse>();
+
+  const mutateDepositForBankTransfer = useDepositPayment((data) => {
+    setBankTransferDetails(data);
+    setShowInstantTransferModal(true);
   });
 
   const handleDeposit = () => {
@@ -172,16 +182,27 @@ const Proceed = () => {
                 <Image src={navLogo} alt="" />
                 <div>
                   <p className="text-[#404040] font-work-sans-regular text-xs text-end">
-                    Blaise@Gmail.com
+                    {bankTransferDetails?.customer.email}
                   </p>
                   <p className="font-work-sans-medium text-base">
-                    PAY NGN 300,198
+                    PAY NGN{" "}
+                    {MoneyFormat(
+                      (bankTransferDetails?.amount ?? 0) +
+                        (bankTransferDetails?.fee ?? 0) +
+                        (bankTransferDetails?.vat ?? 0)
+                    )}
                   </p>
                 </div>
               </div>
               <div className="my-3">
                 <p className="text-[#202020] font-work-sans-medium">
-                  Transfer NGN 300,198 to Assex-Markets Checkout
+                  Transfer NGN{" "}
+                  {MoneyFormat(
+                    (bankTransferDetails?.amount ?? 0) +
+                      (bankTransferDetails?.fee ?? 0) +
+                      (bankTransferDetails?.vat ?? 0)
+                  )}{" "}
+                  to {bankTransferDetails?.bank_account.bank_name} Checkout
                 </p>
               </div>
 
@@ -191,7 +212,15 @@ const Proceed = () => {
                     Bank name
                   </p>
                   <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                    Assex Markets
+                    {bankTransferDetails?.bank_account.bank_name}
+                  </p>
+                </div>
+                <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
+                  <p className="text-[#404040] font-work-sans-regular text-xs">
+                    Account name
+                  </p>
+                  <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                    {bankTransferDetails?.bank_account.account_name}
                   </p>
                 </div>
                 <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
@@ -200,15 +229,21 @@ const Proceed = () => {
                       Account number
                     </p>
                     <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                      12345678990
+                      {bankTransferDetails?.bank_account.account_number}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 cursor-pointer">
-                    <p className="text-xs font-work-sans-regular text-[#007BFF]">
-                      Copy
-                    </p>
-                    <Image src={copyIcon} alt="" />
-                  </div>
+                  <CopyWrapper
+                    value={
+                      bankTransferDetails?.bank_account.account_number ?? ""
+                    }
+                  >
+                    <div className="flex items-center gap-2 cursor-pointer">
+                      <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                        Copy
+                      </p>
+                      <Image src={copyIcon} alt="" />
+                    </div>
+                  </CopyWrapper>
                 </div>
                 <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
                   <div>
@@ -216,15 +251,28 @@ const Proceed = () => {
                       Amount
                     </p>
                     <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                      NGN 300,198
+                      NGN{" "}
+                      {MoneyFormat(
+                        (bankTransferDetails?.amount ?? 0) +
+                          (bankTransferDetails?.fee ?? 0) +
+                          (bankTransferDetails?.vat ?? 0)
+                      )}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 cursor-pointer">
-                    <p className="text-xs font-work-sans-regular text-[#007BFF]">
-                      Copy
-                    </p>
-                    <Image src={copyIcon} alt="" />
-                  </div>
+                  <CopyWrapper
+                    value={String(
+                      (bankTransferDetails?.amount ?? 0) +
+                        (bankTransferDetails?.fee ?? 0) +
+                        (bankTransferDetails?.vat ?? 0)
+                    )}
+                  >
+                    <div className="flex items-center gap-2 cursor-pointer">
+                      <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                        Copy
+                      </p>
+                      <Image src={copyIcon} alt="" />
+                    </div>
+                  </CopyWrapper>
                 </div>
                 <div className="bg-[#EE95071A] p-4 flex items-center gap-2 rounded-lg">
                   <Image src={timerYellow} alt="" />
@@ -248,7 +296,12 @@ const Proceed = () => {
               </div>
               <div>
                 <p className="text-[#1F0D3F] text-center font-work-sans-semi-bold text-2xl">
-                  PAY NGN 300,198
+                  PAY NGN 
+                  {MoneyFormat(
+                    (bankTransferDetails?.amount ?? 0) +
+                      (bankTransferDetails?.fee ?? 0) +
+                      (bankTransferDetails?.vat ?? 0)
+                  )}
                 </p>
                 <p className="text-[#404040] font-work-sans-regular text-center">
                   Tap on copy to copy amount & account no.
@@ -272,8 +325,13 @@ const Proceed = () => {
                       Transfer Exact Amount Only
                     </p>
                     <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
-                      Send exactly NGN 300,198 - incorrect amounts will cause
-                      payment failure
+                      Send exactly NGN 
+                      {MoneyFormat(
+                        (bankTransferDetails?.amount ?? 0) +
+                          (bankTransferDetails?.fee ?? 0) +
+                          (bankTransferDetails?.vat ?? 0)
+                      )}
+                       - incorrect amounts will cause payment failure
                     </p>
                   </div>
                   <div className="mb-2">
@@ -740,12 +798,15 @@ const Proceed = () => {
                         style={{
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
+                        onChange={(e) => {
+                          setSelectedAccountId(e.target.value);
+                        }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
                         {accounts &&
                           accounts.map((item) => {
                             return (
-                              <option>
+                              <option value={item.id}>
                                 {item.accountGroup.name}{" "}
                                 {item.accountGroup.description}
                               </option>
@@ -782,7 +843,7 @@ const Proceed = () => {
                     </div>
                   </Col>
                   <Col xs={24} lg={12}>
-                    <div>
+                    <div className="mt-4 lg:mt-0">
                       <TransferInput greyBg label="Amount to be Deposited" />
                     </div>
                   </Col>
@@ -792,13 +853,22 @@ const Proceed = () => {
                     action={() => {
                       // setShowDepositDetails(true);
                       if (activeState === "internal-bank-transfer") {
-                        setShowInstantTransferModal(true);
+                        mutateDepositForBankTransfer.mutate({
+                          amount: amountToDeposit,
+                          chargeHash: "",
+                          methodSlug: activeState!,
+                          toAccount: selectedAccountId,
+                        });
+
                         return;
                       }
                       setStartTimer(true);
                       handleDeposit();
                     }}
-                    loading={mutateDeposit.isPending}
+                    loading={
+                      mutateDeposit.isPending ||
+                      mutateDepositForBankTransfer.isPending
+                    }
                     text="Proceed"
                     variant="green-bg"
                     icon={arrowRightMultiple}
