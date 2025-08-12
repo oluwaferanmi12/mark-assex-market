@@ -380,7 +380,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
             Account #81978
           </span>
         </div>
-        <p className="font-work-sans-medium my-4 text-lg">
+        <p className="font-work-sans-medium my-4 text-lg text-black">
           $ {MoneyFormat(account.balance)} USD
         </p>
         <div className="flex items-start justify-between">
