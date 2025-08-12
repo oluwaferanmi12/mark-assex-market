@@ -2,6 +2,7 @@ import { axiosInstance } from "@/api/axios";
 import {
   CreateLoginInterface,
   CreateNewPasswordInterface,
+  Login2fa,
   LoginInterface,
   RefreshTokenInterface,
   RegisterUserInterface,
@@ -41,4 +42,9 @@ export const resetComplete = async (payload: CreateNewPasswordInterface) => {
 export const refreshToken = async (payload: RefreshTokenInterface) => {
   const result = await axiosInstance.post("/auth/refresh-token", payload);
   return result;
+};
+
+export const login2fa = async (payload: Login2fa) => {
+  const result = await axiosInstance.post(`/auth/login/two-fa`, payload);
+  return result.data;
 };

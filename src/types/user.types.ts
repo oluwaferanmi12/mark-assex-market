@@ -21,6 +21,7 @@ export interface UserProfileInterface {
   createdAt: string;
   updatedAt: string;
   phoneCode: string | null;
+  twoFaStatus: "ENABLED" | "DISABLED";
 }
 
 export interface UpdateUserInterface {

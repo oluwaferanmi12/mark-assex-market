@@ -2,6 +2,7 @@ export interface LoginInterface {
   accessToken: string;
   refreshToken: string;
   user: LoginUserInterface;
+  twoFaEnabled: boolean;
 }
 
 export type ProfileStatus = "UNVERIFIED" | "ACTIVE" | "LOCK" | "SUSPENDED";
@@ -45,4 +46,10 @@ export interface CreateNewPasswordInterface {
 
 export interface RefreshTokenInterface {
   token: string;
+}
+
+export interface Login2fa {
+  email: string;
+  password: string;
+  otp: string;
 }

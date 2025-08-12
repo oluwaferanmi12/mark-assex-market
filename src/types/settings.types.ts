@@ -80,3 +80,8 @@ export interface ChangeUserPassword {
   password: string;
   confirmPassword: string;
 }
+
+export interface Setup2fa {
+  secret: string;
+  code: string;
+}

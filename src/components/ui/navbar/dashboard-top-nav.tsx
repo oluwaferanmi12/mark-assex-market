@@ -4,8 +4,6 @@ import Image from "next/image";
 import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
 import wallet from "@/assets/svgs/top-nav-wallet.svg";
 import notificationIcon from "@/assets/svgs/icon-notification.svg";
-import dailyIcon from "@/assets/svgs/icon-24-hours.svg";
-import profilePlaceholder from "@/assets/svgs/profile-placeholder.svg";
 import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import smallLogo from "@/assets/svgs/nav-logo.svg";
 import hamburgerIcon from "@/assets/svgs/hamburger-icon.svg";
@@ -36,6 +34,7 @@ import { CountDown } from "@/components/shared/timer/count-down";
 import {
   useGenerate2FA,
   useGetUserProfile,
+  useSetup2fa,
   useVerify2FA,
 } from "@/hooks/queries/useSettings";
 import { Get2FA, UserProfileInterface } from "@/types";
@@ -57,9 +56,10 @@ export const DashboardTopNav = ({
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showLoggedOutModal, setShowLoggedOutModal] = useState(false);
-  const [show2fa, setShow2fa] = useState(true);
+  const [show2fa, setShow2fa] = useState(false);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
+  const setUpMutate = useSetup2fa(() => {});
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
@@ -90,6 +90,14 @@ export const DashboardTopNav = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setShowCustomDropDown]);
+
+  useEffect(() => {
+    if (userProfile) {
+      if (userProfile.twoFaStatus === "DISABLED") {
+        setShow2fa(true);
+      }
+    }
+  }, [userProfile]);
 
   const items: MenuProps["items"] = [
     {
@@ -226,7 +234,11 @@ export const DashboardTopNav = ({
           <div className="flex justify-end gap-2">
             <Button
               action={() => {
-                verifyMutate.mutate({ code: otp });
+                // verifyMutate.mutate({ code: otp });
+                setUpMutate.mutate({
+                  code: otp,
+                  secret: generated2FA?.secret!,
+                });
                 setShowVerifyOtp(false);
               }}
               loading={false}

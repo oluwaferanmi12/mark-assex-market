@@ -11,6 +11,7 @@ import {
   saveFinanceInfo,
   saveNotificationPreference,
   saveUserProfile,
+  setup2fa,
   submitKyc,
   verify2FA,
 } from "@/services/setting.service";
@@ -24,6 +25,7 @@ import {
   PhoneRequest,
   PhoneVerify,
   ProfilePicture,
+  Setup2fa,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -163,6 +165,17 @@ export const useChangeUserPassword = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ChangeUserPassword) => {
       return changeUserPassword(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useSetup2fa = (sc: (data: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: Setup2fa) => {
+      return setup2fa(payload);
     },
     onSuccess: (data) => {
       sc(data);

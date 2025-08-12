@@ -9,6 +9,7 @@ import {
   PhoneRequest,
   PhoneVerify,
   ProfilePicture,
+  Setup2fa,
   SubmitKycInterface,
   Verify2fa,
 } from "@/types/settings.types";
@@ -62,7 +63,12 @@ export const generate2FA = async (): Promise<Get2FA> => {
 };
 
 export const verify2FA = async (payload: Verify2fa) => {
-  const { data } = await axiosInstance.post("/security/2fa/verify");
+  const { data } = await axiosInstance.post("/security/2fa/verify", payload);
+  return data.data;
+};
+
+export const setup2fa = async (payload: Setup2fa) => {
+  const { data } = await axiosInstance.post(`/security/2fa/setup`, payload);
   return data.data;
 };
 
@@ -90,3 +96,5 @@ export const changeUserPassword = async (payload: ChangeUserPassword) => {
   const { data } = await axiosInstance.patch(`/users/change-password`, payload);
   return data.data;
 };
+
+

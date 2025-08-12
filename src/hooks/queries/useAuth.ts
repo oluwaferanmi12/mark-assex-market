@@ -1,6 +1,7 @@
 import {
   confirmOtp,
   login,
+  login2fa,
   refreshToken,
   register,
   resetComplete,
@@ -106,6 +107,15 @@ export const useRefreshToken = (
     },
     onError: (data) => {
       ec(data);
+    },
+  });
+};
+
+export const useLogin2fa = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: login2fa,
+    onSuccess: (data) => {
+      sc(data);
     },
   });
 };
