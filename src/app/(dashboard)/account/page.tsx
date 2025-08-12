@@ -231,7 +231,7 @@ const Account = () => {
             </p>
 
             <Button
-              variant="green-bg"
+              variant="blue-bg"
               action={() => {
                 router.push(`/account/create-account?state=${activeAccount}`);
               }}

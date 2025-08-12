@@ -313,7 +313,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
             </div>
           </div>
         </div>
-        <div className="p-6  flex items-center justify-between">
+        <div className="p-6 flex items-center justify-between">
           <div className="flex flex-col gap-3">
             <p className="text-[#707070] text-lg font-work-sans-regular">
               Balance
@@ -380,7 +380,9 @@ export const TradeContainer = ({ account }: { account: Account }) => {
             Account #81978
           </span>
         </div>
-        <p className="font-work-sans-medium my-4 text-lg">$ 50,000 USD</p>
+        <p className="font-work-sans-medium my-4 text-lg">
+          $ {MoneyFormat(account.balance)} USD
+        </p>
         <div className="flex items-start justify-between">
           <div className="flex items-center flex-col justify-center gap-2">
             <span>
@@ -428,7 +430,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
               Balance
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              $50,000
+              ${MoneyFormat(account.balance)}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">
@@ -437,7 +439,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
             </p>
             <div className="flex items-center gap-2">
               <p className="font-work-sans-regular text-[#404040] text-xs">
-                1:200
+                1:{account.leverage}
               </p>
               <span
                 onClick={() => {
@@ -454,7 +456,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
               Equity
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              $50,000
+              ${0}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">
@@ -462,7 +464,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
               Available to withdraw
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              $50,000
+              ${account.balance}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">
@@ -470,7 +472,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
               MT5 Login
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              81978
+              {account.mt5Id}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">
