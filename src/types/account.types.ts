@@ -35,3 +35,23 @@ export interface GenericVerifyOtpInterface {
   otp: string;
   withToken: boolean;
 }
+
+export interface AccountGroupInterface {
+  id: string;
+  name: string;
+  type: "LIVE" | "DEMO";
+  description: string;
+  leverage: number;
+  spread: number;
+  status: "ACTIVE" | "INACTIVE";
+  createdAt: string;
+  updatedAt: string;
+  mustVerify: boolean;
+  applyLimit: number;
+  minDeposit: string;
+  maxDeposit: string;
+  minWithdrawal: string;
+  maxWithdrawal: string;
+  commission: number;
+  logo: null | string;
+}

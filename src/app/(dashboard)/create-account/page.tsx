@@ -13,7 +13,10 @@ import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import checkCircle from "@/assets/svgs/check-circle.svg";
 import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
-import { useCreateTradeAccount } from "@/hooks/queries/useAccount";
+import {
+  useCreateTradeAccount,
+  useGetAccountGroups,
+} from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +26,7 @@ const CreateAccount = () => {
 
   const router = useRouter();
   const demoRef = useRef<HTMLParagraphElement>(null);
+
   const mutateCreate = useCreateTradeAccount(() => {
     toast.success("Account created successfully");
     router.push("/account");
@@ -39,7 +43,7 @@ const CreateAccount = () => {
       setHighlightStyles({ left: offsetLeft, width: offsetWidth });
     }
   }, [activeAccount]);
-  
+
   return (
     <>
       <PageGoBack />

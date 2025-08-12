@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/api/axios";
 import { CreateAccountInterface } from "@/interfaces/ui-interfac";
-import { Account, CreateTradeAccount } from "@/types";
+import { Account, AccountGroupInterface, CreateTradeAccount } from "@/types";
 
 export const getAccount = async () => {
   const { data } = await axiosInstance.get("/accounts");
@@ -17,4 +17,9 @@ export const createAccount = async (
 export const getAccountDetail = async (id: string): Promise<Account> => {
   const { data } = await axiosInstance.get(`/accounts/${id}`);
   return data.data;
+};
+
+export const getAccountGroups = async (): Promise<AccountGroupInterface[]> => {
+  const { data } = await axiosInstance.get(`/accounts/groups`);
+  return data.data.data
 };
