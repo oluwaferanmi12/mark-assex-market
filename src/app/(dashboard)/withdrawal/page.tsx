@@ -14,7 +14,7 @@ import { CardGroupLoader } from "@/components/loaders/card-loader";
 
 const Withdrawal = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { data, isPending } = useGetPaymentMethods();
+  const { data, isPending } = useGetPaymentMethods(true);
 
   return (
     <>

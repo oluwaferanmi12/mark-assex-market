@@ -7,6 +7,8 @@ export interface PaymentMethod {
   maxAmount: number;
   time: string;
   image: string;
+  isCrypto: boolean;
+  isWithdraw: boolean;
 }
 
 export type TransactionStatus = "PENDING" | "SUCCESS" | "FAILED";

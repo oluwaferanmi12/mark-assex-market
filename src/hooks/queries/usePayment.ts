@@ -23,10 +23,14 @@ import {
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetPaymentMethods = () => {
+export const useGetPaymentMethods = (withdrawOnly = false) => {
   return useQuery<PaymentMethod[]>({
-    queryFn: paymentMethods,
+    queryFn: () => {
+      return paymentMethods();
+    },
     queryKey: ["payment-method"],
+    select: (methods) =>
+      withdrawOnly ? methods.filter((m) => m.isWithdraw) : methods,
   });
 };
 

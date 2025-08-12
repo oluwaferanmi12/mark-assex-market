@@ -787,7 +787,7 @@ const Proceed = () => {
                     </div>
                   </Col>
                 </Row>
-                <div>
+                <div className="my-4">
                   <Button
                     action={() => {
                       // setShowDepositDetails(true);
