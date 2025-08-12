@@ -1,6 +1,6 @@
 "use client";
 import { VisibleOnDesktop } from "@/components/shared/wrappers/visible-on-desktop";
-import { Col, Row } from "antd";
+import { Col, Dropdown, MenuProps, Row } from "antd";
 import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import Image from "next/image";
@@ -30,6 +30,14 @@ import { MoneyFormat } from "@/utils/money-format";
 import { QRCodeCanvas } from "qrcode.react";
 import { Copy } from "@/components/shared/copier/copy";
 import { useGetAccount } from "@/hooks/queries/useAccount";
+import shieldCheck from "@/assets/svgs/shield-check.svg";
+import instantTransferIcon from "@/assets/svgs/instantTransferIcon.svg";
+import cautionIcon from "@/assets/svgs/caution-icon-blue.svg";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import navLogo from "@/assets/svgs/nav-logo.svg";
+import copyIcon from "@/assets/svgs/copy-blue-icon.svg";
+import arrowLeft from "@/assets/svgs/arrow-left.svg";
+import timerYellow from "@/assets/svgs/timer-yellow.svg";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -46,12 +54,17 @@ const Proceed = () => {
   const { data: paymentMethodDetails } = useGetPaymentMethodDetails(
     activeState!
   );
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const { data: accounts } = useGetAccount();
   const [startTimer, setStartTimer] = useState(false);
   const checkoutUrl = useRef("");
+  const [showInstantTransferModal, setShowInstantTransferModal] =
+    useState(false);
   const mutateDepositInstance = useDepositPayment((data) => {
     setWalletAddress(data.address!);
   });
+  const [showGeneratedBankDetails, setShowGeneratedBankDetails] =
+    useState(false);
   const mutateDeposit = useDepositPayment((data) => {
     checkoutUrl.current = data.checkout_url;
     setShowRedirectModal(true);
@@ -71,6 +84,33 @@ const Proceed = () => {
     setActiveState(val);
     router.push(`/deposit/proceed?val=${val}`);
   };
+
+  const getMethodName = () => {
+    const result = paymentMethods?.find((item) => item.slug === activeState);
+    return result?.name;
+  };
+
+  const customMethods: MenuProps["items"] = paymentMethods?.map(
+    (item, index) => {
+      return {
+        key: index,
+        label: (
+          <div
+            onClick={() => {
+              handleChangePaymentMethod(item.slug);
+              setActiveState(item.slug);
+            }}
+            className="flex items-center gap-2 cursor-pointer"
+          >
+            <Image src={item.image} width={18} height={18} alt="" />
+            <div>
+              <p className="font-work-sans-regular">{item.name}</p>
+            </div>
+          </div>
+        ),
+      };
+    }
+  );
 
   useEffect(() => {
     if (activeState) {
@@ -113,6 +153,201 @@ const Proceed = () => {
 
   return (
     <>
+      <ModalContainer
+        active={showInstantTransferModal}
+        handleClose={() => {
+          setShowInstantTransferModal(false);
+        }}
+      >
+        <ModalHeader
+          headText="Instant bank deposit"
+          handleCancel={() => {
+            setShowInstantTransferModal(false);
+          }}
+        />
+        <ModalBody>
+          {showGeneratedBankDetails ? (
+            <div>
+              <div className="flex items-center justify-between">
+                <Image src={navLogo} alt="" />
+                <div>
+                  <p className="text-[#404040] font-work-sans-regular text-xs text-end">
+                    Blaise@Gmail.com
+                  </p>
+                  <p className="font-work-sans-medium text-base">
+                    PAY NGN 300,198
+                  </p>
+                </div>
+              </div>
+              <div className="my-3">
+                <p className="text-[#202020] font-work-sans-medium">
+                  Transfer NGN 300,198 to Assex-Markets Checkout
+                </p>
+              </div>
+
+              <div>
+                <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
+                  <p className="text-[#404040] font-work-sans-regular text-xs">
+                    Bank name
+                  </p>
+                  <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                    Assex Markets
+                  </p>
+                </div>
+                <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
+                  <div>
+                    <p className="text-[#404040] font-work-sans-regular text-xs">
+                      Account number
+                    </p>
+                    <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                      12345678990
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                      Copy
+                    </p>
+                    <Image src={copyIcon} alt="" />
+                  </div>
+                </div>
+                <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
+                  <div>
+                    <p className="text-[#404040] font-work-sans-regular text-xs">
+                      Amount
+                    </p>
+                    <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                      NGN 300,198
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                      Copy
+                    </p>
+                    <Image src={copyIcon} alt="" />
+                  </div>
+                </div>
+                <div className="bg-[#EE95071A] p-4 flex items-center gap-2 rounded-lg">
+                  <Image src={timerYellow} alt="" />
+                  <p className="text-xs text-[#1F0D3F] font-work-sans-regular">
+                    This account is for this transaction only and expires in
+                    28:12
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center my-4">
+              <div className="bg-[#34C6591A] px-4 py-3 rounded-full flex items-center gap-1">
+                <Image src={shieldCheck} alt="" />
+                <p className="text-[#34C659] font-work-sans-regular text-xs">
+                  Secured by AssexMarkets
+                </p>
+              </div>
+              <div className="my-2">
+                <Image src={instantTransferIcon} alt="" />
+              </div>
+              <div>
+                <p className="text-[#1F0D3F] text-center font-work-sans-semi-bold text-2xl">
+                  PAY NGN 300,198
+                </p>
+                <p className="text-[#404040] font-work-sans-regular text-center">
+                  Tap on copy to copy amount & account no.
+                </p>
+              </div>
+              <div className="my-4 flex flex-col items-start w-full">
+                <p className="text-[#202020] text-base font-work-sans-medium">
+                  Before you make this transaction
+                </p>
+                <p className=" text-[#404040] font-work-sans-regular ">
+                  Please read these instructions carefully before proceeding
+                </p>
+              </div>
+              <div className="bg-[#F5F7FF80] p-4 rounded-lg border-[0.5px] border-[#004DEF59] w-full flex  gap-3">
+                <div>
+                  <Image src={cautionIcon} alt="" />
+                </div>
+                <div>
+                  <div className="mb-2">
+                    <p className="text-[#202020] font-work-sans-medium">
+                      Transfer Exact Amount Only
+                    </p>
+                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                      Send exactly NGN 300,198 - incorrect amounts will cause
+                      payment failure
+                    </p>
+                  </div>
+                  <div className="mb-2">
+                    <p className="text-[#202020] font-work-sans-medium">
+                      Single-Use Account
+                    </p>
+                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                      Don't save this account - it only accepts one transfer and
+                      cannot be reused
+                    </p>
+                  </div>
+                  <div className="mb-2">
+                    <p className="text-[#202020] font-work-sans-medium">
+                      Time-Limited Account
+                    </p>
+                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                      This account expires automatically after 30 minutes for
+                      security
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 p-4 w-full rounded-lg shadow-[0_2px_8px_0_rgba(0,0,0,0.1)] flex items-center gap-2">
+                <input
+                  onChange={(e) => {
+                    setAgreedToTerms(e.target.checked);
+                  }}
+                  type="checkbox"
+                  className="accent-[#0DAE94]"
+                />
+                <p className="font-work-sans-regular text-[#1F0D3F]">
+                  {" "}
+                  I have read and understood all the transfer guidelines above
+                </p>
+              </div>
+            </div>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          {showGeneratedBankDetails ? (
+            <div className="flex gap-2 flex-col">
+              <Button
+                variant="green-bg"
+                fullWidth
+                loading={false}
+                action={() => {}}
+                text="I Have Sent the Money"
+              />
+              <Button
+                variant="transparent"
+                fullWidth
+                icon={arrowLeft}
+                iconPosition="left"
+                loading={false}
+                action={() => {}}
+                text="Change payment method"
+              />
+            </div>
+          ) : (
+            <Button
+              variant="green-bg"
+              fullWidth
+              loading={false}
+              action={() => {
+                setShowGeneratedBankDetails(true);
+              }}
+              text={
+                agreedToTerms ? "Continue" : "Please confirm your understanding"
+              }
+              buttonDisabled={!agreedToTerms}
+            />
+          )}
+        </ModalFooter>
+      </ModalContainer>
       <ModalContainer
         active={showRedirectModal}
         handleClose={() => setShowRedirectModal(true)}
@@ -162,36 +397,29 @@ const Proceed = () => {
           />
         </div>
       </ModalContainer>
+
       <PageHeader text="Deposit" />
       <div className="bg-white p-4 rounded-lg mt-6">
         {activeState?.toLowerCase().includes("tether") ||
         activeState?.toLowerCase().includes("btc") ||
         activeState?.toLowerCase().includes("eth") ? (
-          <div className="mt-6 bg-white p-4 rounde">
+          <div className="mt-6 bg-white p-4 ">
             <Row className="mb-4">
               <Col lg={12} xs={24}>
                 <div>
                   <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
                     Payment Method
                   </p>
-                  <select
-                    onChange={(e) => {
-                      handleChangePaymentMethod(e.target.value);
-                    }}
-                    value={activeState}
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                  >
-                    {paymentMethods?.map((item) => {
-                      return (
-                        <option key={item.slug} value={item.slug}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  <Dropdown menu={{ items: customMethods }}>
+                    <div
+                      style={{
+                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                      }}
+                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                    >
+                      {getMethodName()}
+                    </div>
+                  </Dropdown>
                 </div>
                 <div className="bg-[#F40E0E1A] p-3 rounded-lg my-3 flex items-center gap-2">
                   <Image src={exclamationIcon} alt="" />
@@ -336,7 +564,7 @@ const Proceed = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="my-4">
+                    <div>
                       <Button
                         action={() => {
                           setVerificationModal(true);
@@ -488,24 +716,17 @@ const Proceed = () => {
                       <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
                         Payment Method
                       </p>
-                      <select
-                        onChange={(e) => {
-                          handleChangePaymentMethod(e.target.value);
-                        }}
-                        value={activeState!}
-                        style={{
-                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                        }}
-                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                      >
-                        {paymentMethods?.map((item) => {
-                          return (
-                            <option key={item.slug} value={item.slug}>
-                              {item.name}
-                            </option>
-                          );
-                        })}
-                      </select>
+
+                      <Dropdown menu={{ items: customMethods }}>
+                        <div
+                          style={{
+                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          }}
+                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        >
+                          {getMethodName()}
+                        </div>
+                      </Dropdown>
                     </div>
                   </Col>
                 </Row>
@@ -530,7 +751,7 @@ const Proceed = () => {
                               </option>
                             );
                           })}
-                        <option>Wallet</option>
+                        <option value={""}>Wallet</option>
                       </select>
                     </div>
                   </Col>
@@ -566,10 +787,14 @@ const Proceed = () => {
                     </div>
                   </Col>
                 </Row>
-                <div className="my-4 ">
+                <div>
                   <Button
                     action={() => {
                       // setShowDepositDetails(true);
+                      if (activeState === "internal-bank-transfer") {
+                        setShowInstantTransferModal(true);
+                        return;
+                      }
                       setStartTimer(true);
                       handleDeposit();
                     }}

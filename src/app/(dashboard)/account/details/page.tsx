@@ -41,14 +41,12 @@ const AccountDetails = () => {
     { text: "Pending", id: "" },
     { text: "Cancelled", id: "" },
   ];
-  console.log(data, "DAta value here");
 
   useEffect(() => {
     const idVal = new URLSearchParams(window.location.search);
     const idQuery = idVal.get("id");
     setId(idQuery ?? "");
   }, []);
-  console.log(data, "Data value here");
   return (
     <div>
       <p className="text-2xl font-work-sans-medium">Account #81978</p>

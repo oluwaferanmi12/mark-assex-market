@@ -7,25 +7,24 @@ export const ModalContainer = ({
   children,
   width = "medium",
   greyBg,
-  addPadding
+  addPadding,
+  contentKey, // <-- NEW: tell the modal when content changes
 }: {
   active: boolean;
   handleClose: () => void;
   children: ReactNode;
   width?: "small" | "medium" | "large";
   greyBg?: boolean;
-  addPadding ?: boolean;
+  addPadding?: boolean;
+  contentKey?: string | number; // e.g. current step/view
 }) => {
   useEffect(() => {
-    if (active) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = active ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [active]);
+
   return (
     <AnimatePresence>
       {active && (
@@ -35,24 +34,35 @@ export const ModalContainer = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          onClick={() => handleClose()}
-          style={{
-            backgroundColor: "rgba(0,0,0,0.4)",
-          }}
-          className="fixed inset-0 z-40 flex justify-center items-center bg-black/30 backdrop-blur-xs"
+          onClick={handleClose}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 backdrop-blur-xs"
         >
           <motion.div
             key="modal"
+            // Animate size/position when content changes
+            layout="position"
+            // Separate timing for layout tween (size) vs enter/exit (opacity/transform)
+            transition={{ layout: { duration: 0.3, ease: "easeOut" } }}
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className={` ${greyBg ? "bg-[#FAFAFA]" : "bg-white"} rounded-xl ${
-              addPadding && "p-4"
+            className={`${greyBg ? "bg-[#FAFAFA]" : "bg-white"} rounded-xl ${
+              addPadding ? "p-4" : ""
             } lg:w-[500px] w-[90%]`}
             onClick={(e) => e.stopPropagation()}
           >
-            {children}
+            {/* Swap animations for the actual content */}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={contentKey ?? "static"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                {children}
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       )}
