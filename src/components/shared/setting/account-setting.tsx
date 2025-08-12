@@ -65,6 +65,7 @@ export const AccountSetting = () => {
     createdAt: "",
     updatedAt: "",
     phoneCode: "",
+    twoFaStatus: "DISABLED",
   });
   const { data, isSuccess } = useGetUserProfile();
 

@@ -44,6 +44,7 @@ export const VerifyPersonalDetails = ({
     createdAt: "",
     updatedAt: "",
     phoneCode: "",
+    twoFaStatus: "DISABLED",
   });
 
   const handleUpdateUser = () => {

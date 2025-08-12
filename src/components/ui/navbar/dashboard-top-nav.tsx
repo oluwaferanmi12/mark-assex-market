@@ -59,7 +59,9 @@ export const DashboardTopNav = ({
   const [show2fa, setShow2fa] = useState(false);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
-  const setUpMutate = useSetup2fa(() => {});
+  const setUpMutate = useSetup2fa(() => {
+    toast.success("2fa setup successfully");
+  });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
