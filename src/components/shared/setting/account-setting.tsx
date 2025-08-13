@@ -48,7 +48,7 @@ export const AccountSetting = () => {
     id: "",
     firstName: "",
     lastName: "",
-    gender: "MALE",
+    gender: "",
     email: "",
     middleName: "",
     dateOfBirth: "",
@@ -109,6 +109,7 @@ export const AccountSetting = () => {
     if (data && isSuccess) {
       setUserData({
         ...data,
+        gender: data.gender ? data.gender : "",
         dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
       });
       if (data.picture) {
@@ -388,6 +389,7 @@ export const AccountSetting = () => {
                   inputValue={userData.gender!}
                   disabled={readOnly}
                 >
+                  <option value={""}>Select gender</option>
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
                 </GSelect>
