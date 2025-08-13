@@ -47,6 +47,7 @@ import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { useAppSelector } from "@/hooks/redux/useAppSelector";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { useQueryClient } from "@tanstack/react-query";
+import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
 
 export const DashboardTopNav = ({
   userProfile,
@@ -77,6 +78,7 @@ export const DashboardTopNav = ({
   const two2Fa = useGenerate2FA((data: Get2FA) => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     setShowOTPInstruction(true);
+    dispatch(setShow2faFlow(false));
     setShow2fa(false);
     setGenerated2FA(data);
   });
@@ -179,10 +181,14 @@ export const DashboardTopNav = ({
                 className="mt-2 p-4 rounded-lg  flex items-center justify-between"
               >
                 <p className="font-work-sans-medium">{generated2FA?.secret}</p>
-                <div className="flex cursor-pointer items-center gap-2">
-                  <p className="font-work-sans-regular text-[#0DAE94]">Copy</p>
-                  <Image src={copyIcon} alt="" />
-                </div>
+                <CopyWrapper value={generated2FA?.secret ?? ""}>
+                  <div className="flex cursor-pointer items-center gap-2">
+                    <p className="font-work-sans-regular text-[#0DAE94]">
+                      Copy
+                    </p>
+                    <Image src={copyIcon} alt="" />
+                  </div>
+                </CopyWrapper>
               </div>
             </div>
             <div className="flex gap-4 my-3">
