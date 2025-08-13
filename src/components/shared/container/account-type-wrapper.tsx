@@ -34,7 +34,7 @@ export const AccountTypeWrapper = ({
       style={{ boxShadow: showActive ? ACTIVE_SHADOW : INACTIVE_SHADOW }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}   // keyboard focus support
+      onFocus={() => setHovered(true)} // keyboard focus support
       onBlur={() => setHovered(false)}
       role="region"
       aria-pressed={active}
@@ -61,7 +61,7 @@ export const AccountTypeWrapper = ({
         <Button
           text="Create Account"
           variant="green-bg"
-          action={() => router.push("/create-account")}
+          action={() => router.push(`/create-account?id=${item.id}`)}
           loading={false}
           fullRounded
           fullWidth

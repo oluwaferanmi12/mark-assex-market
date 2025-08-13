@@ -22,6 +22,7 @@ import {
   useDepositPayment,
   useGetPaymentMethodDetails,
   useGetPaymentMethods,
+  useVerifyPayment,
 } from "@/hooks/queries/usePayment";
 import { toast } from "sonner";
 import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
@@ -40,6 +41,8 @@ import arrowLeft from "@/assets/svgs/arrow-left.svg";
 import timerYellow from "@/assets/svgs/timer-yellow.svg";
 import { DepositBankTransferResponse } from "@/types";
 import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
+import paymentLoading from "@/assets/svgs/confirm-payment.svg";
+import { Spinner } from "@/components/spinner/spinner";
 
 const Proceed = () => {
   const [verificationModal, setVerificationModal] = useState(false);
@@ -65,6 +68,7 @@ const Proceed = () => {
   const mutateDepositInstance = useDepositPayment((data) => {
     setWalletAddress(data.address!);
   });
+  const [activeDepositId, setActiveDepositId] = useState("");
   const [showGeneratedBankDetails, setShowGeneratedBankDetails] =
     useState(false);
   const mutateDeposit = useDepositPayment((data) => {
@@ -72,12 +76,17 @@ const Proceed = () => {
     setShowRedirectModal(true);
     toast.success("Deposit initiated successfully");
   });
+  const [showDepositLoading, setShowDepositLoading] = useState(false);
   const [selectedAccountId, setSelectedAccountId] = useState("");
   const [bankTransferDetails, setBankTransferDetails] =
     useState<DepositBankTransferResponse>();
+  const [startPolling, setStartPolling] = useState(false);
+  const { data: verifyData } = useVerifyPayment(activeDepositId!, startPolling);
 
   const mutateDepositForBankTransfer = useDepositPayment((data) => {
     setBankTransferDetails(data);
+    setStartPolling(true);
+    setActiveDepositId(data.id);
     setShowInstantTransferModal(true);
   });
 
@@ -141,6 +150,16 @@ const Proceed = () => {
   }, [activeState]);
 
   useEffect(() => {
+    if (verifyData) {
+      if (verifyData.status === "SUCCESS") {
+        setShowDepositLoading(false);
+        setActiveDepositId("");
+        setStartPolling(false);
+      }
+    }
+  }, [verifyData]);
+
+  useEffect(() => {
     let timer: NodeJS.Timeout;
     if (startTimer) {
       timer = setInterval(() => {
@@ -169,242 +188,268 @@ const Proceed = () => {
           setShowInstantTransferModal(false);
         }}
       >
-        <ModalHeader
-          headText="Instant bank deposit"
-          handleCancel={() => {
-            setShowInstantTransferModal(false);
-          }}
-        />
-        <ModalBody>
-          {showGeneratedBankDetails ? (
-            <div>
-              <div className="flex items-center justify-between">
-                <Image src={navLogo} alt="" />
-                <div>
-                  <p className="text-[#404040] font-work-sans-regular text-xs text-end">
-                    {bankTransferDetails?.customer.email}
-                  </p>
-                  <p className="font-work-sans-medium text-base">
-                    PAY NGN{" "}
-                    {MoneyFormat(
-                      (bankTransferDetails?.amount ?? 0) +
-                        (bankTransferDetails?.fee ?? 0) +
-                        (bankTransferDetails?.vat ?? 0)
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="my-3">
-                <p className="text-[#202020] font-work-sans-medium">
-                  Transfer NGN{" "}
-                  {MoneyFormat(
-                    (bankTransferDetails?.amount ?? 0) +
-                      (bankTransferDetails?.fee ?? 0) +
-                      (bankTransferDetails?.vat ?? 0)
-                  )}{" "}
-                  to {bankTransferDetails?.bank_account.bank_name} Checkout
-                </p>
-              </div>
-
-              <div>
-                <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
-                  <p className="text-[#404040] font-work-sans-regular text-xs">
-                    Bank name
-                  </p>
-                  <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                    {bankTransferDetails?.bank_account.bank_name}
-                  </p>
-                </div>
-                <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
-                  <p className="text-[#404040] font-work-sans-regular text-xs">
-                    Account name
-                  </p>
-                  <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                    {bankTransferDetails?.bank_account.account_name}
-                  </p>
-                </div>
-                <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
-                  <div>
-                    <p className="text-[#404040] font-work-sans-regular text-xs">
-                      Account number
-                    </p>
-                    <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                      {bankTransferDetails?.bank_account.account_number}
-                    </p>
-                  </div>
-                  <CopyWrapper
-                    value={
-                      bankTransferDetails?.bank_account.account_number ?? ""
-                    }
-                  >
-                    <div className="flex items-center gap-2 cursor-pointer">
-                      <p className="text-xs font-work-sans-regular text-[#007BFF]">
-                        Copy
-                      </p>
-                      <Image src={copyIcon} alt="" />
-                    </div>
-                  </CopyWrapper>
-                </div>
-                <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
-                  <div>
-                    <p className="text-[#404040] font-work-sans-regular text-xs">
-                      Amount
-                    </p>
-                    <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
-                      NGN{" "}
-                      {MoneyFormat(
-                        (bankTransferDetails?.amount ?? 0) +
-                          (bankTransferDetails?.fee ?? 0) +
-                          (bankTransferDetails?.vat ?? 0)
-                      )}
-                    </p>
-                  </div>
-                  <CopyWrapper
-                    value={String(
-                      (bankTransferDetails?.amount ?? 0) +
-                        (bankTransferDetails?.fee ?? 0) +
-                        (bankTransferDetails?.vat ?? 0)
-                    )}
-                  >
-                    <div className="flex items-center gap-2 cursor-pointer">
-                      <p className="text-xs font-work-sans-regular text-[#007BFF]">
-                        Copy
-                      </p>
-                      <Image src={copyIcon} alt="" />
-                    </div>
-                  </CopyWrapper>
-                </div>
-                <div className="bg-[#EE95071A] p-4 flex items-center gap-2 rounded-lg">
-                  <Image src={timerYellow} alt="" />
-                  <p className="text-xs text-[#1F0D3F] font-work-sans-regular">
-                    This account is for this transaction only and expires in
-                    28:12
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center my-4">
-              <div className="bg-[#34C6591A] px-4 py-3 rounded-full flex items-center gap-1">
-                <Image src={shieldCheck} alt="" />
-                <p className="text-[#34C659] font-work-sans-regular text-xs">
-                  Secured by AssexMarkets
-                </p>
-              </div>
-              <div className="my-2">
-                <Image src={instantTransferIcon} alt="" />
-              </div>
-              <div>
-                <p className="text-[#1F0D3F] text-center font-work-sans-semi-bold text-2xl">
-                  PAY NGN 
-                  {MoneyFormat(
-                    (bankTransferDetails?.amount ?? 0) +
-                      (bankTransferDetails?.fee ?? 0) +
-                      (bankTransferDetails?.vat ?? 0)
-                  )}
-                </p>
-                <p className="text-[#404040] font-work-sans-regular text-center">
-                  Tap on copy to copy amount & account no.
-                </p>
-              </div>
-              <div className="my-4 flex flex-col items-start w-full">
-                <p className="text-[#202020] text-base font-work-sans-medium">
-                  Before you make this transaction
-                </p>
-                <p className=" text-[#404040] font-work-sans-regular ">
-                  Please read these instructions carefully before proceeding
-                </p>
-              </div>
-              <div className="bg-[#F5F7FF80] p-4 rounded-lg border-[0.5px] border-[#004DEF59] w-full flex  gap-3">
-                <div>
-                  <Image src={cautionIcon} alt="" />
-                </div>
-                <div>
-                  <div className="mb-2">
-                    <p className="text-[#202020] font-work-sans-medium">
-                      Transfer Exact Amount Only
-                    </p>
-                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
-                      Send exactly NGN 
-                      {MoneyFormat(
-                        (bankTransferDetails?.amount ?? 0) +
-                          (bankTransferDetails?.fee ?? 0) +
-                          (bankTransferDetails?.vat ?? 0)
-                      )}
-                       - incorrect amounts will cause payment failure
-                    </p>
-                  </div>
-                  <div className="mb-2">
-                    <p className="text-[#202020] font-work-sans-medium">
-                      Single-Use Account
-                    </p>
-                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
-                      Don't save this account - it only accepts one transfer and
-                      cannot be reused
-                    </p>
-                  </div>
-                  <div className="mb-2">
-                    <p className="text-[#202020] font-work-sans-medium">
-                      Time-Limited Account
-                    </p>
-                    <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
-                      This account expires automatically after 30 minutes for
-                      security
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 p-4 w-full rounded-lg shadow-[0_2px_8px_0_rgba(0,0,0,0.1)] flex items-center gap-2">
-                <input
-                  onChange={(e) => {
-                    setAgreedToTerms(e.target.checked);
-                  }}
-                  type="checkbox"
-                  className="accent-[#0DAE94]"
-                />
-                <p className="font-work-sans-regular text-[#1F0D3F]">
-                  {" "}
-                  I have read and understood all the transfer guidelines above
-                </p>
-              </div>
-            </div>
-          )}
-        </ModalBody>
-        <ModalFooter>
-          {showGeneratedBankDetails ? (
-            <div className="flex gap-2 flex-col">
-              <Button
-                variant="green-bg"
-                fullWidth
-                loading={false}
-                action={() => {}}
-                text="I Have Sent the Money"
-              />
-              <Button
-                variant="transparent"
-                fullWidth
-                icon={arrowLeft}
-                iconPosition="left"
-                loading={false}
-                action={() => {}}
-                text="Change payment method"
-              />
-            </div>
-          ) : (
-            <Button
-              variant="green-bg"
-              fullWidth
-              loading={false}
-              action={() => {
-                setShowGeneratedBankDetails(true);
+        {showDepositLoading ? (
+          <div className="flex flex-col py-4  items-center">
+            <Image src={paymentLoading} alt="" />
+            <p className="text-[#202020] font-work-sans-medium text-2xl">
+              Confirming Payment
+            </p>
+            <p className="text-[#404040] font-work-sans-regular mt-1">
+              We're verifying your payment. This usually takes a few seconds.
+            </p>
+            <Spinner />
+          </div>
+        ) : (
+          <>
+            <ModalHeader
+              headText="Instant bank deposit"
+              handleCancel={() => {
+                setShowInstantTransferModal(false);
               }}
-              text={
-                agreedToTerms ? "Continue" : "Please confirm your understanding"
-              }
-              buttonDisabled={!agreedToTerms}
             />
-          )}
-        </ModalFooter>
+            <ModalBody>
+              <>
+                {showGeneratedBankDetails ? (
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <Image src={navLogo} alt="" />
+                      <div>
+                        <p className="text-[#404040] font-work-sans-regular text-xs text-end">
+                          {bankTransferDetails?.customer.email}
+                        </p>
+                        <p className="font-work-sans-medium text-base">
+                          PAY NGN{" "}
+                          {MoneyFormat(
+                            (bankTransferDetails?.amount ?? 0) +
+                              (bankTransferDetails?.fee ?? 0) +
+                              (bankTransferDetails?.vat ?? 0)
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="my-3">
+                      <p className="text-[#202020] font-work-sans-medium">
+                        Transfer NGN{" "}
+                        {MoneyFormat(
+                          (bankTransferDetails?.amount ?? 0) +
+                            (bankTransferDetails?.fee ?? 0) +
+                            (bankTransferDetails?.vat ?? 0)
+                        )}{" "}
+                        to {bankTransferDetails?.bank_account.bank_name}{" "}
+                        Checkout
+                      </p>
+                    </div>
+
+                    <div>
+                      <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
+                        <p className="text-[#404040] font-work-sans-regular text-xs">
+                          Bank name
+                        </p>
+                        <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                          {bankTransferDetails?.bank_account.bank_name}
+                        </p>
+                      </div>
+                      <div className="mb-3 bg-[#456EFE0D] p-4 rounded-lg">
+                        <p className="text-[#404040] font-work-sans-regular text-xs">
+                          Account name
+                        </p>
+                        <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                          {bankTransferDetails?.bank_account.account_name}
+                        </p>
+                      </div>
+                      <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
+                        <div>
+                          <p className="text-[#404040] font-work-sans-regular text-xs">
+                            Account number
+                          </p>
+                          <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                            {bankTransferDetails?.bank_account.account_number}
+                          </p>
+                        </div>
+                        <CopyWrapper
+                          value={
+                            bankTransferDetails?.bank_account.account_number ??
+                            ""
+                          }
+                        >
+                          <div className="flex items-center gap-2 cursor-pointer">
+                            <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                              Copy
+                            </p>
+                            <Image src={copyIcon} alt="" />
+                          </div>
+                        </CopyWrapper>
+                      </div>
+                      <div className="mb-3 bg-[#456EFE0D] flex items-center justify-between p-4 rounded-lg">
+                        <div>
+                          <p className="text-[#404040] font-work-sans-regular text-xs">
+                            Amount
+                          </p>
+                          <p className="text-[#1F0D3F] mt-1 font-work-sans-medium">
+                            NGN{" "}
+                            {MoneyFormat(
+                              (bankTransferDetails?.amount ?? 0) +
+                                (bankTransferDetails?.fee ?? 0) +
+                                (bankTransferDetails?.vat ?? 0)
+                            )}
+                          </p>
+                        </div>
+                        <CopyWrapper
+                          value={String(
+                            (bankTransferDetails?.amount ?? 0) +
+                              (bankTransferDetails?.fee ?? 0) +
+                              (bankTransferDetails?.vat ?? 0)
+                          )}
+                        >
+                          <div className="flex items-center gap-2 cursor-pointer">
+                            <p className="text-xs font-work-sans-regular text-[#007BFF]">
+                              Copy
+                            </p>
+                            <Image src={copyIcon} alt="" />
+                          </div>
+                        </CopyWrapper>
+                      </div>
+                      <div className="bg-[#EE95071A] p-4 flex items-center gap-2 rounded-lg">
+                        <Image src={timerYellow} alt="" />
+                        <p className="text-xs text-[#1F0D3F] font-work-sans-regular">
+                          This account is for this transaction only and expires
+                          in 28:12
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center my-4">
+                    <div className="bg-[#34C6591A] px-4 py-3 rounded-full flex items-center gap-1">
+                      <Image src={shieldCheck} alt="" />
+                      <p className="text-[#34C659] font-work-sans-regular text-xs">
+                        Secured by AssexMarkets
+                      </p>
+                    </div>
+                    <div className="my-2">
+                      <Image src={instantTransferIcon} alt="" />
+                    </div>
+                    <div>
+                      <p className="text-[#1F0D3F] text-center font-work-sans-semi-bold text-2xl">
+                        PAY NGN 
+                        {MoneyFormat(
+                          (bankTransferDetails?.amount ?? 0) +
+                            (bankTransferDetails?.fee ?? 0) +
+                            (bankTransferDetails?.vat ?? 0)
+                        )}
+                      </p>
+                      <p className="text-[#404040] font-work-sans-regular text-center">
+                        Tap on copy to copy amount & account no.
+                      </p>
+                    </div>
+                    <div className="my-4 flex flex-col items-start w-full">
+                      <p className="text-[#202020] text-base font-work-sans-medium">
+                        Before you make this transaction
+                      </p>
+                      <p className=" text-[#404040] font-work-sans-regular ">
+                        Please read these instructions carefully before
+                        proceeding
+                      </p>
+                    </div>
+                    <div className="bg-[#F5F7FF80] p-4 rounded-lg border-[0.5px] border-[#004DEF59] w-full flex  gap-3">
+                      <div>
+                        <Image src={cautionIcon} alt="" />
+                      </div>
+                      <div>
+                        <div className="mb-2">
+                          <p className="text-[#202020] font-work-sans-medium">
+                            Transfer Exact Amount Only
+                          </p>
+                          <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                            Send exactly NGN 
+                            {MoneyFormat(
+                              (bankTransferDetails?.amount ?? 0) +
+                                (bankTransferDetails?.fee ?? 0) +
+                                (bankTransferDetails?.vat ?? 0)
+                            )}
+                             - incorrect amounts will cause payment failure
+                          </p>
+                        </div>
+                        <div className="mb-2">
+                          <p className="text-[#202020] font-work-sans-medium">
+                            Single-Use Account
+                          </p>
+                          <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                            Don't save this account - it only accepts one
+                            transfer and cannot be reused
+                          </p>
+                        </div>
+                        <div className="mb-2">
+                          <p className="text-[#202020] font-work-sans-medium">
+                            Time-Limited Account
+                          </p>
+                          <p className="mt-1 text-xs font-work-sans-regular text-[#707070]">
+                            This account expires automatically after 30 minutes
+                            for security
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-4 w-full rounded-lg shadow-[0_2px_8px_0_rgba(0,0,0,0.1)] flex items-center gap-2">
+                      <input
+                        onChange={(e) => {
+                          setAgreedToTerms(e.target.checked);
+                        }}
+                        type="checkbox"
+                        className="accent-[#0DAE94]"
+                      />
+                      <p className="font-work-sans-regular text-[#1F0D3F]">
+                        {" "}
+                        I have read and understood all the transfer guidelines
+                        above
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </>
+            </ModalBody>
+            <ModalFooter>
+              {showGeneratedBankDetails ? (
+                <div className="flex gap-2 flex-col">
+                  <Button
+                    variant="green-bg"
+                    fullWidth
+                    loading={false}
+                    action={() => {
+                      // verifyPayment.mutate("")
+                      setShowDepositLoading(true);
+                    }}
+                    text="I Have Sent the Money"
+                  />
+                  <Button
+                    variant="transparent"
+                    fullWidth
+                    icon={arrowLeft}
+                    iconPosition="left"
+                    loading={false}
+                    action={() => {}}
+                    text="Change payment method"
+                  />
+                </div>
+              ) : (
+                <Button
+                  variant="green-bg"
+                  fullWidth
+                  loading={false}
+                  action={() => {
+                    setShowGeneratedBankDetails(true);
+                  }}
+                  text={
+                    agreedToTerms
+                      ? "Continue"
+                      : "Please confirm your understanding"
+                  }
+                  buttonDisabled={!agreedToTerms}
+                />
+              )}
+            </ModalFooter>
+          </>
+        )}
       </ModalContainer>
       <ModalContainer
         active={showRedirectModal}

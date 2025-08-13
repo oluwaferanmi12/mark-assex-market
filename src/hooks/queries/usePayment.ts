@@ -113,13 +113,13 @@ export const useValidateBalance = (sc: (val: any) => void) => {
   });
 };
 
-export const useVerifyPayment = (sc: (val: any) => void) => {
-  return useMutation({
-    mutationFn: (id: string) => {
+export const useVerifyPayment = (id: string, refetchActive: boolean) => {
+  return useQuery({
+    queryFn: () => {
       return verifyPayment(id);
     },
-    onSuccess: (data) => {
-      sc(data);
-    },
+    queryKey: ["verify-payment"],
+    enabled: !!id,
+    refetchInterval: refetchActive ? 10000 : false,
   });
 };

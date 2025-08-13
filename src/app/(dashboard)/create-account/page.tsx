@@ -3,7 +3,7 @@
 import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
 import { PageHeader } from "@/components/ui/text/page-header";
 import { Col, Row } from "antd";
-import { motion } from "framer-motion";
+import { motion, useTime } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import bidirectionalIcon from "@/assets/svgs/nav-transfer-active.svg";
@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 const CreateAccount = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
   const liveRef = useRef<HTMLParagraphElement>(null);
+  const [activeId, setActiveId] = useState("");
 
   const router = useRouter();
   const demoRef = useRef<HTMLParagraphElement>(null);
@@ -37,6 +38,11 @@ const CreateAccount = () => {
     width: 0,
   });
   useEffect(() => {
+    const urlParam = new URLSearchParams(window.location.search);
+    const accountId = urlParam.get("id");
+    if (accountId) {
+      setActiveId(accountId);
+    }
     const targetRef = activeAccount === "live" ? liveRef : demoRef;
     if (targetRef.current) {
       const { offsetLeft, offsetWidth } = targetRef.current;

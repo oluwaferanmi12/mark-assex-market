@@ -121,9 +121,9 @@ export interface BankInterfaceForTransfer {
   expiry_date_in_utc: string;
 }
 
-
 export interface DepositBankTransferResponse {
   currency: string;
+  id?: string;
   amount: number;
   amount_expected: number;
   fee: number;
