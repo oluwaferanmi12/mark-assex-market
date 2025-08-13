@@ -8,6 +8,8 @@ import { AuthHeaderWrapper } from "../container/auth-header-wrapper";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { setShow2faFlow } from "@/store/slices/twofaslice";
 
 export const SecuritySetting = () => {
   const queryClient = useQueryClient();
@@ -15,6 +17,7 @@ export const SecuritySetting = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [disableOtpVal, setDisableOtpVal] = useState("");
   const [showDisable2fa, setShowDisable2fa] = useState(false);
+  const dispatch = useAppDispatch();
   const disable2fa = useDisable2FA((data) => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     setShowDisable2fa(true);
@@ -101,6 +104,8 @@ export const SecuritySetting = () => {
             action={() => {
               if (data?.twoFaStatus === "ENABLED") {
                 setShowDisable2fa(true);
+              } else {
+                dispatch(setShow2faFlow(true));
               }
             }}
             loading={false}

@@ -43,12 +43,17 @@ import { toast } from "sonner";
 import { getStoredUser } from "@/utils/auth-helper";
 import { MoneyFormat } from "@/utils/money-format";
 import { Avatar } from "@/components/shared/avatar/avatar";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { useAppSelector } from "@/hooks/redux/useAppSelector";
+import { setShow2faFlow } from "@/store/slices/twofaslice";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const DashboardTopNav = ({
   userProfile,
 }: {
   userProfile?: UserProfileInterface;
 }) => {
+  const queryClient = useQueryClient();
   const [showSideNav, setShowSideNav] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [activeNotificationTab, setActiveNotificationTab] = useState(0);
@@ -62,12 +67,15 @@ export const DashboardTopNav = ({
   const setUpMutate = useSetup2fa(() => {
     toast.success("2fa setup successfully");
   });
+  const dispatch = useAppDispatch();
+  const { isActive } = useAppSelector((state) => state.twofa);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
   const [generated2FA, setGenerated2FA] = useState<Get2FA>();
   const [otp, setOtp] = useState("");
   const two2Fa = useGenerate2FA((data: Get2FA) => {
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     setShowOTPInstruction(true);
     setShow2fa(false);
     setGenerated2FA(data);
@@ -96,6 +104,7 @@ export const DashboardTopNav = ({
   useEffect(() => {
     if (userProfile) {
       if (userProfile.twoFaStatus === "DISABLED") {
+        dispatch(setShow2faFlow(true));
         setShow2fa(true);
       }
     }
@@ -191,6 +200,7 @@ export const DashboardTopNav = ({
           <div className="flex justify-end gap-2">
             <Button
               action={() => {
+                dispatch(setShow2faFlow(false));
                 setShow2fa(false);
               }}
               loading={false}
@@ -251,7 +261,13 @@ export const DashboardTopNav = ({
           </div>
         </ModalFooter>
       </ModalContainer>
-      <ModalContainer active={show2fa} handleClose={() => setShow2fa(false)}>
+      <ModalContainer
+        active={isActive}
+        handleClose={() => {
+          dispatch(setShow2faFlow(false));
+          setShow2fa(false);
+        }}
+      >
         <ModalBody>
           <div className="flex flex-col items-center justify-center">
             <div>
@@ -272,6 +288,7 @@ export const DashboardTopNav = ({
           <div className="flex justify-end gap-2">
             <Button
               action={() => {
+                dispatch(setShow2faFlow(false));
                 setShow2fa(false);
               }}
               loading={false}
