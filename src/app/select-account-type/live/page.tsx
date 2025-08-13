@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import rod from "@/assets/svgs/select-rod.svg";
 import Image from "next/image";
@@ -7,8 +7,10 @@ import priceIconWrap2 from "@/assets/svgs/second-price-wrap.svg";
 import priceIconWrap3 from "@/assets/svgs/price-icon-wrap3.svg";
 import { Col, Row } from "antd";
 import { AccountTypeWrapper } from "@/components/shared/container/account-type-wrapper";
+import { useGetAccountGroups } from "@/hooks/queries/useAccount";
 
 const LiveAccount = () => {
+  const { data } = useGetAccountGroups();
   const liveAccountObject = [
     {
       active: false,
@@ -58,9 +60,9 @@ const LiveAccount = () => {
           <Row justify={"center"}>
             <Col lg={18} xs={22}>
               <Row justify={"center"} gutter={24}>
-                {liveAccountObject.map((item) => {
+                {data?.map((item) => {
                   return (
-                    <Col key={item.title} xs={24} lg={8}>
+                    <Col key={item.id} xs={24} lg={8}>
                       <AccountTypeWrapper item={item} />
                     </Col>
                   );

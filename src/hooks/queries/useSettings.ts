@@ -1,5 +1,6 @@
 import {
   changeUserPassword,
+  disable2FA,
   generate2FA,
   getKyc,
   getNotification,
@@ -176,6 +177,17 @@ export const useSetup2fa = (sc: (data: any) => void) => {
   return useMutation({
     mutationFn: (payload: Setup2fa) => {
       return setup2fa(payload);
+    },
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useDisable2FA = (sc: (data: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: string) => {
+      return disable2FA(payload);
     },
     onSuccess: (data) => {
       sc(data);

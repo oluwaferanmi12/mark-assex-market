@@ -77,6 +77,11 @@ export const phoneRequest = async (payload: PhoneRequest) => {
   return data.data;
 };
 
+export const disable2FA = async (code: string) => {
+  const { data } = await axiosInstance.patch(`/security/2fa/disable`, { code });
+  return data.data;
+};
+
 export const phoneVerify = async (payload: PhoneVerify) => {
   const { data } = await axiosInstance.post(`/kyc/phone-verify`, payload);
   return data.data;
@@ -96,5 +101,3 @@ export const changeUserPassword = async (payload: ChangeUserPassword) => {
   const { data } = await axiosInstance.patch(`/users/change-password`, payload);
   return data.data;
 };
-
-
