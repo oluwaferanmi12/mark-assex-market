@@ -79,7 +79,7 @@ const CreateAccount = () => {
   }, []);
 
   useEffect(() => {
-    console.log(data, "DAta vlaue here")
+    console.log(data, "DAta vlaue here");
     if (data?.length) {
       setLiveAccount(data.filter((item) => item.type === "LIVE"));
       setDemoAccounts(data.filter((item) => item.type === "DEMO"));
@@ -96,17 +96,17 @@ const CreateAccount = () => {
       <div className="mt-4">
         <Row justify={"center"} gutter={24}>
           {activeAccount === "live"
-            ? liveAccounts.map((item) => {
+            ? liveAccounts.map((item, index) => {
                 return (
-                  <Col xs={24} lg={8}>
-                    <AccountTypeWrapper item={item} />
+                  <Col key={index} xs={24} lg={8}>
+                    <AccountTypeWrapper active={index === 1} item={item} />
                   </Col>
                 );
               })
             : demoAccounts.map((item, index) => {
                 return (
-                  <Col xs={24} lg={8}>
-                    <AccountTypeWrapper item={item} />
+                  <Col key={index} xs={24} lg={8}>
+                    <AccountTypeWrapper active={index === 1} item={item} />
                   </Col>
                 );
               })}
