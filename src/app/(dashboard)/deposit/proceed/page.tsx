@@ -86,7 +86,7 @@ const Proceed = () => {
   const mutateDepositForBankTransfer = useDepositPayment((data) => {
     setBankTransferDetails(data);
     setStartPolling(true);
-    setActiveDepositId(data.id);
+    setActiveDepositId(data.reference);
     setShowInstantTransferModal(true);
   });
 
@@ -151,8 +151,13 @@ const Proceed = () => {
 
   useEffect(() => {
     if (verifyData) {
-      if (verifyData.status === "SUCCESS") {
+      console.log(verifyData.data.status);
+      if (verifyData.data.status === "SUCCESS") {
+        toast.success("Deposit made successfully");
         setShowDepositLoading(false);
+        setShowInstantTransferModal(false);
+        setShowDepositLoading(false);
+        setShowGeneratedBankDetails(false);
         setActiveDepositId("");
         setStartPolling(false);
       }

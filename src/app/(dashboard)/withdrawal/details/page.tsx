@@ -108,6 +108,7 @@ const WithdrawalDetails = () => {
     setShowSuccessModal(true);
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
   });
+  
   const router = useRouter();
   const items: MenuProps["items"] =
     previousAccts &&
