@@ -160,6 +160,7 @@ const Proceed = () => {
         setShowGeneratedBankDetails(false);
         setActiveDepositId("");
         setStartPolling(false);
+        router.push("/wallet");
       }
     }
   }, [verifyData]);

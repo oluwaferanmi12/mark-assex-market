@@ -108,7 +108,7 @@ const WithdrawalDetails = () => {
     setShowSuccessModal(true);
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
   });
-  
+
   const router = useRouter();
   const items: MenuProps["items"] =
     previousAccts &&
@@ -236,7 +236,7 @@ const WithdrawalDetails = () => {
         active={showSuccessModal}
         closeAction={() => {
           setShowSuccessModal(false);
-          router.push("/transactions");
+          router.push("/wallet");
         }}
         buttonText="Close"
         mainText="Funds Withdraw In Progress"
