@@ -16,6 +16,7 @@ const CreateAccount = () => {
   const { data } = useGetAccountGroups();
   const [liveAccounts, setLiveAccount] = useState<AccountGroupInterface[]>([]);
   const [demoAccounts, setDemoAccounts] = useState<AccountGroupInterface[]>([]);
+  const [hovered, setHovered] = useState(1);
 
   const liveAccountObject = [
     {
@@ -79,7 +80,6 @@ const CreateAccount = () => {
   }, []);
 
   useEffect(() => {
-    console.log(data, "DAta vlaue here");
     if (data?.length) {
       setLiveAccount(data.filter((item) => item.type === "LIVE"));
       setDemoAccounts(data.filter((item) => item.type === "DEMO"));
@@ -99,14 +99,26 @@ const CreateAccount = () => {
             ? liveAccounts.map((item, index) => {
                 return (
                   <Col key={index} xs={24} lg={8}>
-                    <AccountTypeWrapper active={index === 1} item={item} />
+                    <AccountTypeWrapper
+                      hovered={hovered}
+                      setHovered={setHovered}
+                      active={hovered === index}
+                      item={item}
+                      index={index}
+                    />
                   </Col>
                 );
               })
             : demoAccounts.map((item, index) => {
                 return (
                   <Col key={index} xs={24} lg={8}>
-                    <AccountTypeWrapper active={index === 1} item={item} />
+                    <AccountTypeWrapper
+                      hovered={hovered}
+                      setHovered={setHovered}
+                      active={hovered === index}
+                      item={item}
+                      index={index}
+                    />
                   </Col>
                 );
               })}

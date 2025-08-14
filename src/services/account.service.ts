@@ -21,5 +21,12 @@ export const getAccountDetail = async (id: string): Promise<Account> => {
 
 export const getAccountGroups = async (): Promise<AccountGroupInterface[]> => {
   const { data } = await axiosInstance.get(`/accounts/groups`);
-  return data.data.data
+  return data.data.data;
+};
+
+export const getOneAccountGroup = async (
+  id: string
+): Promise<AccountGroupInterface> => {
+  const { data } = await axiosInstance.get(`/accounts/groups/${id}`);
+  return data.data;
 };

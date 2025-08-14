@@ -237,10 +237,10 @@ export const TradeContainer = ({ account }: { account: Account }) => {
           <div className="flex flex-col gap-4 ">
             <div className="flex items-center gap-3">
               <span className="bg-[#34C65933] rounded-sm text-xs text-[#34C659] px-2 py-1 font-work-sans-regular">
-                Live
+                {account.accountGroup.type}
               </span>
               <span className="bg-[#1F0D3F1A] rounded-sm text-xs text-[#1F0D3F] px-2 py-1 font-work-sans-regular">
-                Raw Spread
+                {account.accountGroup.name}
               </span>
               <span className="bg-[#F1F5F9] rounded-sm text-xs text-black px-2 py-1 font-work-sans-regular">
                 Account {account.mt5Id}

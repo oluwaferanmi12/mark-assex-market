@@ -17,25 +17,28 @@ const INACTIVE_SHADOW =
 export const AccountTypeWrapper = ({
   item,
   active,
+  hovered,
+  setHovered,
+  index,
 }: {
   item: AccountGroupInterface;
   active?: boolean;
+  hovered?: number;
+  setHovered: (val: number) => void;
+  index: number;
 }) => {
   const router = useRouter();
-  const [hovered, setHovered] = useState(false);
-
-  const showActive = Boolean(active || hovered);
 
   return (
     <div
       className={`p-8 rounded-lg mb-4 lg:mb-0 min-h-[500px] bg-white transition-[box-shadow,transform] duration-200 ease-out ${
-        showActive ? "translate-y-0" : "hover:-translate-y-1"
+        active ? "translate-y-0" : "hover:-translate-y-1"
       } ${active ? "" : "focus-within:-translate-y-1"}`}
-      style={{ boxShadow: showActive ? ACTIVE_SHADOW : INACTIVE_SHADOW }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)} // keyboard focus support
-      onBlur={() => setHovered(false)}
+      style={{ boxShadow: active ? ACTIVE_SHADOW : INACTIVE_SHADOW }}
+      onMouseEnter={() => setHovered(index)}
+      onMouseLeave={() => setHovered(1)}
+      onFocus={() => setHovered(index)} // keyboard focus support
+      onBlur={() => setHovered(1)}
       role="region"
       aria-pressed={active}
       tabIndex={0} // enables keyboard focus to preview active state

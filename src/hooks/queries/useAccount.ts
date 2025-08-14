@@ -4,8 +4,9 @@ import {
   getAccount,
   getAccountDetail,
   getAccountGroups,
+  getOneAccountGroup,
 } from "@/services";
-import { Account, CreateTradeAccount } from "@/types";
+import { Account, AccountGroupInterface, CreateTradeAccount } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAccount = () => {
@@ -39,5 +40,13 @@ export const useGetAccountGroups = () => {
   return useQuery({
     queryFn: getAccountGroups,
     queryKey: ["account-id"],
+  });
+};
+
+export const useGetOneAccountGroup = (id: string) => {
+  return useQuery({
+    queryFn: () => getOneAccountGroup(id),
+    queryKey: ["get-one-account-group"],
+    enabled: !!id,
   });
 };

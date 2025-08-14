@@ -49,7 +49,7 @@ const AccountDetails = () => {
   }, []);
   return (
     <div>
-      <p className="text-2xl font-work-sans-medium">Account #81978</p>
+      <p className="text-2xl font-work-sans-medium">Account #{data?.mt5Id}</p>
       <div className="mt-8">
         <div className="flex">
           <DropDownList

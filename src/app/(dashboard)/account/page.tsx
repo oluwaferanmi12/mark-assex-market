@@ -417,7 +417,9 @@ const Account = () => {
                 <div>
                   <Button
                     action={() => {
-                      router.push(`/account/create-account?state=${activeAccount}`);
+                      router.push(
+                        `/account/create-account?state=${activeAccount}`
+                      );
                     }}
                     loading={false}
                     text={`Open ${activeAccount} account`}
