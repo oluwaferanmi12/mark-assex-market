@@ -35,6 +35,7 @@ const CreateAccount = () => {
   });
 
   const { data: accountGroupDetails } = useGetOneAccountGroup(activeId);
+  const { data: accountGroups } = useGetAccountGroups();
 
   const [highlightStyles, setHighlightStyles] = useState({
     left: 0,
@@ -51,7 +52,28 @@ const CreateAccount = () => {
       const { offsetLeft, offsetWidth } = targetRef.current;
       setHighlightStyles({ left: offsetLeft, width: offsetWidth });
     }
-  }, [activeAccount]);
+  }, []);
+
+  useEffect(() => {
+    if (activeId && accountGroups) {
+      const activeAccount = accountGroups.find((item) => item.id === activeId);
+      if (activeAccount?.type === "DEMO") {
+        const targetRef = demoRef;
+        if (targetRef.current) {
+          const { offsetLeft, offsetWidth } = targetRef.current;
+          setHighlightStyles({ left: offsetLeft, width: offsetWidth });
+        }
+        setActiveAccount("demo");
+      } else {
+        const targetRef = liveRef;
+        if (targetRef.current) {
+          const { offsetLeft, offsetWidth } = targetRef.current;
+          setHighlightStyles({ left: offsetLeft, width: offsetWidth });
+        }
+        setActiveAccount("live");
+      }
+    }
+  }, [activeId, accountGroups]);
 
   return (
     <>
@@ -101,6 +123,34 @@ const CreateAccount = () => {
             </div>
             <div className="bg-white p-4 rounded-lg mt-6">
               <div>
+                <Row gutter={28}>
+                  <Col xs={24}>
+                    <div className="mb-4">
+                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                        Account Group
+                      </p>
+                      <select
+                        value={activeId}
+                        style={{
+                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                        }}
+                        onChange={(e) => {
+                          setActiveId(e.target.value);
+                          router.push(`/create-account?id=${e.target.value}`);
+                        }}
+                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                      >
+                        {accountGroups?.map((item) => {
+                          return (
+                            <option value={item.id}>
+                              {item.name}({item.type})
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </Col>
+                </Row>
                 <Row gutter={28}>
                   <Col xs={24}>
                     <div className="mb-4">

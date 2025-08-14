@@ -8,9 +8,11 @@ import priceIconWrap3 from "@/assets/svgs/price-icon-wrap3.svg";
 import { Col, Row } from "antd";
 import { AccountTypeWrapper } from "@/components/shared/container/account-type-wrapper";
 import { useGetAccountGroups } from "@/hooks/queries/useAccount";
+import { useState } from "react";
 
 const DemoAccount = () => {
   const { data } = useGetAccountGroups();
+  const [hovered, setHovered] = useState(1);
   const demoAccountObject = [
     {
       active: false,
@@ -47,10 +49,15 @@ const DemoAccount = () => {
           <Row justify={"center"}>
             <Col lg={18} xs={22}>
               <Row justify={"center"} gutter={24}>
-                {data?.map((item) => {
+                {data?.map((item , index) => {
                   return (
                     <Col key={item.id} xs={24} lg={8}>
-                      <AccountTypeWrapper item={item} />
+                      <AccountTypeWrapper
+                        hovered={hovered}
+                        setHovered={setHovered}
+                        index={index}
+                        item={item}
+                      />
                     </Col>
                   );
                 })}

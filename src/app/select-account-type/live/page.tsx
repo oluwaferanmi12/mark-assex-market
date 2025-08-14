@@ -11,6 +11,7 @@ import { useGetAccountGroups } from "@/hooks/queries/useAccount";
 
 const LiveAccount = () => {
   const { data } = useGetAccountGroups();
+  const [hovered, setHovered] = useState(1);
   const liveAccountObject = [
     {
       active: false,
@@ -60,10 +61,15 @@ const LiveAccount = () => {
           <Row justify={"center"}>
             <Col lg={18} xs={22}>
               <Row justify={"center"} gutter={24}>
-                {data?.map((item) => {
+                {data?.map((item, index) => {
                   return (
                     <Col key={item.id} xs={24} lg={8}>
-                      <AccountTypeWrapper item={item} />
+                      <AccountTypeWrapper
+                        hovered={hovered}
+                        setHovered={setHovered}
+                        index={index}
+                        item={item}
+                      />
                     </Col>
                   );
                 })}
