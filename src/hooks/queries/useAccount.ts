@@ -46,7 +46,7 @@ export const useGetAccountGroups = () => {
 export const useGetOneAccountGroup = (id: string) => {
   return useQuery({
     queryFn: () => getOneAccountGroup(id),
-    queryKey: ["get-one-account-group"],
+    queryKey: ["get-one-account-group", id],
     enabled: !!id,
   });
 };

@@ -20,6 +20,8 @@ import {
 } from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { MoneyFormat } from "@/utils/money-format";
+import { AccountGroupInterface } from "@/types";
 
 const CreateAccount = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -36,6 +38,9 @@ const CreateAccount = () => {
 
   const { data: accountGroupDetails } = useGetOneAccountGroup(activeId);
   const { data: accountGroups } = useGetAccountGroups();
+  const [filteredAccounts, setFilteredAccounts] = useState<
+    AccountGroupInterface[]
+  >([]);
 
   const [highlightStyles, setHighlightStyles] = useState({
     left: 0,
@@ -75,6 +80,15 @@ const CreateAccount = () => {
     }
   }, [activeId, accountGroups]);
 
+  useEffect(() => {
+    if (activeAccount && accountGroups) {
+      const result = accountGroups.filter(
+        (item) => item.type.toLowerCase() === activeAccount
+      );
+      setFilteredAccounts(result);
+    }
+  }, [activeAccount, accountGroups]);
+
   return (
     <>
       <PageGoBack />
@@ -98,6 +112,14 @@ const CreateAccount = () => {
                 <p
                   ref={liveRef}
                   onClick={() => {
+                    const targetRef = liveRef;
+                    if (targetRef.current) {
+                      const { offsetLeft, offsetWidth } = targetRef.current;
+                      setHighlightStyles({
+                        left: offsetLeft,
+                        width: offsetWidth,
+                      });
+                    }
                     setActiveAccount("live");
                   }}
                   className={`relative z-10 font-work-sans-medium cursor-pointer p-2 lg:text-sm text-xs rounded-sm ${
@@ -110,7 +132,17 @@ const CreateAccount = () => {
                 </p>
                 <p
                   ref={demoRef}
-                  onClick={() => setActiveAccount("demo")}
+                  onClick={() => {
+                    const targetRef = demoRef;
+                    if (targetRef.current) {
+                      const { offsetLeft, offsetWidth } = targetRef.current;
+                      setHighlightStyles({
+                        left: offsetLeft,
+                        width: offsetWidth,
+                      });
+                    }
+                    setActiveAccount("demo");
+                  }}
                   className={`relative z-10 font-work-sans-medium cursor-pointer p-2 lg:text-sm text-xs rounded-sm ${
                     activeAccount === "demo"
                       ? "text-[#111111]"
@@ -140,12 +172,8 @@ const CreateAccount = () => {
                         }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        {accountGroups?.map((item) => {
-                          return (
-                            <option value={item.id}>
-                              {item.name}({item.type})
-                            </option>
-                          );
+                        {filteredAccounts?.map((item) => {
+                          return <option value={item.id}>{item.name}</option>;
                         })}
                       </select>
                     </div>
@@ -163,7 +191,7 @@ const CreateAccount = () => {
                         }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        <option>NGN</option>
+                        <option>USD</option>
                       </select>
                     </div>
                   </Col>
@@ -187,20 +215,22 @@ const CreateAccount = () => {
                       </select>
                     </div>
                   </Col>
-                  <Col xs={24}>
-                    <div className="mb-4">
-                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                        Amount
-                      </p>
-                      <input
-                        placeholder="Enter amount(only applies to demo accounts)"
-                        style={{
-                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                        }}
-                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                      />
-                    </div>
-                  </Col>
+                  {activeAccount === "demo" && (
+                    <Col xs={24}>
+                      <div className="mb-4">
+                        <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                          Amount
+                        </p>
+                        <input
+                          placeholder="Enter amount(only applies to demo accounts)"
+                          style={{
+                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          }}
+                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        />
+                      </div>
+                    </Col>
+                  )}
                 </Row>
                 <Row gutter={28}>
                   {/* <Col lg={12} xs={24}>
@@ -298,7 +328,7 @@ const CreateAccount = () => {
                     Maximum Deposit
                   </p>
                   <p className="font-work-sans-medium text-lg text-[#202020]">
-                    ${accountGroupDetails?.maxDeposit}
+                    ${MoneyFormat(Number(accountGroupDetails?.maxDeposit ?? 0))}
                   </p>
                 </div>
                 <div className="mt-3">
