@@ -139,3 +139,14 @@ export interface DepositBankTransferResponse {
     email: string;
   };
 }
+
+export interface PaymentVerifyInterface {
+  fee: number;
+  amount: number;
+  status: string;
+  currency: string;
+  reference: string;
+  transaction_date: null | string;
+  payment_reference: string;
+  virtual_bank_account_details: string | null;
+}
