@@ -10,6 +10,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
+import { removeUser } from "@/utils/auth-helper";
+import { useRouter } from "next/navigation";
 
 export const SecuritySetting = () => {
   const queryClient = useQueryClient();
@@ -18,6 +20,7 @@ export const SecuritySetting = () => {
   const [disableOtpVal, setDisableOtpVal] = useState("");
   const [showDisable2fa, setShowDisable2fa] = useState(false);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const disable2fa = useDisable2FA((data) => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     setShowDisable2fa(true);
@@ -129,7 +132,10 @@ export const SecuritySetting = () => {
           <p className=" text-[#202020] text-xs lg:text-sm">My Devices</p>
 
           <Button
-            action={() => {}}
+            action={() => {
+              router.push("/login");
+              removeUser();
+            }}
             loading={false}
             text="Log Out"
             variant="green-bg"
