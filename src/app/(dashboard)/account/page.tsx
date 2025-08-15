@@ -229,22 +229,21 @@ const Account = () => {
             <p className="lg:text-2xl text-lg font-work-sans-medium  lg:font-work-sans-semi-bold">
               My Accounts
             </p>
-
-            <Button
-              variant="blue-bg"
-              action={() => {
-                router.push(`/account/create-account?state=${activeAccount}`);
-              }}
-              loading={false}
-              text={
-                activeAccount === "demo"
-                  ? "Open Demo Account"
-                  : "Open Live Account"
-              }
-              icon={plusIcon}
-              buttonSmaller
-              textBolder
-            />
+            <Link href={`/account/create-account?state=${activeAccount}`}>
+              <Button
+                variant="blue-bg"
+                action={() => {}}
+                loading={false}
+                text={
+                  activeAccount === "demo"
+                    ? "Open Demo Account"
+                    : "Open Live Account"
+                }
+                icon={plusIcon}
+                buttonSmaller
+                textBolder
+              />
+            </Link>
           </div>
           <div className="mt-4 flex justify-between items-center">
             <div className="relative bg-[#F1F5F9] gap-2 flex items-center p-2 rounded-sm">
