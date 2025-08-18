@@ -53,7 +53,7 @@ export const GInput = ({
         )}
         <input
           type={type === "password" && !showPassword ? "password" : "text"}
-          className="w-full px-4 py-3 border border-[#BEBEBE59] bg-[#F3F4F4] rounded-lg placeholder:text-[#8A8A8A] placeholder:font-work-sans-regular outline-none text-xs font-work-sans-medium "
+          className="w-full px-4 py-3 border text-base border-[#BEBEBE59] bg-[#F3F4F4] rounded-lg placeholder:text-[#8A8A8A] placeholder:font-work-sans-regular outline-none text-xs font-work-sans-medium "
           placeholder={placeholder}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}

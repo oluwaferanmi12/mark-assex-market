@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/buttons/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import iconTransaction from "@/assets/svgs/icon-transaction.svg";
 import arrowUpRight from "@/assets/svgs/arrow-up-right.svg";
 import arrowDownLeft from "@/assets/svgs/arrow-down-left.svg";
@@ -55,6 +55,7 @@ export const TradeContainer = ({
   const [newAccountName, setNewAccountName] = useState("");
   const [showLeverageModal, setShowLeverageModal] = useState(false);
   const router = useRouter();
+  const [manualLeverage, setManualLeverage] = useState(account.leverage);
   const liveAccountDropDownList: DropDownListInterface[] = [
     { text: "Deposit Funds", id: "" },
     { text: "Account Trade History", id: "" },
@@ -98,7 +99,6 @@ export const TradeContainer = ({
       validated = false;
       setPasswordError("Password mismatch");
     }
-
     return validated;
   };
 
@@ -107,6 +107,35 @@ export const TradeContainer = ({
       changePasswordMutate.mutate({ id: account.id, password: password });
     }
   };
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const changeLeverage = (delta: number) => {
+    setManualLeverage((prev) => {
+      const next = prev + delta;
+      if (next < 1) return 1; // min bound
+      if (next > 1000) return 1000; // max bound
+      return next;
+    });
+  };
+
+  const startChanging = (delta: number) => {
+    // change once immediately
+    changeLeverage(delta);
+
+    // then start interval
+    intervalRef.current = setInterval(() => {
+      changeLeverage(delta);
+    }, 150); // adjust speed as needed
+  };
+
+  const stopChanging = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
   return (
     <>
       <ModalContainer
@@ -188,16 +217,25 @@ export const TradeContainer = ({
               </span>
             </p>
             <div className="justify-between mt-2 rounded-lg bg-[#F2F4F7] flex items-center">
-              <span className="mt-1 pl-1 cursor-pointer">
+              <span
+                onMouseDown={() => startChanging(-1)}
+                onMouseUp={stopChanging}
+                onMouseLeave={stopChanging}
+                onTouchStart={() => startChanging(-1)}
+                onTouchEnd={stopChanging}
+                className="mt-1 pl-1 cursor-pointer"
+              >
                 <Image src={minusIcon} alt="" />
               </span>
               <p className="text-[#404040] font-work-sans-medium">
-                1:{account.leverage}
+                1:{manualLeverage}
               </p>
               <span
-                onMouseDown={() => {
-                  console.log("MouseDown");
-                }}
+                onMouseDown={() => startChanging(1)}
+                onMouseUp={stopChanging}
+                onMouseLeave={stopChanging}
+                onTouchStart={() => startChanging(1)}
+                onTouchEnd={stopChanging}
                 className="flex items-center mt-1 pr-1 cursor-pointer"
               >
                 <Image src={plusIcon} alt="" />
@@ -217,8 +255,13 @@ export const TradeContainer = ({
               fullWidth
               variant="green-bg"
               text="Change"
-              loading={false}
-              action={() => {}}
+              loading={changeLeverageMutate.isPending}
+              action={() => {
+                changeLeverageMutate.mutate({
+                  id: account.id,
+                  leverage: manualLeverage,
+                });
+              }}
             />
           </div>
         </ModalFooter>
