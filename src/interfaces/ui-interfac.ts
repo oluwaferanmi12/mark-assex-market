@@ -15,7 +15,8 @@ export interface ButtonInterface {
     | "green-faded-border"
     | "red-faded-border"
     | "grey-border"
-    | 'transparent';
+    | "transparent"
+    | "bg-with-black-text";
 
   fullRounded?: boolean;
   fullWidth?: boolean;

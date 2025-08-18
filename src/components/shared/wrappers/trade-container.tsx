@@ -27,8 +27,20 @@ import redCaution from "@/assets/svgs/red-caution.svg";
 import { useRouter } from "next/navigation";
 import { Account } from "@/types";
 import { MoneyFormat } from "@/utils/money-format";
+import { Col, Row } from "antd";
+import horizontalDashes from "@/assets/svgs/dashed-lines.svg";
+import Link from "next/link";
+import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
+import { CopyWrapper } from "./copy-wrapper";
+import keyIcon from "@/assets/svgs/key-icon.svg";
 
-export const TradeContainer = ({ account }: { account: Account }) => {
+export const TradeContainer = ({
+  account,
+  tradeLink,
+}: {
+  account: Account;
+  tradeLink: string;
+}) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [liveAccountSelected, setLiveAccountSelected] = useState("");
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
@@ -227,22 +239,22 @@ export const TradeContainer = ({ account }: { account: Account }) => {
         </div>
       </ModalContainer>
       <div
-        style={{ border: "0.5px solid #BEBEBE " }}
-        className="my-4 hidden lg:block  bg-white  rounded-lg"
+        style={{ border: "0.5px solid #BEBEBE59 " }}
+        className="my-4 hidden lg:block  bg-white   rounded-lg"
       >
         <div
           style={{ borderBottom: "0.5px solid #BEBEBE " }}
-          className="flex p-6 border-b   justify-between items-stretch"
+          className="flex p-6 border-b  justify-between items-stretch"
         >
           <div className="flex flex-col gap-4 ">
             <div className="flex items-center gap-3">
-              <span className="bg-[#34C65933] rounded-sm text-xs text-[#34C659] px-2 py-1 font-work-sans-regular">
+              <span className="bg-[#34C65933]  rounded-full text-xs text-[#34C659] px-2 py-1 font-work-sans-regular">
                 {account.accountGroup.type}
               </span>
-              <span className="bg-[#1F0D3F1A] rounded-sm text-xs text-[#1F0D3F] px-2 py-1 font-work-sans-regular">
+              <span className="bg-[#1F0D3F1A] rounded-full text-xs text-[#1F0D3F] px-2 py-1 font-work-sans-regular">
                 {account.accountGroup.name}
               </span>
-              <span className="bg-[#F1F5F9] rounded-sm text-xs text-black px-2 py-1 font-work-sans-regular">
+              <span className="bg-[#F1F5F9] rounded-full text-xs text-black px-2 py-1 font-work-sans-regular">
                 Account {account.mt5Id}
               </span>
             </div>
@@ -250,31 +262,20 @@ export const TradeContainer = ({ account }: { account: Account }) => {
               ${account.balance} USD
             </p>
           </div>
-          <div className="flex items-center gap-12 ">
-            <div className="flex items-center gap-4 flex-col justify-center">
-              <p className="text-[#0DAE94]  font-work-sans-regular">Equity</p>
-              <p className="text-lg font-work-sans-regular text-black">
-                {account.balance}USD
-              </p>
-            </div>
-            <div className="flex gap-4 items-center flex-col justify-center">
-              <p className="text-[#0DAE94] font-work-sans-regular">Leverage</p>
-              <p className="text-lg font-work-sans-regular text-black">
-                1:{account.leverage}
-              </p>
-            </div>
-          </div>
+
           <div className="flex flex-col gap-4 ">
             <div className="flex justify-end">
-              <Button
-                icon={iconTransaction}
-                variant="green-bg"
-                buttonSmaller
-                text="Trade"
-                loading={false}
-                action={() => {}}
-                textBolder
-              />
+              <Link href={tradeLink}>
+                <Button
+                  icon={iconTransaction}
+                  variant="green-bg"
+                  buttonSmaller
+                  text="Trade"
+                  loading={false}
+                  action={() => {}}
+                  textBolder
+                />
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <Button
@@ -313,7 +314,7 @@ export const TradeContainer = ({ account }: { account: Account }) => {
             </div>
           </div>
         </div>
-        <div className="p-6 flex items-center justify-between">
+        {/* <div className="p-6 flex items-center justify-between">
           <div className="flex flex-col gap-3">
             <p className="text-[#707070] text-lg font-work-sans-regular">
               Balance
@@ -365,6 +366,106 @@ export const TradeContainer = ({ account }: { account: Account }) => {
                 icon={editIconWhite}
               />
             </div>
+          </div>
+        </div> */}
+        <div className="px-6 pt-6">
+          <Row gutter={48}>
+            <Col xs={12}>
+              <div className="flex items-center gap-2 mb-4 ">
+                <p className="text-[#707070] font-work-sans-regular text-base">
+                  Balance
+                </p>
+                <div className="w-full ">
+                  <Image className="w-full " src={horizontalDashes} alt="" />
+                </div>
+                <p className="text-[#202020] font-work-sans-regular text-base">
+                  ${MoneyFormat(account.balance)}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 mb-4 ">
+                <p className="text-[#707070] font-work-sans-regular text-base">
+                  Equity
+                </p>
+                <div className="w-full ">
+                  <Image className="w-full " src={horizontalDashes} alt="" />
+                </div>
+                <p className="text-[#202020] font-work-sans-regular text-base">
+                  $0
+                </p>
+              </div>
+            </Col>
+            <Col xs={12}>
+              <div className="flex items-center gap-2 mb-4 ">
+                <p className="text-[#707070] font-work-sans-regular whitespace-nowrap text-base">
+                  Actual Leverage
+                </p>
+                <div className="w-full ">
+                  <Image src={horizontalDashes} alt="" className="w-full" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="text-[#202020] font-work-sans-regular text-base">
+                    1:{account.leverage}
+                  </p>
+                  <Image
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowLeverageModal(true);
+                    }}
+                    src={editIconBlack}
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mb-4 ">
+                <p className="text-[#707070] font-work-sans-regular whitespace-nowrap text-base">
+                  Available to withdraw
+                </p>
+                <div className="w-full ">
+                  <Image className="w-full" src={horizontalDashes} alt="" />
+                </div>
+                <p className="text-[#202020] whitespace-nowrap font-work-sans-regular text-base">
+                  ${MoneyFormat(account.balance)}
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </div>
+        <div className="bg-[#F8F7F8] px-6  py-4 rounded-bl-lg rounded-br-lg flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <p className="text-[#707070]">Login:</p>
+              <p className="text-[#1F0D3F] font-work-sans-medium">
+                {account.mt5Id}
+              </p>
+              <span>
+                <CopyWrapper value={account.mt5Id}>
+                  <Image src={copyBlueIcon} alt="" />
+                </CopyWrapper>
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <p className="text-[#707070]">Platform:</p>
+              <p className="text-[#1F0D3F] font-work-sans-medium">
+                {account.server}
+              </p>
+              <span>
+                <CopyWrapper value={account.server}>
+                  <Image src={copyBlueIcon} alt="" />
+                </CopyWrapper>
+              </span>
+            </div>
+          </div>
+          <div>
+            <Button
+              action={() => {
+                setShowPasswordModal(true);
+              }}
+              loading={false}
+              icon={keyIcon}
+              variant="bg-with-black-text"
+              text="Change Password"
+              buttonSmaller
+            />
           </div>
         </div>
       </div>

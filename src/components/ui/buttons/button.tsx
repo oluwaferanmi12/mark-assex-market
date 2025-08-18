@@ -43,6 +43,8 @@ export const Button = ({
           ? "border border-[#BEBEBE] bg-[#FFFFFF59] text-[#202020]"
           : variant === "transparent"
           ? "text-[#202020]"
+          : variant === "bg-with-black-text"
+          ? "text-[##202020] bg-white"
           : ""
       } ${fullWidth && "w-full"} ${
         fullRounded ? "rounded-full" : "rounded-md"

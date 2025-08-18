@@ -69,7 +69,7 @@ const AccountDetails = () => {
           </DropDownList>
         </div>
       </div>
-      {data && <TradeContainer account={data} />}
+      {data && <TradeContainer tradeLink="" account={data} />}
 
       <div className="mt-6">
         <p className="lg:text-xl text-base font-work-sans-medium">Orders</p>

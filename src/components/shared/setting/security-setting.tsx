@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { removeUser } from "@/utils/auth-helper";
 import { useRouter } from "next/navigation";
+import { useLogout } from "@/hooks/queries/useAuth";
 
 export const SecuritySetting = () => {
   const queryClient = useQueryClient();
@@ -19,6 +20,10 @@ export const SecuritySetting = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [disableOtpVal, setDisableOtpVal] = useState("");
   const [showDisable2fa, setShowDisable2fa] = useState(false);
+  const logoutMutate = useLogout(() => {
+    removeUser();
+    router.push("/login");
+  });
   const dispatch = useAppDispatch();
   const router = useRouter();
   const disable2fa = useDisable2FA((data) => {
@@ -133,8 +138,7 @@ export const SecuritySetting = () => {
 
           <Button
             action={() => {
-              router.push("/login");
-              removeUser();
+              logoutMutate.mutate();
             }}
             loading={false}
             text="Log Out"

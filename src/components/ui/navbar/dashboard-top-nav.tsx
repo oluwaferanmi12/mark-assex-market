@@ -40,7 +40,7 @@ import {
 import { Get2FA, UserProfileInterface } from "@/types";
 import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
-import { getStoredUser } from "@/utils/auth-helper";
+import { getStoredUser, removeUser } from "@/utils/auth-helper";
 import { MoneyFormat } from "@/utils/money-format";
 import { Avatar } from "@/components/shared/avatar/avatar";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
@@ -48,6 +48,7 @@ import { useAppSelector } from "@/hooks/redux/useAppSelector";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { useQueryClient } from "@tanstack/react-query";
 import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
+import { useLogout } from "@/hooks/queries/useAuth";
 
 export const DashboardTopNav = ({
   userProfile,
@@ -75,6 +76,10 @@ export const DashboardTopNav = ({
   const [showOTPInstruction, setShowOTPInstruction] = useState(false);
   const [generated2FA, setGenerated2FA] = useState<Get2FA>();
   const [otp, setOtp] = useState("");
+  const logoutMutate = useLogout(() => {
+    removeUser();
+    router.push("/login");
+  });
   const two2Fa = useGenerate2FA((data: Get2FA) => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     setShowOTPInstruction(true);
@@ -352,6 +357,7 @@ export const DashboardTopNav = ({
               action={() => {
                 setShowLogoutModal(false);
                 setShowLoggedOutModal(true);
+                logoutMutate.mutate();
               }}
               loading={false}
               variant="red-bg"

@@ -429,9 +429,11 @@ const Account = () => {
             {filteredAccounts?.length ? (
               filteredAccounts.map((item) => {
                 return (
-                  <Link key={item.id} href={`/account/details?id=${item.id}`}>
-                    <TradeContainer account={item} />
-                  </Link>
+                  <TradeContainer
+                    key={item.id}
+                    tradeLink={`/account/details?id=${item.id}`}
+                    account={item}
+                  />
                 );
               })
             ) : (

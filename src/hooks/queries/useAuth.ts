@@ -2,6 +2,7 @@ import {
   confirmOtp,
   login,
   login2fa,
+  logout,
   refreshToken,
   register,
   resetComplete,
@@ -114,6 +115,15 @@ export const useRefreshToken = (
 export const useLogin2fa = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: login2fa,
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useLogout = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: logout,
     onSuccess: (data) => {
       sc(data);
     },

@@ -71,18 +71,18 @@ export const DashboardSideNav = ({
       slug: "deposit",
     },
     {
-      text: "Internal Transfer",
-      activeIcon: activeTransfer,
-      inactiveIcon: inactiveTransfer,
-      clickAction: () => {},
-      slug: "internal-transfer",
-    },
-    {
       text: "Withdrawal",
       activeIcon: withdrawActive,
       inactiveIcon: withdrawInactive,
       clickAction: () => {},
       slug: "withdrawal",
+    },
+    {
+      text: "Internal Transfer",
+      activeIcon: activeTransfer,
+      inactiveIcon: inactiveTransfer,
+      clickAction: () => {},
+      slug: "internal-transfer",
     },
     {
       text: "Insights",

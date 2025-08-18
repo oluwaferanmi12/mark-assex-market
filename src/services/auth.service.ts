@@ -8,6 +8,7 @@ import {
   RegisterUserInterface,
   VerifyOtpInterface,
 } from "@/types";
+import { getAccessToken, getRefreshToken } from "@/utils/auth-helper";
 
 export const login = async (payload: CreateLoginInterface) => {
   const result = await axiosInstance.post("/auth/login", payload);
@@ -46,5 +47,13 @@ export const refreshToken = async (payload: RefreshTokenInterface) => {
 
 export const login2fa = async (payload: Login2fa) => {
   const result = await axiosInstance.post(`/auth/login/two-fa`, payload);
+  return result.data;
+};
+
+export const logout = async () => {
+  const result = await axiosInstance.post(`/auth/logout`, {
+    refreshToken: getAccessToken(),
+    accessToken: getRefreshToken(),
+  });
   return result.data;
 };
