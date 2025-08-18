@@ -25,11 +25,15 @@ import { TradeContainer } from "@/components/shared/wrappers/trade-container";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGetAccount } from "@/hooks/queries/useAccount";
-import { useManageProfilePicture } from "@/hooks/queries/useSettings";
+import {
+  useGetUserProfile,
+  useManageProfilePicture,
+} from "@/hooks/queries/useSettings";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { GenericEmptyState } from "@/components/states/generic-empty-state";
 import emptyAccountIcon from "@/assets/svgs/account-empty.svg";
+import { MoneyFormat } from "@/utils/money-format";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -47,6 +51,7 @@ const Account = () => {
   const [newAccountName, setNewAccountName] = useState("");
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
   const { data: accounts } = useGetAccount();
+  const { data: userProfile } = useGetUserProfile();
 
   const router = useRouter();
 
@@ -72,6 +77,8 @@ const Account = () => {
       // setShowAccountReadyModal(true);
     }, 3000);
   }, []);
+
+  console.log(accounts, "Accounts value here");
 
   return (
     <>
@@ -297,7 +304,7 @@ const Account = () => {
                     </span>
                   </div>
                   <p className="text-[#111111] text-base lg:text-[20px] font-work-sans-semi-bold">
-                    $ 0
+                    $ {MoneyFormat(userProfile?.walletBalance ?? 0)}
                   </p>
                 </div>
               </div>

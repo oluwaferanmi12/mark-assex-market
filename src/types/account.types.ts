@@ -2,6 +2,11 @@ import { UserProfileInterface } from "./user.types";
 
 export interface CreateTradeAccount {
   accountGroupId: string;
+  password: string;
+  nickname: string;
+  leverage: string;
+  platform: string;
+  amount: number;
 }
 
 export interface AccountGroup {

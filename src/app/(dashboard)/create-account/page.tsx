@@ -22,11 +22,21 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MoneyFormat } from "@/utils/money-format";
 import { AccountGroupInterface } from "@/types";
+import { InputErrorText } from "@/components/ui/text/input-error-text";
 
 const CreateAccount = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
+  const [passwordError, setPasswordError] = useState("");
   const liveRef = useRef<HTMLParagraphElement>(null);
   const [activeId, setActiveId] = useState("");
+  const [nickName, setNickName] = useState("");
+  const [leverage, setLeverage] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [currencyError, setCurrencyError] = useState("");
+  const [leverageError, setLeverageError] = useState("");
+  const [platformError, setPlatformError] = useState("");
 
   const router = useRouter();
   const demoRef = useRef<HTMLParagraphElement>(null);
@@ -36,8 +46,10 @@ const CreateAccount = () => {
     router.push("/account");
   });
 
+  const [password, setPassword] = useState("");
   const { data: accountGroupDetails } = useGetOneAccountGroup(activeId);
   const { data: accountGroups } = useGetAccountGroups();
+
   const [filteredAccounts, setFilteredAccounts] = useState<
     AccountGroupInterface[]
   >([]);
@@ -46,6 +58,34 @@ const CreateAccount = () => {
     left: 0,
     width: 0,
   });
+
+  const validateData = () => {
+    let validated = true;
+    if (!password) {
+      validated = false;
+      setPasswordError("Password is required");
+    } else if (
+      !(password.length >= 8) ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[^A-Za-z0-9]/.test(password)
+    ) {
+      setPasswordError("Criteria for password does not match");
+    }
+
+    if (!currency) {
+      setCurrencyError("Kindly select a currency");
+      validated = false;
+    }
+
+    if (!leverage) {
+      setLeverageError("Leverage is required");
+      validated = false;
+    }
+
+    return validated;
+  };
+
   useEffect(() => {
     const urlParam = new URLSearchParams(window.location.search);
     const accountId = urlParam.get("id");
@@ -88,6 +128,21 @@ const CreateAccount = () => {
       setFilteredAccounts(result);
     }
   }, [activeAccount, accountGroups]);
+
+  const handleCreateAccount = () => {
+    const validated = validateData();
+    if (!validated) {
+      return;
+    }
+    mutateCreate.mutate({
+      accountGroupId: activeId,
+      password: password,
+      amount: +amount,
+      leverage: leverage,
+      nickname: nickName,
+      platform: platform,
+    });
+  };
 
   return (
     <>
@@ -189,11 +244,14 @@ const CreateAccount = () => {
                         style={{
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
+                        onChange={(e) => setCurrency(e.target.value)}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        <option>USD</option>
+                        <option value="">Select currency</option>
+                        <option value={"USD"}>USD</option>
                       </select>
                     </div>
+                    {currencyError && <InputErrorText text={currencyError} />}
                   </Col>
                 </Row>
                 <Row gutter={28}>
@@ -209,11 +267,26 @@ const CreateAccount = () => {
                         style={{
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
+                        onChange={(e) => {
+                          setLeverage(e.target.value);
+                        }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                       >
-                        <option>500</option>
+                        <option value={""}>Select leverage</option>
+                        <option value={2}>1:2</option>
+                        <option value={20}>1:20</option>
+                        <option value={50}>1:50</option>
+                        <option value={100}>1:100</option>
+                        <option value={200}>1:200</option>
+                        <option value={400}>1:400</option>
+                        <option value={500}>1:500</option>
+                        <option value={600}>1:600</option>
+                        <option value={800}>1:800</option>
+                        <option value={1000}>1:1000</option>
+                        <option value={2000}>1:2000</option>
                       </select>
                     </div>
+                    {leverageError && <InputErrorText text={leverageError} />}
                   </Col>
                   {activeAccount === "demo" && (
                     <Col xs={24}>
@@ -225,6 +298,9 @@ const CreateAccount = () => {
                           placeholder="Enter amount(only applies to demo accounts)"
                           style={{
                             boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          }}
+                          onChange={(e) => {
+                            setAmount(+e.target.value);
                           }}
                           className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
                         />
@@ -244,6 +320,9 @@ const CreateAccount = () => {
                       </p>
                       <input
                         placeholder="Enter preferred nickname"
+                        onChange={(e) => {
+                          setNickName(e.target.value);
+                        }}
                         style={{
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
@@ -261,33 +340,45 @@ const CreateAccount = () => {
                           boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
                         }}
                         className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        onChange={(e) => {
+                          setPlatform(e.target.value);
+                        }}
                       >
-                        <option>MT5</option>
+                        <option value={""}>Select platform</option>
+                        <option value={"MT5"}>MT5</option>
                       </select>
                     </div>
                   </Col>
                 </Row>
                 <Row gutter={28} className="mb-4">
                   <Col xs={24}>
-                    <TransferInput greyBg label="Trading Password" />
-                    <div className="my-3">
-                      <PasswordValidateText
-                        validated
-                        text="At least 8 characters"
-                      />
-                      <PasswordValidateText
-                        validated
-                        text="At least one uppercase letter (A–Z)"
-                      />
-                      <PasswordValidateText
-                        validated={false}
-                        text="At least 8 characters"
-                      />
-                      <PasswordValidateText
-                        validated={false}
-                        text="At least one special character (e.g. !, @, #, $)"
-                      />
-                    </div>
+                    <TransferInput
+                      handleInput={(e) => {
+                        setPassword(e);
+                      }}
+                      greyBg
+                      label="Trading Password"
+                    />
+                    {!!password.length && (
+                      <div className="my-3">
+                        <PasswordValidateText
+                          validated={password.length >= 8}
+                          text="At least 8 characters"
+                        />
+                        <PasswordValidateText
+                          validated={/[A-Z]/.test(password)}
+                          text="At least one uppercase letter (A–Z)"
+                        />
+                        <PasswordValidateText
+                          validated={/[0-9]/.test(password)}
+                          text="At least one number (0–9)"
+                        />
+                        <PasswordValidateText
+                          validated={/[^A-Za-z0-9]/.test(password)}
+                          text="At least one special character (e.g. !, @, #, $)"
+                        />
+                      </div>
+                    )}
                   </Col>
                 </Row>
                 <Row>
@@ -295,7 +386,7 @@ const CreateAccount = () => {
                     <div className="my-4">
                       <Button
                         action={() => {
-                          mutateCreate.mutate({ accountGroupId: activeId });
+                          handleCreateAccount();
                         }}
                         loading={mutateCreate.isPending}
                         text="Create Account"
