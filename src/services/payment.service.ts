@@ -5,6 +5,7 @@ import {
   Payment,
   PaymentBank,
   PaymentMethod,
+  PaymentQueries,
   PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
   UserBankAccountDetails,
@@ -21,8 +22,14 @@ export const deposit = async (payload: CreateDepositInterface) => {
   return data.data;
 };
 
-export const getPaymentHistory = async (): Promise<Payment[]> => {
-  const { data } = await axiosInstance.get("/payments");
+export const getPaymentHistory = async (
+  paymentQuery?: PaymentQueries
+): Promise<Payment[]> => {
+  const { data } = await axiosInstance.get(
+    `/payments?keyword=${paymentQuery?.keyword ?? ""}&status=${
+      paymentQuery?.status ?? ""
+    }&type=${paymentQuery?.type ?? ""}`
+  );
   return data.data.data;
 };
 

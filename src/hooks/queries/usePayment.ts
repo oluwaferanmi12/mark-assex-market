@@ -16,6 +16,7 @@ import {
   Payment,
   PaymentBank,
   PaymentMethod,
+  PaymentQueries,
   PaymentResponseInterface,
   PreviouslyUsedBankAccounts,
   ResolveAccountPayload,
@@ -46,10 +47,10 @@ export const useDepositPayment = (sc: (data: any) => void) => {
   });
 };
 
-export const useGetPayments = () => {
+export const useGetPayments = (payload: PaymentQueries) => {
   return useQuery<Payment[]>({
-    queryFn: getPaymentHistory,
-    queryKey: ["get-payments"],
+    queryFn: () => getPaymentHistory(payload),
+    queryKey: ["get-payments", payload],
   });
 };
 

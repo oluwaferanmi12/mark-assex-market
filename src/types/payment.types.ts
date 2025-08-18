@@ -150,3 +150,9 @@ export interface PaymentVerifyInterface {
   payment_reference: string;
   virtual_bank_account_details: string | null;
 }
+
+export interface PaymentQueries {
+  status: "FAILED" | "PENDING" | "SUCCESS" | string;
+  type: "DEPOSIT" | "WITHDRAWAL" | "TRANSFER" | string;
+  keyword: string;
+}
