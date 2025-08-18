@@ -32,8 +32,16 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
   const columnHelper = createColumnHelper<Payment>();
   const columns = [
     columnHelper.accessor("reference", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
-      header: (info) => <TableText variant="header" text="ID" />,
+      cell: (info) => (
+        <div className="flex justify-start pl-4">
+          <TableText variant="body" text={info.getValue()} />
+        </div>
+      ),
+      header: (info) => (
+        <div className="flex justify-start ">
+          <TableText variant="header" text="ID" />
+        </div>
+      ),
     }),
     columnHelper.accessor("amount", {
       cell: (info) => (
@@ -48,10 +56,6 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
     columnHelper.accessor("method", {
       cell: (info) => <TableText variant="body" text={info.getValue().name} />,
       header: (info) => <TableText variant="header" text="Payment Method" />,
-    }),
-    columnHelper.accessor("status", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
-      header: (info) => <TableText variant="header" text="Status" />,
     }),
     columnHelper.accessor("createdAt", {
       cell: (info) => (
