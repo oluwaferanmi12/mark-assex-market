@@ -37,7 +37,7 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
     }),
     columnHelper.accessor("amount", {
       cell: (info) => (
-        <TableText variant="body" text={"NGN " + info.getValue()} />
+        <TableText variant="body" text={"USD " + info.getValue()} />
       ),
       header: (info) => <TableText variant="header" text="Amount" />,
     }),

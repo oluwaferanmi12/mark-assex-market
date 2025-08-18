@@ -34,6 +34,7 @@ export interface Account {
   updatedAt: string;
   user: UserProfileInterface;
   accountGroup: AccountGroup;
+  equity: number;
 }
 
 export interface GenericVerifyOtpInterface {
@@ -59,4 +60,14 @@ export interface AccountGroupInterface {
   maxWithdrawal: string;
   commission: number;
   logo: null | string;
+}
+
+export interface AccountPassworInterface {
+  id: string;
+  password: string;
+}
+
+export interface AccountLeverageInterface {
+  id: string;
+  leverage: number;
 }

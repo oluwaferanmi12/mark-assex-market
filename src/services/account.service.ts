@@ -1,6 +1,12 @@
 import { axiosInstance } from "@/api/axios";
 import { CreateAccountInterface } from "@/interfaces/ui-interfac";
-import { Account, AccountGroupInterface, CreateTradeAccount } from "@/types";
+import {
+  Account,
+  AccountGroupInterface,
+  AccountLeverageInterface,
+  AccountPassworInterface,
+  CreateTradeAccount,
+} from "@/types";
 
 export const getAccount = async () => {
   const { data } = await axiosInstance.get("/accounts");
@@ -29,4 +35,24 @@ export const getOneAccountGroup = async (
 ): Promise<AccountGroupInterface> => {
   const { data } = await axiosInstance.get(`/accounts/groups/${id}`);
   return data.data;
+};
+
+export const changeAccountPassword = async (
+  payload: AccountPassworInterface
+) => {
+  const result = await axiosInstance.post(
+    `/accounts/${payload.id}/change-password`,
+    { password: payload.password }
+  );
+  return result.data;
+};
+
+export const changeAccountLeverage = async (
+  payload: AccountLeverageInterface
+) => {
+  const result = await axiosInstance.post(
+    `/accounts/${payload.id}/change-leverage`,
+    { leverage: payload.leverage }
+  );
+  return result.data;
 };

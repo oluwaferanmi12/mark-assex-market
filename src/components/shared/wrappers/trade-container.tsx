@@ -33,6 +33,11 @@ import Link from "next/link";
 import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
 import { CopyWrapper } from "./copy-wrapper";
 import keyIcon from "@/assets/svgs/key-icon.svg";
+import {
+  useChangeAccountLeverage,
+  useChangeAccountPassword,
+} from "@/hooks/queries/useAccount";
+import { toast } from "sonner";
 
 export const TradeContainer = ({
   account,
@@ -45,6 +50,8 @@ export const TradeContainer = ({
   const [liveAccountSelected, setLiveAccountSelected] = useState("");
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [newAccountName, setNewAccountName] = useState("");
   const [showLeverageModal, setShowLeverageModal] = useState(false);
   const router = useRouter();
@@ -67,6 +74,39 @@ export const TradeContainer = ({
       },
     },
   ];
+  const changePasswordMutate = useChangeAccountPassword(() => {
+    setPassword("");
+    setConfirmPassword("");
+    setShowPasswordModal(false);
+    toast.success("Password Changed");
+  });
+  const changeLeverageMutate = useChangeAccountLeverage(() => {});
+
+  const validateData = () => {
+    let validated = true;
+    if (!password) {
+      validated = false;
+      setPasswordError("Password is required");
+    } else if (
+      !(password.length >= 8) ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[^A-Za-z0-9]/.test(password)
+    ) {
+      setPasswordError("Criteria for password does not match");
+    } else if (password !== confirmPassword) {
+      validated = false;
+      setPasswordError("Password mismatch");
+    }
+
+    return validated;
+  };
+
+  const handleChangePassword = () => {
+    if (validateData()) {
+      changePasswordMutate.mutate({ id: account.id, password: password });
+    }
+  };
   return (
     <>
       <ModalContainer
@@ -154,7 +194,12 @@ export const TradeContainer = ({
               <p className="text-[#404040] font-work-sans-medium">
                 1:{account.leverage}
               </p>
-              <span className="flex items-center mt-1 pr-1 cursor-pointer">
+              <span
+                onMouseDown={() => {
+                  console.log("MouseDown");
+                }}
+                className="flex items-center mt-1 pr-1 cursor-pointer"
+              >
                 <Image src={plusIcon} alt="" />
               </span>
             </div>
@@ -205,34 +250,43 @@ export const TradeContainer = ({
               setInputValue={setPassword}
               placeholder="New password"
               type="password"
+              errorState={passwordError}
             />
             <GInput
               label="Confirm Password"
-              inputValue={password}
-              setInputValue={setPassword}
+              inputValue={confirmPassword}
+              setInputValue={setConfirmPassword}
               placeholder="Confirm password"
               type="password"
             />
-            <div className="mb-3">
-              <PasswordValidateText validated text="At least 8 characters" />
-              <PasswordValidateText
-                validated
-                text="At least one uppercase letter (A–Z)"
-              />
-              <PasswordValidateText
-                validated={false}
-                text="At least 8 characters"
-              />
-              <PasswordValidateText
-                validated={false}
-                text="At least one special character (e.g. !, @, #, $)"
-              />
-            </div>
+            {!!password.length && (
+              <div className="mb-3">
+                <PasswordValidateText
+                  validated={password.length >= 8}
+                  text="At least 8 characters"
+                />
+                <PasswordValidateText
+                  validated={/[A-Z]/.test(password)}
+                  text="At least one uppercase letter (A–Z)"
+                />
+                <PasswordValidateText
+                  validated={/[0-9]/.test(password)}
+                  text="At least one number (0–9)"
+                />
+                <PasswordValidateText
+                  validated={/[^A-Za-z0-9]/.test(password)}
+                  text="At least one special character (e.g. !, @, #, $)"
+                />
+              </div>
+            )}
+
             <Button
               text="Continue"
-              action={() => {}}
+              action={() => {
+                handleChangePassword();
+              }}
               variant="green-bg"
-              loading={false}
+              loading={changePasswordMutate.isPending}
               fullWidth
             />
           </form>
@@ -314,60 +368,7 @@ export const TradeContainer = ({
             </div>
           </div>
         </div>
-        {/* <div className="p-6 flex items-center justify-between">
-          <div className="flex flex-col gap-3">
-            <p className="text-[#707070] text-lg font-work-sans-regular">
-              Balance
-            </p>
-            <p className="text-[#707070] text-lg font-work-sans-regular">
-              Server
-            </p>
-            <p className="text-[#707070] text-lg font-work-sans-regular">
-              MT5 Login: <span className="text-[#1F0D3F]"></span>
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-              <p className="text-[#202020]">$ {MoneyFormat(account.balance)}</p>
-              <p>Actual leverage</p>
-            </div>
-            <div className="text-[#707070] flex items-center gap-12 text-lg font-work-sans-regular">
-              <p className="text-[#202020]">{account.server}</p>
-            </div>
-            <p className="text-[#707070] text-lg font-work-sans-regular">
-              Platform: <span className="text-[#1F0D3F]">Assexmarkets MT5</span>
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-[#707070] flex items-center gap-1 text-lg font-work-sans-regular justify-end">
-              <p className="text-[#202020]">1:{account?.leverage}</p>
 
-              <Image
-                className="cursor-pointer"
-                onClick={() => {
-                  setShowLeverageModal(true);
-                }}
-                src={editIconBlack}
-                alt=""
-              />
-            </div>
-            <p className="text-[#202020] flex justify-end items-center text-lg font-work-sans-regular">
-              $ 0
-            </p>
-            <div>
-              <Button
-                variant="green-bg"
-                action={() => {
-                  setShowPasswordModal(true);
-                }}
-                loading={false}
-                text="Change password"
-                buttonSmaller
-                icon={editIconWhite}
-              />
-            </div>
-          </div>
-        </div> */}
         <div className="px-6 pt-6">
           <Row gutter={48}>
             <Col xs={12}>
@@ -390,7 +391,7 @@ export const TradeContainer = ({
                   <Image className="w-full " src={horizontalDashes} alt="" />
                 </div>
                 <p className="text-[#202020] font-work-sans-regular text-base">
-                  $0
+                  ${account.equity}
                 </p>
               </div>
             </Col>
@@ -557,7 +558,7 @@ export const TradeContainer = ({
               Equity
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              ${0}
+              ${account.equity}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">
