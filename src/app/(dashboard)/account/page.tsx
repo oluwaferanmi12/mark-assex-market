@@ -34,6 +34,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { GenericEmptyState } from "@/components/states/generic-empty-state";
 import emptyAccountIcon from "@/assets/svgs/account-empty.svg";
 import { MoneyFormat } from "@/utils/money-format";
+import { Account as AccountInterface } from "@/types";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -52,6 +53,9 @@ const Account = () => {
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
   const { data: accounts } = useGetAccount();
   const { data: userProfile } = useGetUserProfile();
+  const [filteredAccounts, setFilteredAccounts] = useState<AccountInterface[]>(
+    []
+  );
 
   const router = useRouter();
 
@@ -60,6 +64,15 @@ const Account = () => {
     if (targetRef.current) {
       const { offsetLeft, offsetWidth } = targetRef.current;
       setHighlightStyles({ left: offsetLeft, width: offsetWidth });
+    }
+    if (activeAccount === "live" && accounts) {
+      setFilteredAccounts((prev) => {
+        return accounts?.filter((item) => item.accountGroup.type === "LIVE");
+      });
+    } else if (activeAccount === "demo" && accounts) {
+      setFilteredAccounts((prev) => {
+        return accounts.filter((item) => item.accountGroup.type === "DEMO");
+      });
     }
   }, [activeAccount]);
 
@@ -73,12 +86,18 @@ const Account = () => {
   }
 
   useEffect(() => {
+    if (accounts) {
+      setFilteredAccounts((prev) => {
+        return accounts.filter((item) => item.accountGroup.type === "LIVE");
+      });
+    }
+  }, [accounts]);
+
+  useEffect(() => {
     setTimeout(() => {
       // setShowAccountReadyModal(true);
     }, 3000);
   }, []);
-
-  console.log(accounts, "Accounts value here");
 
   return (
     <>
@@ -407,8 +426,8 @@ const Account = () => {
                 </div>
               </DropDownList>
             </div>
-            {accounts?.length ? (
-              accounts.map((item) => {
+            {filteredAccounts?.length ? (
+              filteredAccounts.map((item) => {
                 return (
                   <Link key={item.id} href={`/account/details?id=${item.id}`}>
                     <TradeContainer account={item} />
