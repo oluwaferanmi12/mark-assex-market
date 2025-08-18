@@ -28,7 +28,7 @@ const Wallet = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
   const { data: user } = useGetUserProfile();
-  const { data } = useGetPayments();
+  const { data } = useGetPayments({ status: "", keyword: "", type: "" });
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "" },
