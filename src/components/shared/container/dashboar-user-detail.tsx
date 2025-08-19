@@ -21,7 +21,7 @@ export const DashboardUserDetails = ({
   }, []);
   return (
     <>
-  <div className="flex w-full items-center gap-2 mt-4 border  overflow-hidden">
+  <div className="flex w-full items-center gap-2 mt-4 overflow-hidden">
     <span className="shrink-0">
       <Avatar avatar={userProfile?.picture!} />
     </span>
