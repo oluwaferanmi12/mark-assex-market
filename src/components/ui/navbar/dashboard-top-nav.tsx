@@ -537,6 +537,7 @@ export const DashboardTopNav = ({
               className="fixed top-0 left-0 h-full w-4/5 bg-white z-50 shadow-lg"
             >
               <DashboardSideNav
+                userProfile={userProfile}
                 handleCloseAsModal={() => setShowSideNav(false)}
               />
             </motion.div>

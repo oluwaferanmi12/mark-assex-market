@@ -130,6 +130,8 @@ export const DashboardSideNav = ({
     },
   ];
 
+  console.log(userProfile, "User Profile value her");
+
   const mobileObject = [
     {
       text: "Notification",
@@ -193,7 +195,7 @@ export const DashboardSideNav = ({
               <span>
                 <Image src={wallet} alt="" />
               </span>
-              <p className="text-[#202020] text-base font-work-sans-semi-bold">
+              <p className="text-[#202020]  text-base font-work-sans-semi-bold">
                 ${MoneyFormat(userProfile?.walletBalance ?? 0)}
               </p>
             </div>
