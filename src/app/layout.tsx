@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Toaster } from "sonner";
@@ -11,6 +11,14 @@ import { ClientWrapper } from "@/components/client/client-wrapper";
 
 export const metadata: Metadata = {
   title: "ASSEXMARKETS",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // prevents pinch & focus zoom
+  viewportFit: "cover", // optional; nice for iOS safe areas
 };
 
 export default function RootLayout({
