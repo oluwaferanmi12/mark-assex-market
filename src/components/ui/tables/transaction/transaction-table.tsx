@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/buttons/button";
 import { Payment } from "@/types";
 import { TableDate } from "@/utils/date-formatter";
 import graphIcon from "@/assets/svgs/order-empty-icon.svg";
+import { MoneyFormat } from "@/utils/money-format";
 
 type Props = {
   data?: Payment[];
@@ -124,7 +125,8 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      {"NGN " + selectedTransaction?.amount}
+                      {"NGN " +
+                        MoneyFormat(+(selectedTransaction?.amount ?? 0))}
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">

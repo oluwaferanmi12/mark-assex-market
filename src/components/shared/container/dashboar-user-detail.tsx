@@ -21,17 +21,20 @@ export const DashboardUserDetails = ({
   }, []);
   return (
     <>
-      <div className="flex items-center gap-2 mt-4">
-        <span>
-          <Avatar avatar={userProfile?.picture!} />
-        </span>
-        <div>
-          <p className="text-[#202020] font-work-sans-medium">
-            {userProfile?.firstName ?? "User"}
-          </p>
-          <p className="text-xs font-work-sans-light">{userProfile?.email ?? ""}</p>
-        </div>
-      </div>
-    </>
+  <div className="flex w-full items-center gap-2 mt-4 border  overflow-hidden">
+    <span className="shrink-0">
+      <Avatar avatar={userProfile?.picture!} />
+    </span>
+    <div className="min-w-0 flex-1">
+      <p className="text-[#202020] font-work-sans-medium">
+        {userProfile?.firstName ?? "User"}
+      </p>
+      <p className="text-xs font-work-sans-light truncate">
+        {userProfile?.email ?? ""}
+      </p>
+    </div>
+  </div>
+</>
+
   );
 };
