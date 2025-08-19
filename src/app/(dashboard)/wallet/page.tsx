@@ -1,7 +1,7 @@
 "use client";
 import { PageHeader } from "@/components/ui/text/page-header";
 import walletDollarIcon from "@/assets/svgs/wallet-dollar-icon.svg";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import arrowUp from "@/assets/svgs/arrow-multiple-up.svg";
 import { Button } from "@/components/ui/buttons/button";
@@ -24,37 +24,58 @@ import { useGetUserProfile } from "@/hooks/queries/useSettings";
 import { MoneyFormat } from "@/utils/money-format";
 import searchIcon from "@/assets/svgs/searchIcon.svg";
 import { debounce } from "lodash";
+import { PaymentMethodTypes, PaymentQueries } from "@/types";
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
   const [searchValue, setSearchValue] = useState("");
   const { data: user } = useGetUserProfile();
-  const { data } = useGetPayments({
+  const [payloadQuery, setPayloadQuery] = useState<PaymentQueries>({
     status: "",
-    keyword: "",
     type: "",
+    keyword: "",
     methodSlug: "",
   });
+  const { data, isPending } = useGetPayments(payloadQuery);
+  const [methodSelected, setMethodSelected] = useState("All");
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
-    { text: "Successful", id: "" },
-    { text: "Pending", id: "" },
-    { text: "Failed", id: "" },
+    { text: "Successful", id: "SUCCESS" },
+    { text: "Pending", id: "PENDING" },
+    { text: "Failed", id: "FAILED" },
   ];
 
   const typeDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
-    { text: "Deposit", id: "" },
-    { text: "Withdraw", id: "" },
+    { text: "Deposit", id: "DEPOSIT" },
+    { text: "Withdraw", id: "WITHDRAWAL" },
+    { text: "Transfer", id: "TRANSFER" },
   ];
 
-  const debounced = debounce((e) => {
-    setSearchValue(e.target.value);
-  }, 1000);
+  const methodDropDownList: DropDownListInterface[] = useMemo(() => {
+    let i = 0;
+    const methodList = Object.values(PaymentMethodTypes).map((value) => ({
+      text: value as string,
+      id: value as string,
+    }));
+    return [{ text: "All", id: "" }, ...methodList];
+  }, []);
+  useEffect(() => {
+    console.log(statusSelected);
+    setPayloadQuery((prev) => ({
+      ...prev,
+      type:
+        typeDropDownList.find((item) => item.text === typeSelected)?.id ?? "",
+      status:
+        statusDropDownList.find((item) => item.text === statusSelected)?.id ??
+        "",
+      methodSlug: methodSelected === "All" ? "" : methodSelected,
+      keyword: searchValue,
+    }));
+  }, [typeSelected, statusSelected, methodSelected, searchValue]);
 
   const router = useRouter();
-  console.log(searchValue);
   return (
     <>
       <PageHeader text="Wallet" />
@@ -151,19 +172,28 @@ const Wallet = () => {
         </p>
         <VisibleOnDesktop>
           <div className="flex justify-between items-end">
-            <div className="relative">
-              <span className="absolute top-3 left-3">
-                <Image src={searchIcon} alt="" />
-              </span>
-              <input
+            <div>
+              <SearchInput
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  setSearchValue(e);
                 }}
-                placeholder="Search..."
-                className="bg-white focus:outline-none font-work-sans-regular py-2 px-4 pl-8 rounded-xl border border-[#BEBEBE59]"
               />
             </div>
             <div className="flex items-center gap-3">
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Payment Method
+                </p>
+                <DropDownList
+                  dropDownList={methodDropDownList}
+                  selected={methodSelected}
+                  setSelected={setMethodSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={methodSelected} />
+                  </div>
+                </DropDownList>
+              </div>
               <div>
                 <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
                   Type
@@ -174,7 +204,7 @@ const Wallet = () => {
                   setSelected={setTypeSelected}
                 >
                   <div>
-                    <DropDownTextWrapper filterSelected={statusSelected} />
+                    <DropDownTextWrapper filterSelected={typeSelected} />
                   </div>
                 </DropDownList>
               </div>
@@ -209,7 +239,7 @@ const Wallet = () => {
           </div>
         </VisibleOnMobile>
         <VisibleOnDesktop>
-          <TransactionTable data={data} />
+          <TransactionTable loading={isPending} data={data} />
         </VisibleOnDesktop>
         <VisibleOnMobile>
           <div className="my-4">
