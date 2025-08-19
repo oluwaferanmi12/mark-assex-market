@@ -62,6 +62,7 @@ const WithdrawalDetails = () => {
   const { data: banks } = usePaymentBanks();
   const { data: previousAccts } = usePaymentAccount();
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
+  const [cryptoType, setCryptoType] = useState(false);
   const verifyMutate = useValidateBalance(() => {
     sendGenericOtp.mutate({ channel: "email" });
   });
@@ -213,6 +214,15 @@ const WithdrawalDetails = () => {
       setWithdrawPayload((prev) => ({ ...prev, methodSlug: accountType }));
       router.push(`/withdrawal/details?val=${accountType}`);
     }
+
+    setCryptoType((prev) => {
+      return (
+        accountType.includes("tether") ||
+        accountType.includes("btc") ||
+        accountType.includes("eth") ||
+        accountType.includes("trx")
+      );
+    });
   }, [accountType]);
 
   useEffect(() => {
@@ -270,15 +280,19 @@ const WithdrawalDetails = () => {
           />
         </div>
       </ModalContainer>
-      <div className="my-4">
-        <PageGoBack
-          action={() => {
-            if (showDepositDetails) {
-              setShowDepositDetails(false);
-            }
-          }}
-        />
-      </div>
+      {(showDepositDetails || showPaymentSetup) && (
+        <div className="my-4">
+          <PageGoBack
+            action={() => {
+              if (showDepositDetails) {
+                setShowDepositDetails(false);
+              } else if (showPaymentSetup) {
+                setShowPaymentSetup(false);
+              }
+            }}
+          />
+        </div>
+      )}
 
       <PageHeader text="Withdrawal" />
       {showDepositDetails ? (
@@ -328,20 +342,23 @@ const WithdrawalDetails = () => {
                       No Commission
                     </p>
                   </div>
-                  <div
-                    style={{
-                      borderBottom: "0.5px solid #BEBEBE80",
-                      borderStyle: "dashed",
-                    }}
-                    className="flex items-center justify-between py-2"
-                  >
-                    <p className="text-[#707070] font-work-sans-regular">
-                      Conversion Rate
-                    </p>
-                    <p className="text-[#111111] font-work-sans-regular">
-                      1 USD = 780.022 NGN
-                    </p>
-                  </div>
+                  {!cryptoType && (
+                    <div
+                      style={{
+                        borderBottom: "0.5px solid #BEBEBE80",
+                        borderStyle: "dashed",
+                      }}
+                      className="flex items-center justify-between py-2"
+                    >
+                      <p className="text-[#707070] font-work-sans-regular">
+                        Conversion Rate
+                      </p>
+                      <p className="text-[#111111] font-work-sans-regular">
+                        1 USD = 780.022 NGN
+                      </p>
+                    </div>
+                  )}
+
                   <div
                     style={{
                       borderBottom: "0.5px solid #BEBEBE80",
@@ -602,14 +619,18 @@ const WithdrawalDetails = () => {
                               No Commission
                             </p>
                           </div>
-                          <div className="flex items-center my-2 justify-between">
-                            <p className="text-[#707070] font-work-sans-regular text-base">
-                              Conversion rate
-                            </p>
-                            <p className="text-[#111111] font-work-sans-regular text-base">
-                              1 USD = 780.022 NGN
-                            </p>
-                          </div>
+
+                          {!cryptoType && (
+                            <div className="flex items-center my-2 justify-between">
+                              <p className="text-[#707070] font-work-sans-regular text-base">
+                                Conversion rate
+                              </p>
+                              <p className="text-[#111111] font-work-sans-regular text-base">
+                                1 USD = 780.022 NGN
+                              </p>
+                            </div>
+                          )}
+
                           <div className="flex items-center my-2 justify-between">
                             <p className="text-[#707070] font-work-sans-regular text-base">
                               From account{" "}
@@ -651,21 +672,23 @@ const WithdrawalDetails = () => {
                   </Dropdown>
                 </div>
               </Col>
-              <Col lg={12} xs={24}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Currency
-                  </p>
-                  <select
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                  >
-                    <option>NGN</option>
-                  </select>
-                </div>
-              </Col>
+              {!cryptoType && (
+                <Col lg={12} xs={24}>
+                  <div>
+                    <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                      Currency
+                    </p>
+                    <select
+                      style={{
+                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                      }}
+                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                    >
+                      <option>USD</option>
+                    </select>
+                  </div>
+                </Col>
+              )}
             </Row>
             <Row className="mb-4">
               <Col lg={12} xs={24}>
@@ -707,10 +730,6 @@ const WithdrawalDetails = () => {
                     Amount
                   </p>
                   <div>
-                    <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
-                      <Image src={dollarGreen} alt="" />
-                    </span>
-
                     <input
                       placeholder="Enter amount"
                       onChange={(e) => {
@@ -728,11 +747,13 @@ const WithdrawalDetails = () => {
                   </div>
                 </div>
               </Col>
-              <Col xs={24} lg={12}>
-                <div>
-                  <TransferInput greyBg label="Amount to be Received" />
-                </div>
-              </Col>
+              {!cryptoType && (
+                <Col xs={24} lg={12}>
+                  <div>
+                    <TransferInput greyBg label="Amount to be Received" />
+                  </div>
+                </Col>
+              )}
             </Row>
             <div className="my-4">
               <Button
