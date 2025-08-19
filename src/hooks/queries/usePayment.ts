@@ -32,7 +32,9 @@ export const useGetPaymentMethods = (withdrawOnly = false) => {
     },
     queryKey: ["payment-method"],
     select: (methods) =>
-      withdrawOnly ? methods.filter((m) => m.isWithdraw) : methods,
+      withdrawOnly
+        ? methods.filter((m) => m.isWithdraw)
+        : methods.filter((m) => m.status === "ACTIVE"),
   });
 };
 
