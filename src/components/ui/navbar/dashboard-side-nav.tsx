@@ -32,6 +32,7 @@ import { useEffect, useRef, useState } from "react";
 import navCloseIcon from "@/assets/svgs/nav-x-button.svg";
 import { getStoredUser } from "@/utils/auth-helper";
 import { UserProfileInterface } from "@/types";
+import { MoneyFormat } from "@/utils/money-format";
 
 export const DashboardSideNav = ({
   handleCloseAsModal,
@@ -193,7 +194,7 @@ export const DashboardSideNav = ({
                 <Image src={wallet} alt="" />
               </span>
               <p className="text-[#202020] text-base font-work-sans-semi-bold">
-                $0
+                ${MoneyFormat(userProfile?.walletBalance ?? 0)}
               </p>
             </div>
           </div>

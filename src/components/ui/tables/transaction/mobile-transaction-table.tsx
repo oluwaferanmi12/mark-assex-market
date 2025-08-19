@@ -82,19 +82,21 @@ export const MobileTransactionTable = ({
                   />
                 </div>
               </div>
-              <div className="px-4 pb-4">
-                <TransactionErrorWrapper active={showReason}>
-                  <div className="text-[#202020] text-xs">
-                    <span className="font-work-sans-regular">
-                      Insufficient Funds:{" "}
-                    </span>
-                    <span className="font-work-sans-light">
-                      here wasn’t enough money in your account to complete the
-                      transaction.
-                    </span>
-                  </div>
-                </TransactionErrorWrapper>
-              </div>
+              {payment.status === "FAILED" && (
+                <div className="px-4 pb-4">
+                  <TransactionErrorWrapper active={showReason}>
+                    <div className="text-[#202020] text-xs">
+                      <span className="font-work-sans-regular">
+                        Insufficient Funds:{" "}
+                      </span>
+                      <span className="font-work-sans-light">
+                        here wasn’t enough money in your account to complete the
+                        transaction.
+                      </span>
+                    </div>
+                  </TransactionErrorWrapper>
+                </div>
+              )}
             </FadeIn>
           )}
         </AnimatePresence>
