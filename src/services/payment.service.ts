@@ -2,6 +2,8 @@ import { axiosInstance } from "@/api/axios";
 import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
+  ExternalTransferPayload,
+  InternalTransferPayload,
   Payment,
   PaymentBank,
   PaymentMethod,
@@ -28,7 +30,9 @@ export const getPaymentHistory = async (
   const { data } = await axiosInstance.get(
     `/payments?keyword=${paymentQuery?.keyword ?? ""}&status=${
       paymentQuery?.status ?? ""
-    }&type=${paymentQuery?.type ?? ""}&methodSlug=${paymentQuery?.methodSlug ?? ""}`
+    }&type=${paymentQuery?.type ?? ""}&methodSlug=${
+      paymentQuery?.methodSlug ?? ""
+    }`
   );
   return data.data.data;
 };
@@ -78,5 +82,21 @@ export const validateBalance = async (payload: ValidateBalance) => {
 
 export const verifyPayment = async (id: string) => {
   const result = await axiosInstance.get(`/payments/${id}/verify`);
+  return result.data;
+};
+
+export const internalTransfer = async (payload: InternalTransferPayload) => {
+  const result = await axiosInstance.post(
+    `/payments/internal-transfer`,
+    payload
+  );
+  return result.data;
+};
+
+export const externalTransfer = async (payload: ExternalTransferPayload) => {
+  const result = await axiosInstance.post(
+    `/payments/external-transfer`,
+    payload
+  );
   return result.data;
 };

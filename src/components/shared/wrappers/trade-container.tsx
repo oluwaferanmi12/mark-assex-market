@@ -213,15 +213,15 @@ export const TradeContainer = ({
             <p className="font-work-sans-regular">
               Change Max Leverage{" "}
               <span className="font-work-sans-regular text-[#707070]">
-                (Account #123004)
+                (Account #{account.mt5Id})
               </span>
             </p>
             <div className="justify-between mt-2 rounded-lg bg-[#F2F4F7] flex items-center">
               <span
-                onMouseDown={() => startChanging(-1)}
+                onMouseDown={() => startChanging(-100)}
                 onMouseUp={stopChanging}
                 onMouseLeave={stopChanging}
-                onTouchStart={() => startChanging(-1)}
+                onTouchStart={() => startChanging(-100)}
                 onTouchEnd={stopChanging}
                 className="mt-1 pl-1 cursor-pointer"
               >
@@ -231,10 +231,10 @@ export const TradeContainer = ({
                 1:{manualLeverage}
               </p>
               <span
-                onMouseDown={() => startChanging(1)}
+                onMouseDown={() => startChanging(100)}
                 onMouseUp={stopChanging}
                 onMouseLeave={stopChanging}
-                onTouchStart={() => startChanging(1)}
+                onTouchStart={() => startChanging(100)}
                 onTouchEnd={stopChanging}
                 className="flex items-center mt-1 pr-1 cursor-pointer"
               >

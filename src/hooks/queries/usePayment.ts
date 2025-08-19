@@ -1,7 +1,9 @@
 import {
   deposit,
+  externalTransfer,
   getPaymentHistory,
   getPaymentMethodDetails,
+  internalTransfer,
   paymentAccounts,
   paymentBanks,
   paymentMethods,
@@ -13,6 +15,8 @@ import {
 import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
+  ExternalTransferPayload,
+  InternalTransferPayload,
   Payment,
   PaymentBank,
   PaymentMethod,
@@ -124,5 +128,17 @@ export const useVerifyPayment = (id: string, refetchActive: boolean) => {
     queryKey: ["verify-payment"],
     enabled: !!id,
     refetchInterval: refetchActive ? 10000 : false,
+  });
+};
+
+export const useInternalTransfer = () => {
+  return useMutation({
+    mutationFn: (payload: InternalTransferPayload) => internalTransfer(payload),
+  });
+};
+
+export const useExternalTransfer = () => {
+  return useMutation({
+    mutationFn: (payload: ExternalTransferPayload) => externalTransfer(payload),
   });
 };

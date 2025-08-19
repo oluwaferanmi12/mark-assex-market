@@ -130,8 +130,6 @@ export const DashboardSideNav = ({
     },
   ];
 
-  console.log(userProfile, "User Profile value her");
-
   const mobileObject = [
     {
       text: "Notification",
@@ -174,7 +172,7 @@ export const DashboardSideNav = ({
   }, [pathName]);
 
   return (
-    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col lg:justify-between">
+    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen  px-6 z-50 top-0 flex flex-col lg:justify-between">
       <div>
         <div className="hidden lg:block">
           <span>

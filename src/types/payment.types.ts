@@ -170,3 +170,16 @@ export enum PaymentMethodTypes {
   Eth = "eth",
   Trx = "trx",
 }
+
+export interface InternalTransferPayload {
+  fromAccount: string;
+  toAccount: string;
+  amount: number;
+}
+
+export interface ExternalTransferPayload {
+  fromAccount: string;
+  email: string;
+  amount: number;
+  token: string;
+}
