@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AccountGroupInterface } from "@/types";
 import { useState } from "react";
+import Link from "next/link";
 
 const ACTIVE_SHADOW =
   "0px 16px 48px 0px rgba(0, 204, 177, 0.12), 0px 4px 12px 0px rgba(10, 124, 255, 0.24), 0px 0px 0px 4px #00CCB1";
@@ -61,14 +62,16 @@ export const AccountTypeWrapper = ({
       </div>
 
       <div className="my-4">
-        <Button
-          text="Create Account"
-          variant="green-bg"
-          action={() => router.push(`/create-account?id=${item.id}`)}
-          loading={false}
-          fullRounded
-          fullWidth
-        />
+        <Link href={`/create-account?id=${item.id}`}>
+          <Button
+            text="Create Account"
+            variant="green-bg"
+            action={() => {}}
+            loading={false}
+            fullRounded
+            fullWidth
+          />
+        </Link>
       </div>
 
       <div>
