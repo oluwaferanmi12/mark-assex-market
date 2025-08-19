@@ -10,7 +10,6 @@ export const Avatar = ({
   height?: number;
   width?: number;
 }) => {
-  console.log(avatar, "Avatar");
   return (
     <div
       className="relative"

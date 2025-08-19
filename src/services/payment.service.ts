@@ -28,7 +28,7 @@ export const getPaymentHistory = async (
   const { data } = await axiosInstance.get(
     `/payments?keyword=${paymentQuery?.keyword ?? ""}&status=${
       paymentQuery?.status ?? ""
-    }&type=${paymentQuery?.type ?? ""}`
+    }&type=${paymentQuery?.type ?? ""}&methodSlug=${paymentQuery?.methodSlug ?? ""}`
   );
   return data.data.data;
 };

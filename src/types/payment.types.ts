@@ -155,4 +155,18 @@ export interface PaymentQueries {
   status: "FAILED" | "PENDING" | "SUCCESS" | string;
   type: "DEPOSIT" | "WITHDRAWAL" | "TRANSFER" | string;
   keyword: string;
+  methodSlug: string;
+}
+
+export enum PaymentMethodTypes {
+  KoraHq = "kora-hq",
+  Paystack = "paystack",
+  Cryptochill = "cryptochill",
+  InternalBankTransfer = "internal-bank-transfer",
+  DebitCard = "debit-card",
+  TetherUsdtErc20 = "tether-usdt-erc20",
+  TetherUsdtTrc20 = "tether-usdt-trc20",
+  Btc = "btc",
+  Eth = "eth",
+  Trx = "trx",
 }

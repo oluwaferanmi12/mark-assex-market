@@ -8,13 +8,13 @@ import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
 import { SearchInput } from "@/components/ui/inputs/search-input";
 import { PageHeader } from "@/components/ui/text/page-header";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { TransactionTable } from "@/components/ui/tables/transaction/transaction-table";
 import { MobileTransactionTable } from "@/components/ui/tables/transaction/mobile-transaction-table";
 import { useGetPayments } from "@/hooks/queries/usePayment";
-import { PaymentQueries } from "@/types";
+import { PaymentMethodTypes, PaymentQueries } from "@/types";
 
 const Transaction = () => {
   const [typeSelected, setTypeSelected] = useState("All");
@@ -25,8 +25,10 @@ const Transaction = () => {
     status: "",
     type: "",
     keyword: "",
+    methodSlug: "",
   });
-  const { data } = useGetPayments(payloadQuery);
+  const [methodSelected, setMethodSelected] = useState("All");
+  const { data, isPending } = useGetPayments(payloadQuery);
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Successful", id: "SUCCESS" },
@@ -41,6 +43,14 @@ const Transaction = () => {
     { text: "Transfer", id: "TRANSFER" },
   ];
 
+  const methodDropDownList: DropDownListInterface[] = useMemo(() => {
+    let i = 0;
+    const methodList = Object.values(PaymentMethodTypes).map((value) => ({
+      text: value as string,
+      id: value as string,
+    }));
+    return [{ text: "All", id: "" }, ...methodList];
+  }, []);
   useEffect(() => {
     setPayloadQuery((prev) => ({
       ...prev,
@@ -49,8 +59,9 @@ const Transaction = () => {
       status:
         statusDropDownList.find((item) => item.text === statusSelected)?.id ??
         "",
+      methodSlug: methodSelected === "All" ? "" : methodSelected,
     }));
-  }, [typeSelected, statusSelected]);
+  }, [typeSelected, statusSelected, methodSelected]);
 
   return (
     <>
@@ -62,6 +73,20 @@ const Transaction = () => {
               <SearchInput />
             </div>
             <div className="flex items-center gap-3">
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Payment Method
+                </p>
+                <DropDownList
+                  dropDownList={methodDropDownList}
+                  selected={methodSelected}
+                  setSelected={setMethodSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={methodSelected} />
+                  </div>
+                </DropDownList>
+              </div>
               <div>
                 <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
                   Type
@@ -108,7 +133,7 @@ const Transaction = () => {
         </VisibleOnMobile>
         <div className="mt-4">
           <VisibleOnDesktop>
-            <TransactionTable data={data} />
+            <TransactionTable loading={isPending} data={data} />
           </VisibleOnDesktop>
           <VisibleOnMobile>
             {data?.length ? (

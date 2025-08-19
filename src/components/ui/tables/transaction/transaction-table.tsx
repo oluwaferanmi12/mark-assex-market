@@ -4,16 +4,13 @@ import { TablePagination } from "@/components/shared/pagination/table-pagination
 import { TableEmptyState } from "@/components/shared/states/empty/table-empty-state";
 import { TableText } from "@/components/shared/table/table-text";
 import { TableStatus } from "@/components/ui/status/table-status";
-import { orderData, transactionData } from "@/data/drop-down-data";
-import { OrderInterface, TransactionInterface } from "@/interfaces/ui-interfac";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
-import graphIcon from "@/assets/svgs/order-empty-icon.svg";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
 import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
@@ -24,69 +21,83 @@ import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import { Button } from "@/components/ui/buttons/button";
 import { Payment } from "@/types";
 import { TableDate } from "@/utils/date-formatter";
+import graphIcon from "@/assets/svgs/order-empty-icon.svg";
 
-export const TransactionTable = ({ data }: { data?: Payment[] }) => {
+type Props = {
+  data?: Payment[];
+  loading?: boolean; // NEW
+};
+
+export const TransactionTable = ({ data, loading = false }: Props) => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Payment | null>(null);
+
   const columnHelper = createColumnHelper<Payment>();
-  const columns = [
-    columnHelper.accessor("reference", {
-      cell: (info) => (
-        <div className="flex justify-start pl-4">
-          <TableText variant="body" text={info.getValue()} />
-        </div>
-      ),
-      header: (info) => (
-        <div className="flex justify-start ">
-          <TableText variant="header" text="ID" />
-        </div>
-      ),
-    }),
-    columnHelper.accessor("amount", {
-      cell: (info) => (
-        <TableText variant="body" text={"USD " + info.getValue()} />
-      ),
-      header: (info) => <TableText variant="header" text="Amount" />,
-    }),
-    columnHelper.accessor("type", {
-      cell: (info) => <TableText variant="body" text={info.getValue()} />,
-      header: (info) => <TableText variant="header" text="Type" />,
-    }),
-    columnHelper.accessor("method", {
-      cell: (info) => <TableText variant="body" text={info.getValue().name} />,
-      header: (info) => <TableText variant="header" text="Payment Method" />,
-    }),
-    columnHelper.accessor("createdAt", {
-      cell: (info) => (
-        <TableText variant="body" text={TableDate(info.getValue())} />
-      ),
-      header: (info) => <TableText variant="header" text="Date" />,
-    }),
-    columnHelper.accessor("status", {
-      cell: (info) => (
-        <TableStatus variant={info.getValue()} text={info.getValue()} />
-      ),
-      header: (info) => <TableText variant="header" text="Status" />,
-    }),
-    columnHelper.display({
-      id: "action",
-      cell: (info) => (
-        <div className="flex justify-center">
-          <Image src={horizontalEllipsis} alt="" />
-        </div>
-      ),
-      header: (info) => <TableText variant="header" text="Action" />,
-    }),
-  ];
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("reference", {
+        cell: (info) => (
+          <div className="flex justify-start pl-4">
+            <TableText variant="body" text={info.getValue()} />
+          </div>
+        ),
+        header: () => (
+          <div className="flex justify-start ">
+            <TableText variant="header" text="ID" />
+          </div>
+        ),
+      }),
+      columnHelper.accessor("amount", {
+        cell: (info) => (
+          <TableText variant="body" text={"USD " + info.getValue()} />
+        ),
+        header: () => <TableText variant="header" text="Amount" />,
+      }),
+      columnHelper.accessor("type", {
+        cell: (info) => <TableText variant="body" text={info.getValue()} />,
+        header: () => <TableText variant="header" text="Type" />,
+      }),
+      columnHelper.accessor("method", {
+        cell: (info) => <TableText variant="body" text={info.getValue().name} />,
+        header: () => <TableText variant="header" text="Payment Method" />,
+      }),
+      columnHelper.accessor("createdAt", {
+        cell: (info) => (
+          <TableText variant="body" text={TableDate(info.getValue())} />
+        ),
+        header: () => <TableText variant="header" text="Date" />,
+      }),
+      columnHelper.accessor("status", {
+        cell: (info) => (
+          <TableStatus variant={info.getValue()} text={info.getValue()} />
+        ),
+        header: () => <TableText variant="header" text="Status" />,
+      }),
+      columnHelper.display({
+        id: "action",
+        cell: () => (
+          <div className="flex justify-center">
+            <Image src={horizontalEllipsis} alt="" />
+          </div>
+        ),
+        header: () => <TableText variant="header" text="Action" />,
+      }),
+    ],
+    []
+  );
 
   const table = useReactTable({
-    data: data ? data : [],
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const hasData = (data?.length ?? 0) > 0;
+
   return (
     <>
+      {/* Drawer */}
       <SideDrawerWrapper
         active={showSideDrawer}
         handleClose={() => setShowSideDrawer(false)}
@@ -182,65 +193,98 @@ export const TransactionTable = ({ data }: { data?: Payment[] }) => {
           </div>
         </div>
       </SideDrawerWrapper>
-      {/* <TableEmptyState icon={graphIcon} tableText="No Transactions" /> */}
+
+      {/* CONTENT */}
       <div className="mt-4">
-        {data && data.length && (
-          <table className="w-full">
+        {/* Loading skeleton */}
+        {loading && (
+          <table className="w-full animate-pulse">
             <thead>
-              {table.getHeaderGroups().map((headerGroup) => {
-                return (
-                  <tr key={headerGroup.id} className="min-w-full w-full">
-                    {headerGroup.headers.map((header, index, rootData) => {
-                      return (
-                        <th
-                          className={`bg-[#F0F4F8]  p-4 ${
-                            index === 0 && "rounded-tl-2xl"
-                          } ${
-                            index === rootData.length - 1 && "rounded-tr-2xl"
-                          }`}
-                          key={header.id}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+              <tr className="min-w-full w-full">
+                {Array.from({ length: 7 }).map((_, i, arr) => (
+                  <th
+                    key={i}
+                    className={`bg-[#F0F4F8] p-4 ${
+                      i === 0 ? "rounded-tl-2xl" : ""
+                    } ${i === arr.length - 1 ? "rounded-tr-2xl" : ""}`}
+                  >
+                    <div className="h-4 w-24 bg-slate-200 rounded" />
+                  </th>
+                ))}
+              </tr>
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => {
-                return (
-                  <tr
-                    onClick={() => {
-                      setSelectedTransaction(row.original);
-                      setShowSideDrawer(true);
-                    }}
-                    style={{
-                      boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
-                    }}
-                    key={row.id}
-                  >
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <td className="bg-[#FEFEFE33]" key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+              {Array.from({ length: 6 }).map((_, r) => (
+                <tr
+                  key={r}
+                  style={{ boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)" }}
+                >
+                  {Array.from({ length: 7 }).map((__, c) => (
+                    <td key={c} className="bg-[#FEFEFE33] p-4">
+                      <div className="h-4 w-[60%] bg-slate-200 rounded" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
+        )}
+
+        {/* Table with data */}
+        {!loading && hasData && (
+          <table className="w-full">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="min-w-full w-full">
+                  {headerGroup.headers.map((header, index, rootData) => (
+                    <th
+                      className={`bg-[#F0F4F8] p-4 ${
+                        index === 0 ? "rounded-tl-2xl" : ""
+                      } ${
+                        index === rootData.length - 1 ? "rounded-tr-2xl" : ""
+                      }`}
+                      key={header.id}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  onClick={() => {
+                    setSelectedTransaction(row.original);
+                    setShowSideDrawer(true);
+                  }}
+                  style={{
+                    boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
+                  }}
+                  key={row.id}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td className="bg-[#FEFEFE33]" key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        {/* Empty state */}
+        {!loading && !hasData && (
+          <TableEmptyState icon={graphIcon} tableText="No Transactions" />
         )}
 
         <TablePagination />
