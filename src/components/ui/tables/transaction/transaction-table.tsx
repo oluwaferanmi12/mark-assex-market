@@ -59,7 +59,9 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
         header: () => <TableText variant="header" text="Type" />,
       }),
       columnHelper.accessor("method", {
-        cell: (info) => <TableText variant="body" text={info.getValue().name} />,
+        cell: (info) => (
+          <TableText variant="body" text={info.getValue().name} />
+        ),
         header: () => <TableText variant="header" text="Payment Method" />,
       }),
       columnHelper.accessor("createdAt", {
@@ -152,30 +154,31 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                       {TableDate(selectedTransaction?.createdAt ?? "")}
                     </p>
                   </div>
-
-                  <div className="mt-8">
-                    <p className="text-[#707070] font-work-sans-regular">
-                      Reason
-                    </p>
-                    <div className="mt-1 bg-[#F40E0E1A] rounded-lg gap-2 p-2 flex items-center">
-                      <div className="">
-                        <Image
-                          src={cancelIcon}
-                          className="w-[30px] h-[30px]"
-                          alt=""
-                        />
-                      </div>
-                      <div className="font-work-sans-regular text-[#202020]">
-                        <span className="font-work-sans-medium">
-                          Insufficient Funds:{" "}
-                        </span>
-                        <span className="">
-                          There wasn’t enough money in your account to complete
-                          the transaction.
-                        </span>
+                  {selectedTransaction?.status === "FAILED" && (
+                    <div className="mt-8">
+                      <p className="text-[#707070] font-work-sans-regular">
+                        Reason
+                      </p>
+                      <div className="mt-1 bg-[#F40E0E1A] rounded-lg gap-2 p-2 flex items-center">
+                        <div className="">
+                          <Image
+                            src={cancelIcon}
+                            className="w-[30px] h-[30px]"
+                            alt=""
+                          />
+                        </div>
+                        <div className="font-work-sans-regular text-[#202020]">
+                          <span className="font-work-sans-medium">
+                            Insufficient Funds:{" "}
+                          </span>
+                          <span className="">
+                            There wasn’t enough money in your account to
+                            complete the transaction.
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </ModalBody>
