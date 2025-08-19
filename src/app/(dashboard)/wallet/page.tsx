@@ -22,11 +22,13 @@ import { useRouter } from "next/navigation";
 import { useGetPayments } from "@/hooks/queries/usePayment";
 import { useGetUserProfile } from "@/hooks/queries/useSettings";
 import { MoneyFormat } from "@/utils/money-format";
-
+import searchIcon from "@/assets/svgs/searchIcon.svg";
+import { debounce } from "lodash";
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
+  const [searchValue, setSearchValue] = useState("");
   const { data: user } = useGetUserProfile();
   const { data } = useGetPayments({
     status: "",
@@ -47,7 +49,12 @@ const Wallet = () => {
     { text: "Withdraw", id: "" },
   ];
 
+  const debounced = debounce((e) => {
+    setSearchValue(e.target.value);
+  }, 1000);
+
   const router = useRouter();
+  console.log(searchValue);
   return (
     <>
       <PageHeader text="Wallet" />
@@ -144,8 +151,17 @@ const Wallet = () => {
         </p>
         <VisibleOnDesktop>
           <div className="flex justify-between items-end">
-            <div>
-              <SearchInput />
+            <div className="relative">
+              <span className="absolute top-3 left-3">
+                <Image src={searchIcon} alt="" />
+              </span>
+              <input
+                onChange={(e) => {
+                  console.log(e.target.value);
+                }}
+                placeholder="Search..."
+                className="bg-white focus:outline-none font-work-sans-regular py-2 px-4 pl-8 rounded-xl border border-[#BEBEBE59]"
+              />
             </div>
             <div className="flex items-center gap-3">
               <div>

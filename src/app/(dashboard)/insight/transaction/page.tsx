@@ -28,6 +28,7 @@ const Transaction = () => {
     methodSlug: "",
   });
   const [methodSelected, setMethodSelected] = useState("All");
+  const [searchValue, setSearchValue] = useState("");
   const { data, isPending } = useGetPayments(payloadQuery);
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -60,8 +61,9 @@ const Transaction = () => {
         statusDropDownList.find((item) => item.text === statusSelected)?.id ??
         "",
       methodSlug: methodSelected === "All" ? "" : methodSelected,
+      keyword: searchValue,
     }));
-  }, [typeSelected, statusSelected, methodSelected]);
+  }, [typeSelected, statusSelected, methodSelected, searchValue]);
 
   return (
     <>
@@ -70,7 +72,11 @@ const Transaction = () => {
         <VisibleOnDesktop>
           <div className="flex justify-between items-end">
             <div>
-              <SearchInput />
+              <SearchInput
+                onChange={(e) => {
+                  setSearchValue(e);
+                }}
+              />
             </div>
             <div className="flex items-center gap-3">
               <div>
