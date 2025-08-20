@@ -64,7 +64,7 @@ export const MobileTransactionTable = ({
                 <TableRow leftText="Type" rightText={payment.type} />
                 <TableRow
                   leftText="Payment method"
-                  rightText={payment.method.name}
+                  rightText={payment?.method?.name}
                 />
                 <TableRow leftText="Date" type="date" rightText="+12.54" last />
               </div>

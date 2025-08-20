@@ -22,8 +22,17 @@ import {
   useExternalTransfer,
   useInternalTransfer,
 } from "@/hooks/queries/usePayment";
+import { useQueryClient } from "@tanstack/react-query";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { useRouter } from "next/navigation";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import successIcon from "@/assets/svgs/transaction-success-icon.svg";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import { Account } from "@/types";
 
 const InternalTransfer = () => {
+  const queryClient = useQueryClient();
   const [activeOption, setActiveOption] = useState(0);
   const { data } = useGetUserProfile();
   const [senderAccount, setSenderAccount] = useState("");
@@ -31,7 +40,13 @@ const InternalTransfer = () => {
   const [email, setEmail] = useState("");
   const { data: userAccounts } = useGetAccount();
   const [amount, setAmount] = useState(0);
-  const internalTransferMutate = useInternalTransfer();
+  const [transactionSuccessful, setTransactionSuccessful] = useState(false);
+  const internalTransferMutate = useInternalTransfer(() => {
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    setTransactionSuccessful(true);
+  });
+  const [selectedAccountDetail, setSelectedAccountDetail] = useState<Account>();
+  const router = useRouter();
   const externalTransferMutate = useExternalTransfer();
   const [token, setToken] = useState("");
 
@@ -78,9 +93,49 @@ const InternalTransfer = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (receiverAccount && userAccounts) {
+      const result = userAccounts.find((item) => item.id === receiverAccount);
+      setSelectedAccountDetail(result);
+    }
+  }, [receiverAccount, userAccounts]);
   return (
     <>
       <PageHeader text="Internal Transfer" />
+      <ModalContainer
+        active={transactionSuccessful}
+        handleClose={() => {
+          setTransactionSuccessful(false);
+          router.push("/wallet");
+        }}
+      >
+        <ModalBody>
+          <div className="flex items-center justify-center">
+            <Image src={successIcon} alt="" />
+          </div>
+          <p className="text-center text-2xl font-work-sans-medium my-1">
+            Transaction Successful
+          </p>
+          <p className="text-[#404040] font-work-sans-regular w-4/5 mx-auto text-center">
+            Your transfer of ${MoneyFormat(amount)} to trading account #
+            {selectedAccountDetail?.mt5Id}
+            has been completed Successfully.
+          </p>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            action={() => {
+              setTransactionSuccessful(false);
+              router.push("/wallet");
+            }}
+            text="View Transaction"
+            loading={false}
+            variant="green-bg"
+            fullWidth
+          />
+        </ModalFooter>
+      </ModalContainer>
       <div className="py-4">
         <p className="text-[#707070] mb-2 lg:text-sm text-xs font-work-sans-regular">
           Select option
@@ -151,7 +206,7 @@ const InternalTransfer = () => {
               <option value={"wallet"}>Wallet</option>
               {userAccounts?.map((item) => {
                 return (
-                  <option value={item.id}>
+                  <option key={item.id} value={item.id}>
                     {item.accountGroup.name}: {item.mt5Id} ($
                     {MoneyFormat(item.balance)})
                   </option>
@@ -188,7 +243,7 @@ const InternalTransfer = () => {
                 <option value={"wallet"}>Wallet</option>
                 {userAccounts?.map((item) => {
                   return (
-                    <option value={item.id}>
+                    <option key={item.id} value={item.id}>
                       {item.accountGroup.name}(${item.balance})
                     </option>
                   );

@@ -61,7 +61,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("method", {
         cell: (info) => (
-          <TableText variant="body" text={info.getValue().name} />
+          <TableText variant="body" text={info.getValue()?.name} />
         ),
         header: () => <TableText variant="header" text="Payment Method" />,
       }),
