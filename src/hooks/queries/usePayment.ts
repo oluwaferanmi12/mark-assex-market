@@ -140,8 +140,11 @@ export const useInternalTransfer = (sc: (val: any) => void) => {
   });
 };
 
-export const useExternalTransfer = () => {
+export const useExternalTransfer = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ExternalTransferPayload) => externalTransfer(payload),
+    onSuccess: (val: any) => {
+      sc(val);
+    },
   });
 };
