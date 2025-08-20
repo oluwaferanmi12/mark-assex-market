@@ -356,7 +356,7 @@ export const TradeContainer = ({
               </span>
             </div>
             <p className="text-3xl font-work-sans-semi-bold text-black">
-              ${account.balance} USD
+              ${MoneyFormat(account.balance)} USD
             </p>
           </div>
 
