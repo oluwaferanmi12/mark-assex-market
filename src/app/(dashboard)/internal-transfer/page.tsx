@@ -59,7 +59,10 @@ const InternalTransfer = () => {
     setShowOtp(true);
   });
   const router = useRouter();
-  const externalTransferMutate = useExternalTransfer(() => {});
+  const externalTransferMutate = useExternalTransfer(() => {
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    setTransactionSuccessful(true);
+  });
   const verifyOtp = useVerifyGenericOtp((data) => {
     externalTransferMutate.mutate({
       token: data,
@@ -145,11 +148,11 @@ const InternalTransfer = () => {
           </p>
           <p className="text-[#404040] font-work-sans-regular w-4/5 mx-auto text-center">
             Your transfer of ${MoneyFormat(amount)} to trading account
-            {activeOption
+            {!email
               ? receiverAccount === "wallet"
                 ? "Wallet"
                 : `#${selectedAccountDetail?.mt5Id}`
-              : email}
+              : " " + email + " "}
             has been completed Successfully.
           </p>
         </ModalBody>

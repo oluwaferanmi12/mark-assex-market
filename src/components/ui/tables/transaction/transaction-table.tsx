@@ -53,7 +53,10 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("amount", {
         cell: (info) => (
-          <TableText variant="body" text={"USD " + info.getValue()} />
+          <TableText
+            variant="body"
+            text={"USD " + MoneyFormat(+info.getValue())}
+          />
         ),
         header: () => <TableText variant="header" text="Amount" />,
       }),
@@ -132,7 +135,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      {"NGN " +
+                      {"USD " +
                         MoneyFormat(+(selectedTransaction?.amount ?? 0))}
                     </p>
                   </div>
