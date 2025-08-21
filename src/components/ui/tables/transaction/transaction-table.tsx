@@ -24,6 +24,7 @@ import { TableDate } from "@/utils/date-formatter";
 import graphIcon from "@/assets/svgs/order-empty-icon.svg";
 import { MoneyFormat } from "@/utils/money-format";
 import { TableLoader } from "@/components/loaders/table-loader";
+import { DateViewer } from "@/components/shared/wrappers/date-viewer";
 
 type Props = {
   data?: Payment[];
@@ -71,7 +72,9 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("createdAt", {
         cell: (info) => (
-          <TableText variant="body" text={TableDate(info.getValue())} />
+          <div className="flex items-center justify-center">
+            <DateViewer date={info.getValue()} />
+          </div>
         ),
         header: () => <TableText variant="header" text="Date" />,
       }),
