@@ -48,7 +48,10 @@ export const OrderTable = ({
         id: "executedPrice",
         header: () => <TableText variant="header" text="Executed price" />,
         cell: (info) => (
-          <TableText variant="body" text={`USD ${MoneyFormat(info.getValue())}`} />
+          <TableText
+            variant="body"
+            text={`USD ${MoneyFormat(info.getValue())}`}
+          />
         ),
       }),
       // Profit/Loss
@@ -56,18 +59,22 @@ export const OrderTable = ({
         id: "profitLoss",
         header: () => <TableText variant="header" text="Profit/Loss" />,
         cell: (info) => (
-          <TableText variant="body" text={`USD ${MoneyFormat(info.getValue())}`} />
+          <>
+            {info.getValue() < 0 ? (
+              <p className="font-work-sans-regular text-[#D92D20]">
+                -{`USD ${MoneyFormat(info.getValue())}`}
+              </p>
+            ) : (
+              <p className="font-work-sans-regular text-[#202020]">
+                +{`USD ${MoneyFormat(info.getValue())}`}
+              </p>
+            )}
+          </>
         ),
       }),
       // Amount — if you actually have a separate amount field, use it here.
       // If not, keep price but make sure the column id is unique.
-      columnHelper.accessor((row) => row.price, {
-        id: "amount",
-        header: () => <TableText variant="header" text="Amount" />,
-        cell: (info) => (
-          <TableText variant="body" text={`USD ${MoneyFormat(info.getValue())}`} />
-        ),
-      }),
+
       // Status as a display column (not tied to any field)
       columnHelper.display({
         id: "status",
@@ -133,7 +140,10 @@ export const OrderTable = ({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="bg-[#FEFEFE33]">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </td>
                   ))}
                 </tr>
