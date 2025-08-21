@@ -65,7 +65,7 @@ export const ClientTable = () => {
     columnHelper.accessor("date", {
       cell: (info) => (
         <div className="flex justify-center">
-          <DateViewer />
+          <DateViewer date="" />
         </div>
       ),
       header: (info) => <TableText variant="header" text="Date" />,
