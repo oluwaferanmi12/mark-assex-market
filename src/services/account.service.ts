@@ -62,6 +62,8 @@ export const changeAccountLeverage = async (
 export const getAccountHistory = async (
   payload: GetAccountHistoryPayloadInterface
 ): Promise<AccountHistory[]> => {
-  const result = await axiosInstance.get(`/accounts/${payload.id}/history`);
+  const result = await axiosInstance.get(
+    `/accounts/${payload.id}/history?keyword=${payload.keyword}`
+  );
   return result.data.data.data;
 };

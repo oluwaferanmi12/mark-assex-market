@@ -11,11 +11,13 @@ export const DropDownList = ({
   dropDownList,
   selected,
   setSelected,
+  setSelectedId,
 }: {
   children: ReactNode;
   dropDownList: DropDownListInterface[];
   selected: string;
   setSelected: Dispatch<SetStateAction<string>>;
+  setSelectedId?: Dispatch<SetStateAction<string>>;
 }) => {
   const items: MenuProps["items"] = dropDownList.map((item, index) => {
     return {
@@ -24,6 +26,9 @@ export const DropDownList = ({
         <div
           onClick={() => {
             setSelected(item.text);
+            if (setSelectedId) {
+              setSelectedId(item.id);
+            }
             item.clickAction && item.clickAction();
           }}
           className="flex items-center gap-2"

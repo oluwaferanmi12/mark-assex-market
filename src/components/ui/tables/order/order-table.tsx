@@ -21,7 +21,7 @@ export const OrderTable = ({
   history,
   loading,
 }: {
-  history: AccountHistory[];
+  history?: AccountHistory[];
   loading: boolean;
 }) => {
   const columnHelper = createColumnHelper<AccountHistory>();
@@ -59,7 +59,7 @@ export const OrderTable = ({
         id: "profitLoss",
         header: () => <TableText variant="header" text="Profit/Loss" />,
         cell: (info) => (
-          <>
+          <div className="justify-center flex">
             {info.getValue() < 0 ? (
               <p className="font-work-sans-regular text-[#D92D20]">
                 -{`USD ${MoneyFormat(info.getValue())}`}
@@ -69,7 +69,7 @@ export const OrderTable = ({
                 +{`USD ${MoneyFormat(info.getValue())}`}
               </p>
             )}
-          </>
+          </div>
         ),
       }),
       // Amount — if you actually have a separate amount field, use it here.

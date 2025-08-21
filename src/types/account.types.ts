@@ -75,7 +75,7 @@ export interface AccountLeverageInterface {
 export interface GetAccountHistoryPayloadInterface {
   id: string;
   keyword: string;
-  type: "BUY" | "SELL";
+  type: string;
 }
 
 export interface AccountHistory {

@@ -17,18 +17,23 @@ import {
   useGetAccountDetail,
   useGetAccountTradingHistory,
 } from "@/hooks/queries/useAccount";
+import { SearchInput } from "@/components/ui/inputs/search-input";
+import { GetAccountHistoryPayloadInterface } from "@/types";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
   const [orderTypeSelected, setOrderTypeSelected] = useState("All");
   const [indexActive, setIndexActive] = useState(0);
   const [id, setId] = useState("");
+  const [queryParam, setQueryParam] =
+    useState<GetAccountHistoryPayloadInterface>({
+      id: id ?? "",
+      keyword: "",
+      type: "",
+    });
+
   const [statusSelected, setStatusSelected] = useState("All");
-  const tradingHistory = useGetAccountTradingHistory({
-    id: id ?? "",
-    keyword: "",
-    type: "BUY",
-  });
+  const tradingHistory = useGetAccountTradingHistory(queryParam);
 
   const { data } = useGetAccountDetail(id ?? "");
   const filterDropDownList: DropDownListInterface[] = [
@@ -38,9 +43,8 @@ const AccountDetails = () => {
   ];
   const orderDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
-    { text: "Market", id: "" },
-    { text: "Limit", id: "" },
-    { text: "Stop", id: "" },
+    { text: "BUY", id: "BUY" },
+    { text: "SELL", id: "SELL" },
   ];
 
   const statusDropDownList: DropDownListInterface[] = [
@@ -53,6 +57,7 @@ const AccountDetails = () => {
   useEffect(() => {
     const idVal = new URLSearchParams(window.location.search);
     const idQuery = idVal.get("id");
+    setQueryParam((prev) => ({ ...prev, id: idQuery ?? "" }));
     setId(idQuery ?? "");
   }, []);
   return (
@@ -82,35 +87,47 @@ const AccountDetails = () => {
       <div className="mt-6">
         <p className="lg:text-xl text-base font-work-sans-medium">Orders</p>
         <VisibleOnDesktop>
-          <div className="flex justify-end items-center gap-2">
+          <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-                Operations
-              </p>
-              <DropDownList
-                dropDownList={orderDropDownList}
-                selected={orderTypeSelected}
-                setSelected={setOrderTypeSelected}
-              >
-                <div>
-                  <DropDownTextWrapper filterSelected={orderTypeSelected} />
-                </div>
-              </DropDownList>
+              <SearchInput
+                onChange={(e) => {
+                  setQueryParam((prev) => ({ ...prev, keyword: e }));
+                }}
+              />
             </div>
+            <div className="flex justify-end items-center gap-2">
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Operations
+                </p>
+                <DropDownList
+                  dropDownList={orderDropDownList}
+                  selected={orderTypeSelected}
+                  setSelected={setOrderTypeSelected}
+                  setSelectedId={(e) => {
+                    setQueryParam((prev) => ({ ...prev, type: e as string }));
+                  }}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={orderTypeSelected} />
+                  </div>
+                </DropDownList>
+              </div>
 
-            <div>
-              <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-                Status
-              </p>
-              <DropDownList
-                dropDownList={statusDropDownList}
-                selected={statusSelected}
-                setSelected={setStatusSelected}
-              >
-                <div>
-                  <DropDownTextWrapper filterSelected={statusSelected} />
-                </div>
-              </DropDownList>
+              {/* <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Status
+                </p>
+                <DropDownList
+                  dropDownList={statusDropDownList}
+                  selected={statusSelected}
+                  setSelected={setStatusSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={statusSelected} />
+                  </div>
+                </DropDownList>
+              </div> */}
             </div>
           </div>
         </VisibleOnDesktop>
