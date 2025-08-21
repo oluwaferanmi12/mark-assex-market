@@ -19,6 +19,7 @@ import {
 } from "@/hooks/queries/useAccount";
 import { SearchInput } from "@/components/ui/inputs/search-input";
 import { GetAccountHistoryPayloadInterface } from "@/types";
+import { TableEmptyState } from "@/components/shared/states/empty/table-empty-state";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
@@ -153,16 +154,23 @@ const AccountDetails = () => {
           />
         </VisibleOnDesktop>
         <VisibleOnMobile>
-          <MobileOrderTable
-            index={0}
-            activeIndex={indexActive}
-            setActiveIndex={setIndexActive}
-          />
-          <MobileOrderTable
-            index={1}
-            activeIndex={indexActive}
-            setActiveIndex={setIndexActive}
-          />
+          {tradingHistory.isPending ? (
+            <p>Loading...</p>
+          ) : !tradingHistory.data ? (
+            <TableEmptyState icon="" tableText="No Orders" />
+          ) : (
+            tradingHistory.data.map((item, index) => {
+              return (
+                <MobileOrderTable
+                  history={item}
+                  key={item.id}
+                  index={index}
+                  activeIndex={indexActive}
+                  setActiveIndex={setIndexActive}
+                />
+              );
+            })
+          )}
         </VisibleOnMobile>
       </div>
     </div>

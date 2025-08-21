@@ -16,6 +16,7 @@ import { TableLoader } from "@/components/loaders/table-loader";
 import { MoneyFormat } from "@/utils/money-format";
 import { TableDate } from "@/utils/date-formatter";
 import { useMemo } from "react";
+import { DateViewer } from "@/components/shared/wrappers/date-viewer";
 
 export const OrderTable = ({
   history,
@@ -85,7 +86,9 @@ export const OrderTable = ({
         id: "createdAt",
         header: () => <TableText variant="header" text="Created at" />,
         cell: (info) => (
-          <TableText variant="body" text={TableDate(info.getValue())} />
+          <div className=" flex justify-center">
+            <DateViewer date={info.getValue()} />
+          </div>
         ),
       }),
     ],
