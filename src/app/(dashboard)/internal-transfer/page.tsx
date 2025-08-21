@@ -144,8 +144,12 @@ const InternalTransfer = () => {
             Transaction Successful
           </p>
           <p className="text-[#404040] font-work-sans-regular w-4/5 mx-auto text-center">
-            Your transfer of ${MoneyFormat(amount)} to trading account #
-            {selectedAccountDetail?.mt5Id}
+            Your transfer of ${MoneyFormat(amount)} to trading account
+            {activeOption
+              ? receiverAccount === "wallet"
+                ? "Wallet"
+                : `#${selectedAccountDetail?.mt5Id}`
+              : email}
             has been completed Successfully.
           </p>
         </ModalBody>

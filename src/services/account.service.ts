@@ -3,9 +3,11 @@ import { CreateAccountInterface } from "@/interfaces/ui-interfac";
 import {
   Account,
   AccountGroupInterface,
+  AccountHistory,
   AccountLeverageInterface,
   AccountPassworInterface,
   CreateTradeAccount,
+  GetAccountHistoryPayloadInterface,
 } from "@/types";
 
 export const getAccount = async () => {
@@ -55,4 +57,11 @@ export const changeAccountLeverage = async (
     { leverage: payload.leverage }
   );
   return result.data;
+};
+
+export const getAccountHistory = async (
+  payload: GetAccountHistoryPayloadInterface
+): Promise<AccountHistory[]> => {
+  const result = await axiosInstance.get(`/accounts/${payload.id}/history`);
+  return result.data.data.data;
 };

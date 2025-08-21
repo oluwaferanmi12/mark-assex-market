@@ -71,3 +71,23 @@ export interface AccountLeverageInterface {
   id: string;
   leverage: number;
 }
+
+export interface GetAccountHistoryPayloadInterface {
+  id: string;
+  keyword: string;
+  type: "BUY" | "SELL";
+}
+
+export interface AccountHistory {
+  id: string;
+  orderId: string;
+  symbol: string;
+  price: number;
+  profit: number;
+  stopLoss: number;
+  takeProfit: number;
+  openLotSize: number;
+  closeLotSize: number;
+  type: "BUY" | "SELL" | string;
+  date: string;
+}

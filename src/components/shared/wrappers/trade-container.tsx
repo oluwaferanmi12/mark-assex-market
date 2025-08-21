@@ -601,7 +601,7 @@ export const TradeContainer = ({
               Equity
             </p>
             <p className="font-work-sans-regular text-[#404040] text-xs">
-              ${account.equity}
+              ${MoneyFormat(account.equity)}
             </p>
           </div>
           <div className="flex items-center py-4 justify-between border-b border-[#BEBEBE80]">

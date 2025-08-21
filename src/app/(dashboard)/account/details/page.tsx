@@ -13,15 +13,23 @@ import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile"
 import { MobileOrderTable } from "@/components/ui/tables/order/mobile-order-table";
 import { MobileInput } from "@/components/ui/inputs/mobile-table-input";
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
-import { useGetAccountDetail } from "@/hooks/queries/useAccount";
+import {
+  useGetAccountDetail,
+  useGetAccountTradingHistory,
+} from "@/hooks/queries/useAccount";
 
 const AccountDetails = () => {
   const [filterSelected, setFilterSelected] = useState("Newest");
   const [orderTypeSelected, setOrderTypeSelected] = useState("All");
   const [indexActive, setIndexActive] = useState(0);
-  const [statusSelected, setStatusSelected] = useState("All");
-
   const [id, setId] = useState("");
+  const [statusSelected, setStatusSelected] = useState("All");
+  const tradingHistory = useGetAccountTradingHistory({
+    id: id ?? "",
+    keyword: "",
+    type: "BUY",
+  });
+
   const { data } = useGetAccountDetail(id ?? "");
   const filterDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
@@ -122,7 +130,10 @@ const AccountDetails = () => {
       </div>
       <div className="my-4">
         <VisibleOnDesktop>
-          <OrderTable />
+          <OrderTable
+            loading={tradingHistory.isPending}
+            history={tradingHistory.data}
+          />
         </VisibleOnDesktop>
         <VisibleOnMobile>
           <MobileOrderTable
