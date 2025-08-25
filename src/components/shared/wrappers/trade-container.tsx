@@ -88,7 +88,6 @@ export const TradeContainer = ({
   ];
   const liveAccountDropDownList: DropDownListInterface[] = [
     { text: "Deposit Funds", id: "" },
-    { text: "Account Trade History", id: "" },
     {
       text: "Change Password",
       id: "",
