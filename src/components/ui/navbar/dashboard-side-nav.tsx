@@ -172,66 +172,67 @@ export const DashboardSideNav = ({
   }, [pathName]);
 
   return (
-    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen  px-6 z-50 top-0 flex flex-col lg:justify-between">
-      <div>
-        <div className="hidden lg:block">
-          <span>
-            <Image src={smallLogo} alt="" />
-          </span>
-        </div>
-        <div className="lg:hidden border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <p className="text-xs font-work-sans-regular text-[#707070] ">
-                Wallet balance
-              </p>
-              <span>
-                <Image src={eyeIcon} alt="" />
-              </span>
-            </div>
-            <div className="flex gap-1 items-center">
-              <span>
-                <Image src={wallet} alt="" />
-              </span>
-              <p className="text-[#202020]  text-base font-work-sans-semi-bold">
-                ${MoneyFormat(userProfile?.walletBalance ?? 0)}
-              </p>
-            </div>
+    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col overflow-hidden">
+    {/* Scroll container */}
+    <div className="flex-1 min-h-0 overflow-y-auto">
+      {/* Desktop logo (optional sticky) */}
+      <div className="hidden lg:block sticky top-0 bg-white z-20 pb-2">
+        <Image src={smallLogo} alt="" />
+      </div>
+
+      {/* Mobile wallet header — stays on top */}
+      <div className="lg:hidden sticky top-0 bg-white z-20 border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-xs font-work-sans-regular text-[#707070] ">
+              Wallet balance
+            </p>
+            <span><Image src={eyeIcon} alt="" /></span>
           </div>
-          <div
-            onClick={() => {
-              handleCloseAsModal && handleCloseAsModal();
-            }}
-            className="cursor-pointer"
-          >
-            <Image src={navCloseIcon} alt="" />
+          <div className="flex gap-1 items-center">
+            <span><Image src={wallet} alt="" /></span>
+            <p className="text-[#202020] text-base font-work-sans-semi-bold">
+              ${MoneyFormat(userProfile?.walletBalance ?? 0)}
+            </p>
           </div>
         </div>
-        <div className="lg:mt-6">
-          {navObject.map((item, index) => {
-            return <DashboardNavWrapper key={index} item={item} />;
-          })}
+        <div
+          onClick={() => { handleCloseAsModal && handleCloseAsModal(); }}
+          className="cursor-pointer"
+        >
+          <Image src={navCloseIcon} alt="" />
         </div>
       </div>
-      <div>
+
+      {/* NAV + rest now scroll underneath */}
+      <div className="lg:mt-6">
+        {navObject.map((item, index) => (
+          <DashboardNavWrapper key={index} item={item} />
+        ))}
+      </div>
+
+      <div className="mt-6">
         <div className="hidden lg:block">
-          {nav2object.map((item, index) => {
-            return <DashboardNavWrapper key={index} item={item} />;
-          })}
+          {nav2object.map((item, index) => (
+            <DashboardNavWrapper key={index} item={item} />
+          ))}
         </div>
+
         <div className="lg:hidden">
-          {mobileObject.map((item, index) => {
-            return <DashboardNavWrapper key={index} item={item} />;
-          })}
+          {mobileObject.map((item, index) => (
+            <DashboardNavWrapper key={index} item={item} />
+          ))}
         </div>
 
         <DashboardUserDetails userProfile={userProfile} />
-        <div className=" lg:hidden">
-          {nav2object.map((item, index) => {
-            return <DashboardNavWrapper key={index} item={item} />;
-          })}
+
+        <div className="lg:hidden">
+          {nav2object.map((item, index) => (
+            <DashboardNavWrapper key={index} item={item} />
+          ))}
         </div>
       </div>
     </div>
+  </div>
   );
 };
