@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { AccountGroupInterface } from "@/types";
 import { useState } from "react";
 import Link from "next/link";
+import { MoneyFormat } from "@/utils/money-format";
 
 const ACTIVE_SHADOW =
   "0px 16px 48px 0px rgba(0, 204, 177, 0.12), 0px 4px 12px 0px rgba(10, 124, 255, 0.24), 0px 0px 0px 4px #00CCB1";
@@ -78,7 +79,7 @@ export const AccountTypeWrapper = ({
         <div className="flex items-center gap-2 mb-2">
           <Image src={checkIcon} alt="" />
           <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
-            Maximum Deposit ${item.maxDeposit}
+            Maximum Deposit ${MoneyFormat(+item.maxDeposit)}
           </p>
         </div>
         <div className="flex items-center gap-2 mb-2">
@@ -90,7 +91,7 @@ export const AccountTypeWrapper = ({
         <div className="flex items-center gap-2 mb-2">
           <Image src={checkIcon} alt="" />
           <p className="text-[#404040] text-xs lg:text-sm font-work-sans-regular">
-            Comission ${item.commission}
+            Comission ${MoneyFormat(item.commission)}
           </p>
         </div>
       </div>

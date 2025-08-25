@@ -1,10 +1,16 @@
 import { Col, Row } from "antd";
 
-export const CardGroupLoader = ({ stretched }: { stretched?: boolean }) => {
+export const CardGroupLoader = ({
+  stretched,
+  length,
+}: {
+  stretched?: boolean;
+  length?: number;
+}) => {
   return (
     <div>
       <Row gutter={16} className="mt-8">
-        {Array.from({ length: 10 }).map((_, index) => (
+        {Array.from({ length: length ? length : 10 }).map((_, index) => (
           <Col xs={24} lg={stretched ? 24 : 12} className="mb-4" key={index}>
             <div
               className={`
