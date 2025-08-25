@@ -28,7 +28,6 @@ export const useAccountVerification = () => {
     { text: "Document Verification", status: "not-verified", id: "document" },
   ]);
   const { data: userProfile } = useGetUserProfile();
-  console.log(userProfile);
 
   const resolveNextState = (currentState: typeof activeState) => {
     // now what should be done here is to see the next content that is not-verified and then set it to verifying and resolve every toher state

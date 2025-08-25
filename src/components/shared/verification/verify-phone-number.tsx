@@ -10,6 +10,7 @@ import { VerificationIdtype } from "@/interfaces/ui-interfac";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import countryCodes from "country-codes-list";
+import { MuiTelInput } from "mui-tel-input";
 import {
   useGetKyc,
   useGetUserProfile,
@@ -26,11 +27,6 @@ export const VerifyPhoneNumber = ({
   resolveNextStatus: (val: VerificationIdtype) => void;
 }) => {
   const [showOtp, setShowOtp] = useState(false);
-  const [countryCallingCode, setCountryCallingCode] = useState(
-    countryCodes?.customList
-      ? countryCodes?.customList("countryCallingCode")
-      : null
-  );
   const [selectedCode, setSelectedCode] = useState("234");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otpVal, setOtpVal] = useState("");
@@ -46,26 +42,26 @@ export const VerifyPhoneNumber = ({
   });
 
   const handlePhoneRequest = () => {
+    const splittedCode = phoneNumber.split(" ");
+    const countryCodeVal = splittedCode.shift();
     phoneRequestMutate.mutate({
-      phone: phoneNumber,
-      phoneCode: selectedCode,
+      phone: splittedCode.join(""),
+      phoneCode: countryCodeVal ?? "",
     });
   };
 
   useEffect(() => {
     if (userProfile) {
       setSelectedCode(userProfile.phoneCode ? userProfile.phoneCode : "234");
-      setPhoneNumber(userProfile.phone ?? "");
+      setPhoneNumber(
+        userProfile.phone
+          ? `+${userProfile.phoneCode + " " + userProfile.phone}`
+          : ""
+      );
     }
   }, [userProfile]);
 
-  useEffect(() => {
-    setCountryCallingCode(
-      countryCodes?.customList
-        ? countryCodes?.customList("countryCallingCode")
-        : null
-    );
-  }, []);
+  console.log(phoneNumber);
 
   return (
     <>
@@ -117,25 +113,11 @@ export const VerifyPhoneNumber = ({
                     Phone Number
                   </p>
                   <div className="flex items-center ">
-                    <select
-                      value={selectedCode}
-                      onChange={(e) => {
-                        setSelectedCode(e.target.value);
-                      }}
-                      className="border focus:border-none bg-[#F2F4F7] border-[#BEBEBE59] rounded-tl-lg rounded-bl-lg font-work-sans-regular py-[9px]"
-                    >
-                      {countryCallingCode &&
-                        Object.entries(countryCallingCode).map(([key, val]) => {
-                          return <option value={key}>+{key}</option>;
-                        })}
-                    </select>
-                    <input
-                      placeholder={"9123435433"}
+                    <MuiTelInput
                       value={phoneNumber}
-                      onChange={(e) => {
-                        setPhoneNumber(e.target.value);
+                      onChange={(newVal) => {
+                        setPhoneNumber(newVal);
                       }}
-                      className={`w-full  text-[#202020] font-work-sans-regular px-4 py-2 rounded-tr-lg rounded-br-lg border border-[#BEBEBE59] outline-none`}
                     />
                   </div>
                 </div>
