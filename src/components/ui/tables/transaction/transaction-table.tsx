@@ -23,6 +23,8 @@ import { Payment } from "@/types";
 import { TableDate } from "@/utils/date-formatter";
 import graphIcon from "@/assets/svgs/order-empty-icon.svg";
 import { MoneyFormat } from "@/utils/money-format";
+import { TableLoader } from "@/components/loaders/table-loader";
+import { DateViewer } from "@/components/shared/wrappers/date-viewer";
 
 type Props = {
   data?: Payment[];
@@ -51,7 +53,10 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("amount", {
         cell: (info) => (
-          <TableText variant="body" text={"USD " + info.getValue()} />
+          <TableText
+            variant="body"
+            text={"USD " + MoneyFormat(+info.getValue())}
+          />
         ),
         header: () => <TableText variant="header" text="Amount" />,
       }),
@@ -61,13 +66,18 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("method", {
         cell: (info) => (
-          <TableText variant="body" text={info.getValue().name} />
+          <TableText
+            variant="body"
+            text={info.getValue()?.name ?? "Internal Transfer"}
+          />
         ),
         header: () => <TableText variant="header" text="Payment Method" />,
       }),
       columnHelper.accessor("createdAt", {
         cell: (info) => (
-          <TableText variant="body" text={TableDate(info.getValue())} />
+          <div className="flex items-center justify-center">
+            <DateViewer date={info.getValue()} />
+          </div>
         ),
         header: () => <TableText variant="header" text="Date" />,
       }),
@@ -125,7 +135,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                       Amount
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      {"NGN " +
+                      {"USD " +
                         MoneyFormat(+(selectedTransaction?.amount ?? 0))}
                     </p>
                   </div>
@@ -202,38 +212,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       {/* CONTENT */}
       <div className="mt-4">
         {/* Loading skeleton */}
-        {loading && (
-          <table className="w-full animate-pulse">
-            <thead>
-              <tr className="min-w-full w-full">
-                {Array.from({ length: 7 }).map((_, i, arr) => (
-                  <th
-                    key={i}
-                    className={`bg-[#F0F4F8] p-4 ${
-                      i === 0 ? "rounded-tl-2xl" : ""
-                    } ${i === arr.length - 1 ? "rounded-tr-2xl" : ""}`}
-                  >
-                    <div className="h-4 w-24 bg-slate-200 rounded" />
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 6 }).map((_, r) => (
-                <tr
-                  key={r}
-                  style={{ boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)" }}
-                >
-                  {Array.from({ length: 7 }).map((__, c) => (
-                    <td key={c} className="bg-[#FEFEFE33] p-4">
-                      <div className="h-4 w-[60%] bg-slate-200 rounded" />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        {loading && <TableLoader />}
 
         {/* Table with data */}
         {!loading && hasData && (

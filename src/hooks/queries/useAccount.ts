@@ -6,6 +6,7 @@ import {
   getAccount,
   getAccountDetail,
   getAccountGroups,
+  getAccountHistory,
   getOneAccountGroup,
 } from "@/services";
 import {
@@ -14,6 +15,7 @@ import {
   AccountLeverageInterface,
   AccountPassworInterface,
   CreateTradeAccount,
+  GetAccountHistoryPayloadInterface,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -78,5 +80,15 @@ export const useChangeAccountLeverage = (sc: (val: any) => void) => {
     onSuccess: (data) => {
       return sc(data);
     },
+  });
+};
+
+export const useGetAccountTradingHistory = (
+  payload: GetAccountHistoryPayloadInterface
+) => {
+  return useQuery({
+    queryFn: () => getAccountHistory(payload),
+    queryKey: ["trading-history", payload],
+    enabled: !!payload.id,
   });
 };

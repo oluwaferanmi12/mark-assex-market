@@ -131,14 +131,20 @@ export const useVerifyPayment = (id: string, refetchActive: boolean) => {
   });
 };
 
-export const useInternalTransfer = () => {
+export const useInternalTransfer = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: InternalTransferPayload) => internalTransfer(payload),
+    onSuccess: (data) => {
+      sc(data);
+    },
   });
 };
 
-export const useExternalTransfer = () => {
+export const useExternalTransfer = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ExternalTransferPayload) => externalTransfer(payload),
+    onSuccess: (val: any) => {
+      sc(val);
+    },
   });
 };
