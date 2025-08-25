@@ -35,6 +35,7 @@ import { GenericEmptyState } from "@/components/states/generic-empty-state";
 import emptyAccountIcon from "@/assets/svgs/account-empty.svg";
 import { MoneyFormat } from "@/utils/money-format";
 import { Account as AccountInterface } from "@/types";
+import { CardGroupLoader } from "@/components/loaders/card-loader";
 
 const Account = () => {
   const [activeAccount, setActiveAccount] = useState<"live" | "demo">("live");
@@ -51,7 +52,7 @@ const Account = () => {
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [showAccountReadyModal, setShowAccountReadyModal] = useState(false);
-  const { data: accounts } = useGetAccount();
+  const { data: accounts, isPending: accountLoading } = useGetAccount();
   const { data: userProfile } = useGetUserProfile();
   const [filteredAccounts, setFilteredAccounts] = useState<AccountInterface[]>(
     []
@@ -426,7 +427,9 @@ const Account = () => {
                 </div>
               </DropDownList>
             </div>
-            {filteredAccounts?.length ? (
+            {accountLoading ? (
+              <CardGroupLoader stretched />
+            ) : filteredAccounts?.length ? (
               filteredAccounts.map((item) => {
                 return (
                   <TradeContainer

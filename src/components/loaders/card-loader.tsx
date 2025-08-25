@@ -1,11 +1,11 @@
 import { Col, Row } from "antd";
 
-export const CardGroupLoader = () => {
+export const CardGroupLoader = ({ stretched }: { stretched?: boolean }) => {
   return (
     <div>
       <Row gutter={16} className="mt-8">
         {Array.from({ length: 10 }).map((_, index) => (
-          <Col xs={24} lg={12} className="mb-4" key={index}>
+          <Col xs={24} lg={stretched ? 24 : 12} className="mb-4" key={index}>
             <div
               className={`
                 border border-[#BEBEBE59]

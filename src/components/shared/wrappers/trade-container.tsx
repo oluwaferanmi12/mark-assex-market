@@ -434,7 +434,7 @@ export const TradeContainer = ({
                   <Image className="w-full " src={horizontalDashes} alt="" />
                 </div>
                 <p className="text-[#202020] font-work-sans-regular text-base">
-                  ${account.equity}
+                  ${MoneyFormat(account.equity)}
                 </p>
               </div>
             </Col>
