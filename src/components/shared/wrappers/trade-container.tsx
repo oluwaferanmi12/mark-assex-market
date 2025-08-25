@@ -108,13 +108,6 @@ export const TradeContainer = ({
         }
       },
     },
-    {
-      text: "Customize Account Name",
-      id: "",
-      clickAction: () => {
-        setShowCustomiseNameModal(true);
-      },
-    },
   ];
 
   const changePasswordMutate = useChangeAccountPassword(() => {
@@ -163,6 +156,7 @@ export const TradeContainer = ({
       if (leverageFound) {
         setManualLeverage(`1:${account.leverage}`);
       } else {
+        setCustomLeverage(String(account.leverage));
         setManualLeverage("Custom");
       }
     }
