@@ -8,6 +8,7 @@ import { store } from "@/store";
 import { ReduxWrapper } from "@/redux/redux-wrapper";
 import { useTokenRefresher } from "@/hooks/custom/token-refresher";
 import { ClientWrapper } from "@/components/client/client-wrapper";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "ASSEXMARKETS",
@@ -37,6 +38,10 @@ export default function RootLayout({
           </AntdRegistry>
           <Toaster richColors position="top-right" />
         </ReduxWrapper>
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

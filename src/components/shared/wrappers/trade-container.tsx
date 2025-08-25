@@ -529,12 +529,15 @@ export const TradeContainer = ({
           $ {MoneyFormat(account.balance)} USD
         </p>
         <div className="flex items-start justify-between">
-          <div className="flex items-center flex-col justify-center gap-2">
-            <span>
-              <Image src={tradeActive} alt="" />
-            </span>
-            <p className="text-[#202020] font-work-sans-regular">Trade</p>
-          </div>
+          <Link href={tradeLink}>
+            <div className="flex items-center flex-col justify-center gap-2">
+              <span>
+                <Image src={tradeActive} alt="" />
+              </span>
+              <p className="text-[#202020] font-work-sans-regular">Trade</p>
+            </div>
+          </Link>
+
           <div
             onClick={() => {
               router.push("/deposit");

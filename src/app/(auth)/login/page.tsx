@@ -4,7 +4,7 @@ import { AuthHeaderWrapper } from "@/components/shared/container/auth-header-wra
 import { AuthToggle } from "@/components/shared/container/auth-toggle";
 import { Button } from "@/components/ui/buttons/button";
 import { GInput } from "@/components/ui/inputs/general-input";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import googleIcon from "@/assets/svgs/google-icon.svg";
 import { useRouter } from "next/navigation";
 import { useLogin, useLogin2fa } from "@/hooks/queries/useAuth";
@@ -15,6 +15,12 @@ import Cookies from "js-cookie";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { setAuthenticateUser } from "@/store/slices/authSlice";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
+
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
 
 const Login = () => {
   const [email, setEmailAddress] = useState("");
@@ -67,6 +73,30 @@ const Login = () => {
     }
     loginMutate.mutate({ password, email });
   };
+
+  const googleCodeClientRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!window.google) return;
+
+    // Redirect variant (full-page Google => back to your site)
+    googleCodeClientRef.current = window.google.accounts.oauth2.initCodeClient({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!, // from Google Console
+      scope: "openid email profile",
+      ux_mode: "redirect", // or "popup" if you prefer a popup
+      redirect_uri: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/callback`, // e.g. https://yourapp.com/auth/google/callback
+      state: crypto.randomUUID(), // optional CSRF protection
+      // Optional: include a domain hint, etc.
+      // prompt: "select_account", // forces chooser each time
+      // hd: "yourcompany.com",
+    });
+  }, []);
+
+  const handleGoogleClick = () => {
+    // Trigger Google account chooser via your custom button
+    googleCodeClientRef.current?.requestCode();
+  };
+
   return (
     <>
       {showOtpFlow ? (
@@ -142,7 +172,10 @@ const Login = () => {
               <Button
                 text="Google"
                 fullWidth
-                action={() => {}}
+                action={() => {
+                  console.log("Got triggered")
+                  handleGoogleClick();
+                }}
                 loading={false}
                 icon={googleIcon}
                 variant="grey-bg"
