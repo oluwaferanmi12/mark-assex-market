@@ -1,5 +1,6 @@
 import { CreateAccountInterface } from "@/interfaces/ui-interfac";
 import {
+  archiveAccount,
   changeAccountLeverage,
   changeAccountPassword,
   createAccount,
@@ -8,6 +9,7 @@ import {
   getAccountGroups,
   getAccountHistory,
   getOneAccountGroup,
+  unArchiveAccount,
 } from "@/services";
 import {
   Account,
@@ -90,5 +92,23 @@ export const useGetAccountTradingHistory = (
     queryFn: () => getAccountHistory(payload),
     queryKey: ["trading-history", payload],
     enabled: !!payload.id,
+  });
+};
+
+export const useArchiveAccount = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (id: string) => archiveAccount(id),
+    onSuccess: (val: any) => {
+      sc(val);
+    },
+  });
+};
+
+export const useUnArchiveAccount = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (id: string) => unArchiveAccount(id),
+    onSuccess: (val: any) => {
+      sc(val);
+    },
   });
 };

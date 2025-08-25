@@ -67,3 +67,13 @@ export const getAccountHistory = async (
   );
   return result.data.data.data;
 };
+
+export const archiveAccount = async (id: string) => {
+  const { data } = await axiosInstance.patch(`/accounts/${id}/archive`);
+  return data.data;
+};
+
+export const unArchiveAccount = async (id: string) => {
+  const { data } = await axiosInstance.patch(`/accounts/${id}/unarchive`);
+  return data.data;
+};

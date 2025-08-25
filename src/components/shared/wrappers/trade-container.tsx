@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/buttons/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import iconTransaction from "@/assets/svgs/icon-transaction.svg";
 import arrowUpRight from "@/assets/svgs/arrow-up-right.svg";
 import arrowDownLeft from "@/assets/svgs/arrow-down-left.svg";
@@ -13,6 +13,7 @@ import padlockIcon from "@/assets/svgs/padlockIcon.svg";
 import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
 import { GInput } from "@/components/ui/inputs/general-input";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
+import arrowDown from "@/assets/svgs/filled-arrow-down.svg";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
@@ -34,10 +35,13 @@ import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
 import { CopyWrapper } from "./copy-wrapper";
 import keyIcon from "@/assets/svgs/key-icon.svg";
 import {
+  useArchiveAccount,
   useChangeAccountLeverage,
   useChangeAccountPassword,
+  useUnArchiveAccount,
 } from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const TradeContainer = ({
   account,
@@ -46,6 +50,7 @@ export const TradeContainer = ({
   account: Account;
   tradeLink: string;
 }) => {
+  const queryClient = useQueryClient();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [liveAccountSelected, setLiveAccountSelected] = useState("");
   const [showCustomiseNameModal, setShowCustomiseNameModal] = useState(false);
@@ -54,8 +59,33 @@ export const TradeContainer = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newAccountName, setNewAccountName] = useState("");
   const [showLeverageModal, setShowLeverageModal] = useState(false);
+  const [customLeverage, setCustomLeverage] = useState("");
   const router = useRouter();
-  const [manualLeverage, setManualLeverage] = useState(account.leverage);
+  const [manualLeverage, setManualLeverage] = useState("Custom");
+  const archiveAccount = useArchiveAccount(() => {
+    toast.success("Account Archived");
+    queryClient.invalidateQueries({ queryKey: ["get-account"] });
+  });
+  const unArchiveAccount = useUnArchiveAccount(() => {
+    toast.success("Account Active");
+    queryClient.invalidateQueries({ queryKey: ["get-account"] });
+  });
+  const leverageDropDown: DropDownListInterface[] = [
+    { text: "Custom", id: "custom" },
+    { text: "1:2", id: "2" },
+    { text: "1:20", id: "20" },
+    { text: "1:50", id: "50" },
+    { text: "1:100", id: "100" },
+    { text: "1:200", id: "200" },
+    { text: "1:300", id: "300" },
+    { text: "1:400", id: "400" },
+    { text: "1:500", id: "500" },
+    { text: "1:600", id: "600" },
+    { text: "1:800", id: "800" },
+    { text: "1:1000", id: "1000" },
+    { text: "1:2000", id: "2000" },
+    { text: "1:Unlimited", id: "Unlimited" },
+  ];
   const liveAccountDropDownList: DropDownListInterface[] = [
     { text: "Deposit Funds", id: "" },
     { text: "Account Trade History", id: "" },
@@ -66,7 +96,18 @@ export const TradeContainer = ({
         setShowPasswordModal(true);
       },
     },
-    { text: "Archive Account", id: "" },
+    {
+      text:
+        account.status === "ACTIVE" ? "Archive Account" : "UnArchive Account",
+      id: "",
+      clickAction: () => {
+        if (account.status === "ACTIVE") {
+          archiveAccount.mutate(account.id);
+        } else {
+          unArchiveAccount.mutate(account.id);
+        }
+      },
+    },
     {
       text: "Customize Account Name",
       id: "",
@@ -75,13 +116,18 @@ export const TradeContainer = ({
       },
     },
   ];
+
   const changePasswordMutate = useChangeAccountPassword(() => {
     setPassword("");
     setConfirmPassword("");
     setShowPasswordModal(false);
     toast.success("Password Changed");
   });
-  const changeLeverageMutate = useChangeAccountLeverage(() => {});
+  const changeLeverageMutate = useChangeAccountLeverage(() => {
+    queryClient.invalidateQueries({ queryKey: ["get-account"] });
+    setShowLeverageModal(false);
+    toast.success("Leverage updated");
+  });
 
   const validateData = () => {
     let validated = true;
@@ -108,34 +154,19 @@ export const TradeContainer = ({
     }
   };
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const changeLeverage = (delta: number) => {
-    setManualLeverage((prev) => {
-      const next = prev + delta;
-      if (next < 1) return 1; // min bound
-      if (next > 1000) return 1000; // max bound
-      return next;
-    });
-  };
-
-  const startChanging = (delta: number) => {
-    // change once immediately
-    changeLeverage(delta);
-
-    // then start interval
-    intervalRef.current = setInterval(() => {
-      changeLeverage(delta);
-    }, 150); // adjust speed as needed
-  };
-
-  const stopChanging = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+  useEffect(() => {
+    if (account) {
+      // now find the account leverage and then determine the default value
+      const leverageFound = leverageDropDown.find(
+        (item) => +item.id === account.leverage
+      );
+      if (leverageFound) {
+        setManualLeverage(`1:${account.leverage}`);
+      } else {
+        setManualLeverage("Custom");
+      }
     }
-  };
-
+  }, [account]);
   return (
     <>
       <ModalContainer
@@ -210,43 +241,38 @@ export const TradeContainer = ({
         />
         <ModalBody>
           <div className="my-3">
-            <p className="font-work-sans-regular">
+            <p className="mb-2 font-work-sans-regular text-[#202020]">
               Change Max Leverage{" "}
-              <span className="font-work-sans-regular text-[#707070]">
+              <span className="text-xs text-[#707070]">
                 (Account #{account.mt5Id})
               </span>
             </p>
-            <div className="justify-between mt-2 rounded-lg bg-[#F2F4F7] flex items-center">
-              <span
-                onMouseDown={() => startChanging(-100)}
-                onMouseUp={stopChanging}
-                onMouseLeave={stopChanging}
-                onTouchStart={() => startChanging(-100)}
-                onTouchEnd={stopChanging}
-                className="mt-1 pl-1 cursor-pointer"
+            <DropDownList
+              dropDownList={leverageDropDown}
+              selected={manualLeverage}
+              setSelected={setManualLeverage}
+            >
+              <div
+                style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
+                className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-3"
               >
-                <Image src={minusIcon} alt="" />
-              </span>
-              <p className="text-[#404040] font-work-sans-medium">
-                1:{manualLeverage}
-              </p>
-              <span
-                onMouseDown={() => startChanging(100)}
-                onMouseUp={stopChanging}
-                onMouseLeave={stopChanging}
-                onTouchStart={() => startChanging(100)}
-                onTouchEnd={stopChanging}
-                className="flex items-center mt-1 pr-1 cursor-pointer"
-              >
-                <Image src={plusIcon} alt="" />
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <Image src={redCaution} alt="" />
-              <p className="text-[#F40E0E] font-work-sans-regular">
-                Hold on “+” or “-” to reduce or increase quantities faster
-              </p>
-            </div>
+                <p className="font-work-sans-regular  text-xs">
+                  {manualLeverage}
+                </p>
+                <Image src={arrowDown} alt="" />
+              </div>
+            </DropDownList>
+            {manualLeverage === "Custom" && (
+              <div className="mt-2">
+                <GInput
+                  errorState="Range: 1:2 - 1:2000000000"
+                  placeholder="Value"
+                  label="Value"
+                  inputValue={customLeverage}
+                  setInputValue={setCustomLeverage}
+                />
+              </div>
+            )}
           </div>
         </ModalBody>
         <ModalFooter>
@@ -257,9 +283,18 @@ export const TradeContainer = ({
               text="Change"
               loading={changeLeverageMutate.isPending}
               action={() => {
+                // handle if it is manual leverage or whatnot
+                let leverage: number;
+                if (manualLeverage === "Custom" && customLeverage) {
+                  leverage = +customLeverage;
+                } else {
+                  const split = manualLeverage.split(":");
+                  leverage = +split[1];
+                }
+
                 changeLeverageMutate.mutate({
                   id: account.id,
-                  leverage: manualLeverage,
+                  leverage: leverage,
                 });
               }}
             />
