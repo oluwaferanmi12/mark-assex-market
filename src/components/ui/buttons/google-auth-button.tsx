@@ -55,6 +55,7 @@ export default function GoogleAuthButton({
   const handleClick = () => {
     if (!ready) return;
     codeClientRef.current?.requestCode();
+    console.log('test here')
   };
 
   return (
