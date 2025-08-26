@@ -57,3 +57,8 @@ export const logout = async () => {
   });
   return result.data;
 };
+
+export const googleLogin = async (idToken: string) => {
+  const { data } = await axiosInstance.post(`/auth/google`, { idToken });
+  return data.data;
+};

@@ -28,7 +28,7 @@ export default function GoogleAuthButton({
 
   // REQUIRED: set these in your .env.* (client-side)
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
-  const REDIRECT_URI = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/callback`;
+  const REDIRECT_URI = `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
 
   // Initialize after script loads
   const initCodeClient = () => {
@@ -55,11 +55,10 @@ export default function GoogleAuthButton({
   const handleClick = () => {
     if (!ready) return;
     codeClientRef.current?.requestCode();
-    console.log('test here')
   };
 
   return (
-    <>
+    <div className="opacity-0 cursor-pointer absolute w-full">
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
@@ -70,11 +69,12 @@ export default function GoogleAuthButton({
         type="button"
         onClick={handleClick}
         disabled={!ready}
-        className={className}
+        className="w-full h-[50px]"
         aria-disabled={!ready}
+        
       >
         {text}
       </button>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import {
   confirmOtp,
+  googleLogin,
   login,
   login2fa,
   logout,
@@ -124,6 +125,15 @@ export const useLogin2fa = (sc: (val: any) => void) => {
 export const useLogout = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: logout,
+    onSuccess: (data) => {
+      sc(data);
+    },
+  });
+};
+
+export const useGoogleLogin = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn:  googleLogin,
     onSuccess: (data) => {
       sc(data);
     },

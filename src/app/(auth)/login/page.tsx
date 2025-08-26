@@ -7,7 +7,7 @@ import { GInput } from "@/components/ui/inputs/general-input";
 import React, { useEffect, useRef, useState } from "react";
 import googleIcon from "@/assets/svgs/google-icon.svg";
 import { useRouter } from "next/navigation";
-import { useLogin, useLogin2fa } from "@/hooks/queries/useAuth";
+import { useGoogleLogin, useLogin, useLogin2fa } from "@/hooks/queries/useAuth";
 import { isValidEmail } from "@/utils/email-validate";
 import { toast } from "sonner";
 import { localStorageSetter } from "@/utils/localstorage-setter";
@@ -29,6 +29,9 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [showOtpFlow, setShowOtpFlow] = useState(false);
+  const googleLogin = useGoogleLogin((data) => {
+    console.log(data, "Data from login");
+  });
   const login2fa = useLogin2fa((data) => {
     toast.success("Authenticated Successfully");
     Cookies.set("user", JSON.stringify(data.data));
@@ -75,28 +78,13 @@ const Login = () => {
     loginMutate.mutate({ password, email });
   };
 
-  const googleCodeClientRef = useRef<any>(null);
-
   useEffect(() => {
-    if (!window.google) return;
-
-    // Redirect variant (full-page Google => back to your site)
-    googleCodeClientRef.current = window.google.accounts.oauth2.initCodeClient({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!, // from Google Console
-      scope: "openid email profile",
-      ux_mode: "redirect", // or "popup" if you prefer a popup
-      redirect_uri: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/callback`, // e.g. https://yourapp.com/auth/google/callback
-      state: crypto.randomUUID(), // optional CSRF protection
-      // Optional: include a domain hint, etc.
-      // prompt: "select_account", // forces chooser each time
-      // hd: "yourcompany.com",
-    });
+    const urlParam = new URLSearchParams(window.location.search);
+    const urlCode = urlParam.get("code");
+    if (urlCode) {
+      googleLogin.mutate(urlCode);
+    }
   }, []);
-
-  const handleGoogleClick = () => {
-    // Trigger Google account chooser via your custom button
-    googleCodeClientRef.current?.requestCode();
-  };
 
   return (
     <>
@@ -104,8 +92,8 @@ const Login = () => {
         <>
           <AuthHeaderWrapper
             jl
-            text="Enter OTP on your authenticator app"
-            subText={`Go to your google authenticator app and enter the 6 digit code`}
+            text="Enter OTP sent to your mail"
+            subText={`Go to your email address and enter the 6 digit code`}
           />
           <form className="my-4">
             <div className="mb-4">
@@ -169,15 +157,12 @@ const Login = () => {
               ></div>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <GoogleAuthButton />
               <Button
                 text="Google"
                 fullWidth
-                action={() => {
-                  console.log("Got triggered");
-                  handleGoogleClick();
-                }}
+                action={() => {}}
                 loading={false}
                 icon={googleIcon}
                 variant="grey-bg"
