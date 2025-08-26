@@ -30,7 +30,12 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [showOtpFlow, setShowOtpFlow] = useState(false);
   const googleLogin = useGoogleLogin((data) => {
-    console.log(data, "Data from login");
+    toast.success("Authenticated Successfully");
+    console.log(data);
+    Cookies.set("user", JSON.stringify(data.data));
+    dispatch(setAuthenticateUser());
+    router.push("/account");
+    localStorageSetter("user", JSON.stringify(data.data));
   });
   const login2fa = useLogin2fa((data) => {
     toast.success("Authenticated Successfully");
@@ -82,7 +87,10 @@ const Login = () => {
     const urlParam = new URLSearchParams(window.location.search);
     const urlCode = urlParam.get("code");
     if (urlCode) {
-      googleLogin.mutate(urlCode);
+      googleLogin.mutate({
+        code: urlCode,
+        redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+      });
     }
   }, []);
 

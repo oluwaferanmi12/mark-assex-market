@@ -53,3 +53,8 @@ export interface Login2fa {
   password: string;
   otp: string;
 }
+
+export interface GoogleLogin {
+  code: string;
+  redirectUrl: string;
+}

@@ -2,6 +2,7 @@ import { axiosInstance } from "@/api/axios";
 import {
   CreateLoginInterface,
   CreateNewPasswordInterface,
+  GoogleLogin,
   Login2fa,
   LoginInterface,
   RefreshTokenInterface,
@@ -58,7 +59,7 @@ export const logout = async () => {
   return result.data;
 };
 
-export const googleLogin = async (idToken: string) => {
-  const { data } = await axiosInstance.post(`/auth/google`, { idToken });
-  return data.data;
+export const googleLogin = async (payload: GoogleLogin) => {
+  const { data } = await axiosInstance.post(`/auth/google`, payload);
+  return data;
 };
