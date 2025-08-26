@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { setAuthenticateUser } from "@/store/slices/authSlice";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
+import GoogleAuthButton from "@/components/ui/buttons/google-auth-button";
 
 declare global {
   interface Window {
@@ -169,11 +170,12 @@ const Login = () => {
             </div>
 
             <div className="mt-4">
+              <GoogleAuthButton />
               <Button
                 text="Google"
                 fullWidth
                 action={() => {
-                  console.log("Got triggered")
+                  console.log("Got triggered");
                   handleGoogleClick();
                 }}
                 loading={false}
