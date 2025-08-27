@@ -443,18 +443,30 @@ const InternalTransfer = () => {
               <VisibleOnMobile>
                 {activeOption ? (
                   <Button
-                    action={() => {}}
-                    loading={false}
+                    action={() => {
+                      if (!handleValidate()) {
+                        if (isValidEmail(email)) {
+                          sendGenericOtp.mutate({ channel: "email" });
+                        } else {
+                          toast.error("Invalid email entered");
+                        }
+                      } else {
+                        toast.error("All fields are required");
+                      }
+                    }}
+                    loading={sendGenericOtp.isPending}
                     variant="green-bg"
-                    text="Send"
+                    text="Proceed"
                     icon={arrowRight}
                     iconPosition="right"
                     fullWidth
                   />
                 ) : (
                   <Button
-                    action={() => {}}
-                    loading={false}
+                    action={() => {
+                      handleTransfer();
+                    }}
+                    loading={internalTransferMutate.isPending}
                     variant="green-bg"
                     text="Send"
                     icon={arrowRight}
