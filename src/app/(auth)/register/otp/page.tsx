@@ -41,34 +41,32 @@ const RegisterOtp = () => {
   };
   return (
     <>
-      <>
-        <AuthHeaderWrapper
-          jl
-          text="Enter OTP"
-          subText={`Enter the OTP sent to your email ${maskedEmail} . If you didn't receive it, request a new code.`}
+      <AuthHeaderWrapper
+        jl
+        text="Enter OTP"
+        subText={`Enter the OTP sent to your email ${maskedEmail} . If you didn't receive it, request a new code.`}
+      />
+      <form className="my-4">
+        <div className="mb-4">
+          <OTPInput setOtpValue={setOtpVal} />
+        </div>
+        <div className="my-4 flex items-center font-work-sans-light">
+          <p className="text-xs">
+            Didn't receive any code?{" "}
+            <span className="text-[#004DEF] cursor-pointer">Resend code</span>
+          </p>
+        </div>
+        <Button
+          variant="green-bg"
+          fullWidth
+          text="Continue"
+          action={() => {
+            handleVerifyEmail();
+            // router.push("/select-account-type");
+          }}
+          loading={isPending}
         />
-        <form className="my-4">
-          <div className="mb-4">
-            <OTPInput setOtpValue={setOtpVal} />
-          </div>
-          <div className="my-4 flex items-center font-work-sans-light">
-            <p className="text-xs">
-              Didn't receive any code?{" "}
-              <span className="text-[#004DEF] cursor-pointer">Resend code</span>
-            </p>
-          </div>
-          <Button
-            variant="green-bg"
-            fullWidth
-            text="Continue"
-            action={() => {
-              handleVerifyEmail();
-              // router.push("/select-account-type");
-            }}
-            loading={isPending}
-          />
-        </form>
-      </>
+      </form>
     </>
   );
 };

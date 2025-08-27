@@ -7,7 +7,12 @@ import { GInput } from "@/components/ui/inputs/general-input";
 import React, { useEffect, useRef, useState } from "react";
 import googleIcon from "@/assets/svgs/google-icon.svg";
 import { useRouter } from "next/navigation";
-import { useGoogleLogin, useLogin, useLogin2fa } from "@/hooks/queries/useAuth";
+import {
+  useGoogleLogin,
+  useLogin,
+  useLogin2fa,
+  useVerifyOTP,
+} from "@/hooks/queries/useAuth";
 import { isValidEmail } from "@/utils/email-validate";
 import { toast } from "sonner";
 import { localStorageSetter } from "@/utils/localstorage-setter";
@@ -29,9 +34,13 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [showOtpFlow, setShowOtpFlow] = useState(false);
+  const [verifyAccountType, setAccountVerifyType] = useState(false);
+  const verifyOtp = useVerifyOTP(() => {
+    loginMutate.mutate({ email, password });
+  });
   const googleLogin = useGoogleLogin((data) => {
     toast.success("Authenticated Successfully");
-    console.log(data);
+
     Cookies.set("user", JSON.stringify(data.data));
     dispatch(setAuthenticateUser());
     router.push("/account");
@@ -49,6 +58,9 @@ const Login = () => {
 
   const loginMutate = useLogin((data) => {
     if (data.data.twoFaEnabled) {
+      setShowOtpFlow(true);
+    } else if (data.data.unverifiedAccount) {
+      setAccountVerifyType(true);
       setShowOtpFlow(true);
     } else {
       toast.success("Authenticated Successfully");
@@ -113,7 +125,11 @@ const Login = () => {
               fullWidth
               text="Continue"
               action={() => {
-                login2fa.mutate({ email, password, otp: otpVal });
+                if (verifyAccountType) {
+                  verifyOtp.mutate({ email, otp: otpVal });
+                } else {
+                  login2fa.mutate({ email, password, otp: otpVal });
+                }
               }}
               loading={login2fa.isPending}
             />
