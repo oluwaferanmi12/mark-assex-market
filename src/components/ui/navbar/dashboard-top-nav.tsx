@@ -78,7 +78,7 @@ export const DashboardTopNav = ({
   const [otp, setOtp] = useState("");
   const logoutMutate = useLogout(() => {
     removeUser();
-    router.push("/login");
+    window.location.href = "/login";
   });
   const two2Fa = useGenerate2FA((data: Get2FA) => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });

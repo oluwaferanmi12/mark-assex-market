@@ -13,13 +13,13 @@ import { useEffect, useState } from "react";
 import { useVerifyOTP } from "@/hooks/queries/useAuth";
 import { toast } from "sonner";
 import { getHashedEmail } from "@/utils/get-hashed-email";
+import { useSendGenericOtp } from "@/hooks/queries/useGeneric";
 
 const RegisterOtp = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [maskedEmail, setMaskedEmail] = useState("");
   const [otpVal, setOtpVal] = useState("");
-
   const { mutate, isPending } = useVerifyOTP(() => {
     router.replace("/select-account-type");
     removeLocalStorageValue("otp-email");

@@ -21,6 +21,7 @@ import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { setAuthenticateUser } from "@/store/slices/authSlice";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import GoogleAuthButton from "@/components/ui/buttons/google-auth-button";
+import { CountDownTimer } from "@/components/ui/timer/countdown-timer";
 
 declare global {
   interface Window {
@@ -36,12 +37,12 @@ const Login = () => {
   const [showOtpFlow, setShowOtpFlow] = useState(false);
   const [verifyAccountType, setAccountVerifyType] = useState(false);
   const [googleButtonLoading, setGoogleButtonLoading] = useState(false);
+  const [startCountDown, setStartCountDown] = useState(false);
   const verifyOtp = useVerifyOTP(() => {
     loginMutate.mutate({ email, password });
   });
   const googleLogin = useGoogleLogin((data) => {
     toast.success("Authenticated Successfully");
-
     Cookies.set("user", JSON.stringify(data.data));
     dispatch(setAuthenticateUser());
     router.replace("/account");
@@ -60,7 +61,9 @@ const Login = () => {
   const loginMutate = useLogin((data) => {
     if (data.data.twoFaEnabled) {
       setShowOtpFlow(true);
+      setStartCountDown(true);
     } else if (data.data.unverifiedAccount) {
+      setStartCountDown(true);
       setAccountVerifyType(true);
       setShowOtpFlow(true);
     } else {
@@ -121,7 +124,34 @@ const Login = () => {
             <div className="mb-4">
               <OTPInput setOtpValue={setOtpVal} />
             </div>
-
+            <div className="my-4 flex items-center font-work-sans-light">
+              <p className="text-xs">
+                Didn't receive any code?{" "}
+                <span
+                  onClick={() => {
+                    if (!startCountDown) {
+                      loginMutate.mutate({ email, password });
+                    }
+                    setStartCountDown(true);
+                  }}
+                  className={`${
+                    startCountDown ? "text-[#707070]" : "text-[#004DEF]"
+                  }  cursor-pointer`}
+                >
+                  Resend code
+                </span>
+              </p>
+              {startCountDown && (
+                <CountDownTimer
+                  minutes={2}
+                  onComplete={() => {
+                    setStartCountDown(false);
+                  }}
+                  running={startCountDown}
+                  resetKey={startCountDown ? 1 : 2}
+                />
+              )}
+            </div>
             <Button
               variant="green-bg"
               fullWidth

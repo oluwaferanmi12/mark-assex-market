@@ -22,6 +22,7 @@ export const SecuritySetting = () => {
   const [showDisable2fa, setShowDisable2fa] = useState(false);
   const logoutMutate = useLogout(() => {
     removeUser();
+    window.location.href = "/login";
     router.push("/login");
   });
   const dispatch = useAppDispatch();
