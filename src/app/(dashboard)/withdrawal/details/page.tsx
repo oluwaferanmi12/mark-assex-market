@@ -117,7 +117,30 @@ const WithdrawalDetails = () => {
       return {
         key: index,
         label: (
-          <div className="flex items-center gap-2">
+          <div
+            onClick={() => {
+              setWithdrawPayload((prev) => ({
+                ...prev,
+                paymentAccountId: item.id,
+                accountName: item.accountName,
+                accountNumber: item.accountNumber,
+              }));
+
+              setObtainedDetails((prev) => ({
+                ...prev,
+                account_name: item.accountName,
+                account_number: item.accountNumber,
+                bank_code: item.bankCode,
+                bank_name: item.bank,
+              }));
+
+              const findSelectedAccount = banks?.find(
+                (bank) => bank.nibss_bank_code === item.bankCode
+              );
+              setSelectedBank(findSelectedAccount);
+            }}
+            className="flex items-center gap-2"
+          >
             <div>
               <p className="font-work-sans-regular">{item.accountName}</p>
               <p className="text-xs">
@@ -501,33 +524,35 @@ const WithdrawalDetails = () => {
                     <>
                       <Row gutter={28}>
                         <Col xs={12}>
-                          <div className="mt-6">
-                            <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                              Choose from accounts you've previously withdrawn
-                              from
-                            </p>
-                            <Dropdown menu={{ items }}>
-                              <div
-                                style={{
-                                  boxShadow:
-                                    "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                                }}
-                                className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular flex items-center justify-between"
-                              >
-                                {withdrawPayload.paymentAccountId ? (
-                                  <p>
-                                    {
-                                      resolvePreviousAccountDetails()
-                                        ?.accountName
-                                    }
-                                  </p>
-                                ) : (
-                                  "Select account"
-                                )}
-                                <Image src={arrowDown} alt="" />
-                              </div>
-                            </Dropdown>
-                          </div>
+                          {previousAccts?.length && (
+                            <div className="mt-6">
+                              <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                                Choose from accounts you've previously withdrawn
+                                from
+                              </p>
+                              <Dropdown menu={{ items }}>
+                                <div
+                                  style={{
+                                    boxShadow:
+                                      "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                                  }}
+                                  className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular flex items-center justify-between"
+                                >
+                                  {withdrawPayload.paymentAccountId ? (
+                                    <p>
+                                      {
+                                        resolvePreviousAccountDetails()
+                                          ?.accountName
+                                      }
+                                    </p>
+                                  ) : (
+                                    "Select account"
+                                  )}
+                                  <Image src={arrowDown} alt="" />
+                                </div>
+                              </Dropdown>
+                            </div>
+                          )}
                         </Col>
                       </Row>
 
