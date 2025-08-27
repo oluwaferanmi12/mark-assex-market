@@ -15,6 +15,8 @@ type Props = {
   // If you want to hook into loading/errors:
   onReady?: () => void;
   onError?: (err: unknown) => void;
+  loading?: boolean;
+  setLoading?: (val: boolean) => void;
 };
 
 export default function GoogleAuthButton({
@@ -22,6 +24,8 @@ export default function GoogleAuthButton({
   className,
   onReady,
   onError,
+  loading,
+  setLoading,
 }: Props) {
   const [ready, setReady] = useState(false);
   const codeClientRef = useRef<any>(null);
@@ -54,6 +58,9 @@ export default function GoogleAuthButton({
 
   const handleClick = () => {
     if (!ready) return;
+    if (setLoading) {
+      setLoading(true);
+    }
     codeClientRef.current?.requestCode();
   };
 
@@ -68,10 +75,9 @@ export default function GoogleAuthButton({
       <button
         type="button"
         onClick={handleClick}
-        disabled={!ready}
+        disabled={!ready || loading}
         className="w-full h-[50px]"
         aria-disabled={!ready}
-        
       >
         {text}
       </button>

@@ -35,6 +35,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [showOtpFlow, setShowOtpFlow] = useState(false);
   const [verifyAccountType, setAccountVerifyType] = useState(false);
+  const [googleButtonLoading, setGoogleButtonLoading] = useState(false);
   const verifyOtp = useVerifyOTP(() => {
     loginMutate.mutate({ email, password });
   });
@@ -43,7 +44,7 @@ const Login = () => {
 
     Cookies.set("user", JSON.stringify(data.data));
     dispatch(setAuthenticateUser());
-    router.push("/account");
+    router.replace("/account");
     localStorageSetter("user", JSON.stringify(data.data));
   });
   const login2fa = useLogin2fa((data) => {
@@ -99,6 +100,7 @@ const Login = () => {
     const urlParam = new URLSearchParams(window.location.search);
     const urlCode = urlParam.get("code");
     if (urlCode) {
+      setGoogleButtonLoading(true);
       googleLogin.mutate({
         code: urlCode,
         redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
@@ -182,12 +184,15 @@ const Login = () => {
             </div>
 
             <div className="mt-4 relative">
-              <GoogleAuthButton />
+              <GoogleAuthButton
+                loading={googleButtonLoading}
+                setLoading={setGoogleButtonLoading}
+              />
               <Button
                 text="Google"
                 fullWidth
                 action={() => {}}
-                loading={false}
+                loading={googleButtonLoading}
                 icon={googleIcon}
                 variant="grey-bg"
               />
