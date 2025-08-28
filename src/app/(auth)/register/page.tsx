@@ -20,7 +20,6 @@ import { useRegister } from "@/hooks/queries/useAuth";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { countryList } from "@/utils/country-list";
 import { GSelect } from "@/components/ui/inputs/general-select";
-import { localStorageSetter } from "@/utils/localstorage-setter";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -243,17 +242,6 @@ const Register = () => {
             style={{ border: "0.5px solid #BEBEBE " }}
             className=" w-full "
           ></div>
-        </div>
-
-        <div className="mt-4">
-          <Button
-            text="Google"
-            fullWidth
-            action={() => {}}
-            loading={false}
-            icon={googleIcon}
-            variant="grey-bg"
-          />
         </div>
       </form>
     </div>
