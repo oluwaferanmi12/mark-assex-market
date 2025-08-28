@@ -325,7 +325,7 @@ const WithdrawalDetails = () => {
               Payment Method
             </p>
             <Row>
-              <Col xs={12}>
+              <Col lg={12} xs={24}>
                 <div
                   style={{ border: "0.2px solid #0DAE94" }}
                   className=" rounded-lg p-4 flex items-center gap-3 mt-2"
@@ -523,7 +523,7 @@ const WithdrawalDetails = () => {
                   ) : (
                     <>
                       <Row gutter={28}>
-                        <Col xs={12}>
+                        <Col lg={12} xs={24}>
                           {previousAccts?.length && (
                             <div className="mt-6">
                               <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
@@ -623,7 +623,7 @@ const WithdrawalDetails = () => {
                   />
                   <div className="my-4">
                     <Row>
-                      <Col xs={12}>
+                      <Col lg={12} xs={24}>
                         <p className="text-[#1F0D3F] font-work-sans-medium">
                           Withdrawal Info:
                         </p>
