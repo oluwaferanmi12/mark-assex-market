@@ -117,8 +117,8 @@ const Login = () => {
         <>
           <AuthHeaderWrapper
             jl
-            text="Enter OTP sent to your mail"
-            subText={`Go to your email address and enter the 6 digit code`}
+            text="Enter OTP sent to your Authenticator App"
+            subText={`Go to your google authenticator app and enter the 6 digit code`}
           />
           <form className="my-4">
             <div className="mb-4">
