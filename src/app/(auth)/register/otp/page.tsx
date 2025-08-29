@@ -4,26 +4,31 @@ import { AuthHeaderWrapper } from "@/components/shared/container/auth-header-wra
 import { Button } from "@/components/ui/buttons/button";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { useRouter } from "next/navigation";
-import arrowLeft from "@/assets/svgs/arrow-left-green.svg";
 import {
-  localStorageGetter,
+  localStorageSetter,
   removeLocalStorageValue,
 } from "@/utils/localstorage-setter";
 import { useEffect, useState } from "react";
 import { useVerifyOTP } from "@/hooks/queries/useAuth";
 import { toast } from "sonner";
 import { getHashedEmail } from "@/utils/get-hashed-email";
-import { useSendGenericOtp } from "@/hooks/queries/useGeneric";
+import Cookies from "js-cookie";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { setAuthenticateUser } from "@/store/slices/authSlice";
 
 const RegisterOtp = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [maskedEmail, setMaskedEmail] = useState("");
+  const dispatch = useAppDispatch();
   const [otpVal, setOtpVal] = useState("");
-  const { mutate, isPending } = useVerifyOTP(() => {
-    router.replace("/select-account-type");
+  const { mutate, isPending } = useVerifyOTP((data) => {
     removeLocalStorageValue("otp-email");
     toast.success("Otp verified");
+    Cookies.set("user", JSON.stringify(data.data));
+    dispatch(setAuthenticateUser());
+    localStorageSetter("user", JSON.stringify(data.data));
+    router.replace("/select-account-type");
   });
   // const email = localStorageGetter("otp-email");
   useEffect(() => {

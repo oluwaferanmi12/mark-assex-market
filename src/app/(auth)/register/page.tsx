@@ -7,7 +7,6 @@ import { GInput } from "@/components/ui/inputs/general-input";
 import { CitizenConfirmation } from "@/components/ui/text/citizen-confirmation-text";
 import { PasswordValidateText } from "@/components/ui/text/password-validate-text";
 import React, { useState } from "react";
-import googleIcon from "@/assets/svgs/google-icon.svg";
 import arrowUp from "@/assets/svgs/chevron-arrow-up.svg";
 import arrowDown from "@/assets/svgs/chevron-arrow-down.svg";
 import Image from "next/image";
@@ -17,7 +16,6 @@ import { FadeIn } from "@/animation/fade-in";
 import { useRouter } from "next/navigation";
 import { isValidEmail } from "@/utils/email-validate";
 import { useRegister } from "@/hooks/queries/useAuth";
-import { SelectInput } from "@/components/ui/inputs/select-input";
 import { countryList } from "@/utils/country-list";
 import { GSelect } from "@/components/ui/inputs/general-select";
 
@@ -230,19 +228,7 @@ const Register = () => {
             variant="green-bg"
           />
         </div>
-        <div className="flex my-4 justify-center items-center">
-          <div
-            style={{ border: "0.5px solid #BEBEBE " }}
-            className=" w-full "
-          ></div>
-          <p className="text-xs font-work-sans-light min-w-[100px] text-center">
-            or register with
-          </p>
-          <div
-            style={{ border: "0.5px solid #BEBEBE " }}
-            className=" w-full "
-          ></div>
-        </div>
+       
       </form>
     </div>
   );

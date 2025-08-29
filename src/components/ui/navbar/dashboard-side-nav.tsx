@@ -29,7 +29,9 @@ import { UserProfileInterface } from "@/types";
 import headPhoneIcon from "@/assets/svgs/head-phone-icon.svg";
 import headPhoneIconActive from "@/assets/svgs/headphone-icon-active.svg";
 import scrollTextIcon from "@/assets/svgs/scroll-text.svg";
+import scrollTextIconGreen from "@/assets/svgs/scroll-text-green.svg";
 import dataBricksIcon from "@/assets/svgs/data-bricks-icon.svg";
+import dataBrickGreen from "@/assets/svgs/green-data-bricks.svg";
 
 export const DashboardSideNav = ({
   handleCloseAsModal,
@@ -82,14 +84,14 @@ export const DashboardSideNav = ({
     },
     {
       text: "Transaction History",
-      activeIcon: scrollTextIcon,
+      activeIcon: scrollTextIconGreen,
       inactiveIcon: scrollTextIcon,
       clickAction: () => {},
       slug: "transaction",
     },
     {
       text: "Analytics",
-      activeIcon: dataBricksIcon,
+      activeIcon: dataBrickGreen,
       inactiveIcon: dataBricksIcon,
       clickAction: () => {},
       slug: "analytics",

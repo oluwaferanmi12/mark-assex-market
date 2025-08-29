@@ -35,13 +35,13 @@ export const useRegister = (succesCallback: () => void) => {
   });
 };
 
-export const useVerifyOTP = (successCallback: () => void) => {
+export const useVerifyOTP = (successCallback: (data: any) => void) => {
   return useMutation({
     mutationFn: (payload: VerifyOtpInterface) => {
       return verify(payload);
     },
     onSuccess: (data) => {
-      successCallback();
+      successCallback(data);
     },
     mutationKey: ["verifyOtp"],
   });
@@ -133,7 +133,7 @@ export const useLogout = (sc: (val: any) => void) => {
 
 export const useGoogleLogin = (sc: (val: any) => void) => {
   return useMutation({
-    mutationFn:  googleLogin,
+    mutationFn: googleLogin,
     onSuccess: (data) => {
       sc(data);
     },
