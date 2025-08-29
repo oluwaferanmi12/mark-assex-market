@@ -22,7 +22,7 @@ export interface UserProfileInterface {
   updatedAt: string;
   phoneCode: string | null;
   twoFaStatus: "ENABLED" | "DISABLED";
-  assexId: string;
+  assexId?: string;
 }
 
 export interface UpdateUserInterface {
