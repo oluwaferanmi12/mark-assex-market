@@ -640,7 +640,7 @@ export const DashboardTopNav = ({
                   transition={{ duration: 0.3 }}
                   className="absolute right-0 mt-2 w-[300px] rounded-md border border-gray-300 bg-white shadow-lg z-50 p-4"
                 >
-                  <div className="p-2 rounded-lg border border-[#BEBEBE59] flex items-center gap-2">
+                  <div className="py-2 rounded-lg  flex items-center gap-2">
                     <Avatar avatar={userProfile?.picture ?? ""} />
                     <div>
                       <p className="text-[#202020] text-base font-work-sans-medium">
@@ -650,6 +650,18 @@ export const DashboardTopNav = ({
                         {userProfile?.email}
                       </p>
                     </div>
+                  </div>
+                  <div
+                    style={{ border: "0.5px solid #BEBEBE59" }}
+                    className="p-2 rounded-lg"
+                  >
+                    <p className="font-work-sans-medium text-[#202020]">
+                      {" "}
+                      <span className="text-[#404040] font-work-sans-regular ">
+                        User ID
+                      </span>{" "}
+                      : {userProfile?.assexId}
+                    </p>
                   </div>
                   <div className="my-4 cursor-pointer">
                     <div
