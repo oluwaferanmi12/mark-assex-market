@@ -53,7 +53,7 @@ const SelectAccountType = () => {
                 <div>
                   <Button
                     action={() => {
-                      router.push("/select-account-type/demo")
+                      router.push("/account/create-account?state=demo");
                     }}
                     loading={false}
                     variant="blue-bg"
@@ -106,7 +106,7 @@ const SelectAccountType = () => {
                 <div>
                   <Button
                     action={() => {
-                      router.push("/select-account-type/live");
+                      router.push("/account/create-account?state=live");
                     }}
                     loading={false}
                     variant="green-bg"
