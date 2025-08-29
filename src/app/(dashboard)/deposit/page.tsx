@@ -67,24 +67,7 @@ const Deposit = () => {
         </div>
       </ModalContainer>
       <PageHeader text="Deposit" />
-      <div className="mt-4">
-        <Row>
-          <Col xs={4}>
-            <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
-              My Account
-            </p>
-            <DropDownList
-              dropDownList={statusDropDownList}
-              selected={statusSelected}
-              setSelected={setStatusSelected}
-            >
-              <div>
-                <DropDownTextWrapper filterSelected={statusSelected} />
-              </div>
-            </DropDownList>
-          </Col>
-        </Row>
-      </div>
+      
       <Row gutter={16} className="mt-8">
         {isPending ? (
           <CardGroupLoader />
