@@ -1,11 +1,5 @@
 import { InputErrorText } from "@/components/ui/text/input-error-text";
-import { error } from "console";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
-import eyeIcon from "@/assets/svgs/tabler-icon-eye.svg";
-import eyeUnslash from "@/assets/svgs/tabler-icon-eye-unslash.svg";
-import Image from "next/image";
-import Link from "next/link";
-
+import { ReactNode, SetStateAction, useState } from "react";
 export const GSelect = ({
   label,
   inputValue,
