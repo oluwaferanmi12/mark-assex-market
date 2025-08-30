@@ -83,7 +83,10 @@ const Wallet = () => {
     <>
       <PageHeader text="Wallet" />
       <div className="flex flex-col lg:flex-row lg:items-center justify-between mt-8">
-        <div className="cardBg relative p-4 w-[320px] h-[164px]">
+        <div
+          className="cardBg rounded-lg relative p-4 lg:w-[320px] mb-2 lg:mb-0 w-full
+         h-[164px]"
+        >
           <div className="flex items-center gap-2">
             <span>
               <Image src={smallLogo} alt="" />
@@ -109,7 +112,6 @@ const Wallet = () => {
               {hideBalance
                 ? "*****"
                 : `$${MoneyFormat(user?.walletBalance ?? 0)}`}{" "}
-           
             </p>
           </div>
           <div className="absolute bottom-2 right-2">
