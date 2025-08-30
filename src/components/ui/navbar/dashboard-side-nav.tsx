@@ -155,13 +155,6 @@ export const DashboardSideNav = ({
       clickAction: () => {},
       slug: "settings",
     },
-    {
-      text: "Logout",
-      activeIcon: logOutIcon,
-      inactiveIcon: logOutIcon,
-      clickAction: () => {},
-      slug: "logout",
-    },
   ];
 
   useEffect(() => {
@@ -210,11 +203,7 @@ export const DashboardSideNav = ({
 
             <DashboardUserDetails userProfile={userProfile} />
 
-            <div className="lg:hidden">
-              {nav2object.map((item, index) => (
-                <DashboardNavWrapper key={index} item={item} />
-              ))}
-            </div>
+            
           </div>
         </div>
       </div>
