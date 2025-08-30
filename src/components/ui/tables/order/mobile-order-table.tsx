@@ -56,7 +56,12 @@ export const MobileOrderTable = ({
                   MoneyFormat(history.profit)
                 }
               />
-              <TableRow leftText="Date" type="date" rightText={history.date} last />
+              <TableRow
+                leftText="Date"
+                type="date"
+                rightText={history.date}
+                last
+              />
             </div>
           </FadeIn>
         )}

@@ -38,6 +38,7 @@ export const MobileTransactionTable = ({
         className="border  border-[#BEBEBE80] bg-white rounded-lg mb-4"
       >
         <div className="flex border-b border-[#BEBEBE80] justify-between p-4">
+          
           <div>
             <p className="font-work-sans-medium">
               ${MoneyFormat(+payment.amount)}
@@ -70,32 +71,34 @@ export const MobileTransactionTable = ({
                       : payment?.method?.name
                   }
                 />
-                <TableRow leftText="Date" type="date" rightText="+12.54" last />
+                <TableRow leftText="Date" type="date" rightText={payment.createdAt} last />
               </div>
-              <div
-                onClick={() => setShowReason((prev) => !prev)}
-                className="flex items-center justify-center gap-2 cursor-pointer mb-4"
-              >
-                <p className="text-[#0DAE94] font-work-sans-regular">
-                  View reason
-                </p>
-                <div>
-                  <Image
-                    src={showReason ? arrowUpGreen : arrowDownGreen}
-                    alt=""
-                  />
+              {payment.status === "FAILED" && (
+                <div
+                  onClick={() => setShowReason((prev) => !prev)}
+                  className="flex items-center justify-center gap-2 cursor-pointer mb-4"
+                >
+                  <p className="text-[#0DAE94] font-work-sans-regular">
+                    View reason
+                  </p>
+                  <div>
+                    <Image
+                      src={showReason ? arrowUpGreen : arrowDownGreen}
+                      alt=""
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
+
               {payment.status === "FAILED" && (
                 <div className="px-4 pb-4">
                   <TransactionErrorWrapper active={showReason}>
                     <div className="text-[#202020] text-xs">
                       <span className="font-work-sans-regular">
-                        Insufficient Funds:{" "}
+                        {payment.reason}
                       </span>
                       <span className="font-work-sans-light">
-                        here wasn’t enough money in your account to complete the
-                        transaction.
+                        {/* {payment} */}
                       </span>
                     </div>
                   </TransactionErrorWrapper>

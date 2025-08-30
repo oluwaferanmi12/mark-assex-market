@@ -53,6 +53,7 @@ export interface Payment {
   paymentAddressId: string | null;
   user: PaymentUser;
   method: TransactionPaymentMethod;
+  reason: string;
 }
 
 export interface CreateWithdrawalInterface {

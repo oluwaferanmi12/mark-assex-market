@@ -410,23 +410,6 @@ const Account = () => {
             </DashboardCardWrapper>
           </div>
           <div className="mt-8">
-            <div className="flex">
-              <DropDownList
-                dropDownList={filterDropDownList}
-                selected={filterSelected}
-                setSelected={setFilterSelected}
-              >
-                <div
-                  style={{ boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)" }}
-                  className="border border-[#BEBEBE80] justify-between min-w-[200px] flex bg-white rounded-lg px-4 py-2"
-                >
-                  <p className="font-work-sans-medium lg:text-sm text-xs">
-                    {filterSelected}
-                  </p>
-                  <Image src={arrowDown} alt="" />
-                </div>
-              </DropDownList>
-            </div>
             {accountLoading ? (
               <CardGroupLoader stretched />
             ) : filteredAccounts?.length ? (
