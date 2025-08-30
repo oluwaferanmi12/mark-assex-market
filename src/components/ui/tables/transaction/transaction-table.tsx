@@ -181,11 +181,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                         </div>
                         <div className="font-work-sans-regular text-[#202020]">
                           <span className="font-work-sans-medium">
-                            Insufficient Funds:{" "}
-                          </span>
-                          <span className="">
-                            There wasn’t enough money in your account to
-                            complete the transaction.
+                            {selectedTransaction.reason}
                           </span>
                         </div>
                       </div>

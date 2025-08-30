@@ -47,8 +47,12 @@ import arrowDown from "@/assets/svgs/arrow-down-black.svg";
 import accessPlaceholder from "@/assets/svgs/access-placeholder.svg";
 import { useQueryClient } from "@tanstack/react-query";
 import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import { setShow2faFlow } from "@/store/slices/twofaslice";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 
 const WithdrawalDetails = () => {
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [accountType, setAccountType] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -63,6 +67,7 @@ const WithdrawalDetails = () => {
   const { data: previousAccts } = usePaymentAccount();
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
   const [cryptoType, setCryptoType] = useState(false);
+  const accountProfile = useGetUserProfile();
   const verifyMutate = useValidateBalance(() => {
     sendGenericOtp.mutate({ channel: "email" });
   });
@@ -446,7 +451,7 @@ const WithdrawalDetails = () => {
                   </div>
                 )}
 
-                <div className="my-4 ">
+                <div className="my-4">
                   <Button
                     action={() => {
                       //   setVerificationModal(true);
@@ -783,11 +788,15 @@ const WithdrawalDetails = () => {
             <div className="my-4">
               <Button
                 action={() => {
-                  if (withdrawPayload.amount) {
-                    setShowDepositDetails(true);
-                    return;
-                  } else if (!withdrawPayload.amount) {
-                    toast.error("Kindly enter an amount");
+                  if (accountProfile.data?.twoFaStatus === "ENABLED") {
+                    if (withdrawPayload.amount) {
+                      setShowDepositDetails(true);
+                      return;
+                    } else if (!withdrawPayload.amount) {
+                      toast.error("Kindly enter an amount");
+                    }
+                  } else {
+                    dispatch(setShow2faFlow(true));
                   }
                 }}
                 loading={false}
