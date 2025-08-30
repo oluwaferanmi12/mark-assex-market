@@ -17,10 +17,8 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { NotificationWrapper } from "@/components/shared/wrappers/notification-wrapper";
 import { NotificationWithImage } from "@/components/shared/wrappers/notification-with-wrapper";
 import { useRouter } from "next/navigation";
-import { Dropdown, MenuProps } from "antd";
-import { CustomDropDown } from "@/components/ui/drop-down/custom-dropdown";
+import { MenuProps } from "antd";
 import accountSetting from "@/assets/svgs/profile-setting-icon.svg";
-import supportIcon from "@/assets/svgs/support-chat-icon.svg";
 import headphoneIcon from "@/assets/svgs/head-phone-icon.svg";
 import logoutIcon from "@/assets/svgs/logout-icon-red.svg";
 import modalLogoutIcon from "@/assets/svgs/modal-logout-icon.svg";
@@ -28,19 +26,16 @@ import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import { Button } from "@/components/ui/buttons/button";
 import successIcon from "@/assets/svgs/success-icon.svg";
 import twoFAIcon from "@/assets/svgs/two-fa-icon.svg";
-import phoneEmptyIcono from "@/assets/svgs/phone-empty-icon.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
-import { CountDown } from "@/components/shared/timer/count-down";
 import {
   useGenerate2FA,
-  useGetUserProfile,
   useSetup2fa,
   useVerify2FA,
 } from "@/hooks/queries/useSettings";
 import { Get2FA, UserProfileInterface } from "@/types";
 import copyIcon from "@/assets/svgs/copyIconGreen.svg";
 import { toast } from "sonner";
-import { getStoredUser, removeUser } from "@/utils/auth-helper";
+import { removeUser } from "@/utils/auth-helper";
 import { MoneyFormat } from "@/utils/money-format";
 import { Avatar } from "@/components/shared/avatar/avatar";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
@@ -49,6 +44,7 @@ import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { useQueryClient } from "@tanstack/react-query";
 import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
 import { useLogout } from "@/hooks/queries/useAuth";
+import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
 
 export const DashboardTopNav = ({
   userProfile,
@@ -653,7 +649,7 @@ export const DashboardTopNav = ({
                   </div>
                   <div
                     style={{ border: "0.5px solid #BEBEBE59" }}
-                    className="p-2 rounded-lg"
+                    className="p-2 rounded-lg flex items-center justify-between"
                   >
                     <p className="font-work-sans-medium text-[#202020]">
                       {" "}
@@ -662,6 +658,11 @@ export const DashboardTopNav = ({
                       </span>{" "}
                       : {userProfile?.assexId}
                     </p>
+                    <CopyWrapper value={userProfile?.assexId ?? ""}>
+                      <span>
+                        <Image src={copyBlueIcon} alt="" />
+                      </span>
+                    </CopyWrapper>
                   </div>
                   <div className="my-4 cursor-pointer">
                     <div
