@@ -175,6 +175,7 @@ const Login = () => {
             <GInput
               setInputValue={setEmailAddress}
               label="Email Address"
+              errorState={emailError}
               inputValue={email}
               placeholder="Enter email address"
             />
@@ -183,6 +184,7 @@ const Login = () => {
               label="Password"
               inputValue={password}
               placeholder="Enter password"
+              errorState={passwordError}
               type="password"
               showForgotPassword
             />

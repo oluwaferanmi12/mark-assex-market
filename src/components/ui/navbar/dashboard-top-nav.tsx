@@ -45,6 +45,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
 import { useLogout } from "@/hooks/queries/useAuth";
 import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
+import cautionIcon from "@/assets/svgs/caution-icon-2.svg";
+import xIcon from "@/assets/svgs/x-close.svg";
+import cautionOutline from "@/assets/svgs/caution-outline.svg";
 
 export const DashboardTopNav = ({
   userProfile,
@@ -62,8 +65,10 @@ export const DashboardTopNav = ({
   const [show2fa, setShow2fa] = useState(false);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(true);
   const setUpMutate = useSetup2fa(() => {
     toast.success("2fa setup successfully");
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
   });
   const dispatch = useAppDispatch();
   const { isActive } = useAppSelector((state) => state.twofa);
@@ -125,6 +130,72 @@ export const DashboardTopNav = ({
   ];
   return (
     <>
+      <ModalContainer
+        active={showVerificationModal}
+        handleClose={() => setShowVerificationModal(false)}
+      >
+        <ModalBody>
+          <div className="flex items-center  justify-between">
+            <Image src={cautionIcon} alt="" />
+            <Image
+              className="cursor-pointer"
+              onClick={() => {
+                setShowVerificationModal(false);
+              }}
+              src={xIcon}
+              alt=""
+            />
+          </div>
+          <div>
+            <p className="text-[#202020] font-work-sans-medium text-lg mt-2">
+              Account verification required
+            </p>
+            <p className="text-[#404040] font-work-sans-regular mt-2">
+              For your security and to comply with financial regulations, you
+              need to verify your account.Please upload your KYC documents
+              (valid ID, proof of address) to continue using all features.
+            </p>
+          </div>
+          <div className="bg-[#007BFF0D] my-3 p-4 rounded-lg border-[0.5px] border-[#007BFF80]">
+            <div>
+              <div className="flex items-center gap-3">
+                <Image src={cautionOutline} alt="" />
+                <p className="text-[#404040] font-work-sans-regular">
+                  Without verification, you may face:
+                </p>
+              </div>
+              <div className="ml-10 mt-1">
+                <ul className="list-disc text-[#404040] font-work-sans-regular">
+                  <li>Limited access to deposits/withdrawals</li>
+                  <li>Trading restrictions</li>
+                  <li> Possible account suspension</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex justify-end gap-2">
+            <Button
+              text="Remind me later"
+              variant="grey-bg"
+              action={() => {
+                setShowVerificationModal(false);
+              }}
+              loading={false}
+            />
+            <Button
+              text="Verify now"
+              variant="green-bg"
+              action={() => {
+                router.push("/account-verification");
+                setShowVerificationModal(false);
+              }}
+              loading={false}
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
       <ModalContainer
         active={showOTPInstruction}
         handleClose={() => {
@@ -216,9 +287,6 @@ export const DashboardTopNav = ({
             />
             <Button
               action={() => {
-                // setShowVerifyOtp(true);
-                // setShow2fa(false);
-                // two2Fa.mutate();
                 setShowOTPInstruction(false);
                 setShowVerifyOtp(true);
               }}
@@ -253,7 +321,6 @@ export const DashboardTopNav = ({
           <div className="flex justify-end gap-2">
             <Button
               action={() => {
-                // verifyMutate.mutate({ code: otp });
                 setUpMutate.mutate({
                   code: otp,
                   secret: generated2FA?.secret!,
@@ -304,8 +371,6 @@ export const DashboardTopNav = ({
             />
             <Button
               action={() => {
-                // setShowVerifyOtp(true);
-                // setShow2fa(false);
                 two2Fa.mutate();
               }}
               loading={two2Fa.isPending}
