@@ -250,8 +250,13 @@ const Account = () => {
         </ModalFooter>
       </ModalContainer>
       <div>
-        <AccounVerificationPending />
-        <div className="mt-8">
+        {userProfile?.kycStatus === "PENDING" && (
+          <div className="mb-4">
+            <AccounVerificationPending />
+          </div>
+        )}
+
+        <div className="">
           <div className="flex items-center justify-between">
             <p className="lg:text-2xl text-lg font-work-sans-medium  lg:font-work-sans-semi-bold">
               My Accounts

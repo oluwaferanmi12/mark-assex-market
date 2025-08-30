@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (data?.kycStatus !== "AWAITING") {
+    if (data?.kycStatus !== "PENDING") {
       dispatch(setShowVerificationModal(true));
     }
   }, [pathname]);

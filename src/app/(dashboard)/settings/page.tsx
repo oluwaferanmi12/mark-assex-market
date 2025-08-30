@@ -8,29 +8,37 @@ import { DocumentSetting } from "@/components/shared/setting/document-setting";
 import { NotificationSetting } from "@/components/shared/setting/notification-setting";
 import { SecuritySetting } from "@/components/shared/setting/security-setting";
 import { SettingsTab } from "@/components/shared/setting/settings-tab";
+import { KycStatus } from "@/components/ui/status/kyc-status";
 import { PageHeader } from "@/components/ui/text/page-header";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
 import { SettingsIdType, SettingsTabInterface } from "@/interfaces/ui-interfac";
 import { AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<SettingsIdType>("account");
+  const { data, isSuccess } = useGetUserProfile();
 
   return (
     <>
-      <AccounVerificationPending />
-      <div className="my-6">
-        <PageHeader text="Account Settings" />
-        <p className="text-[#707070] lg:text-sm text-xs font-work-sans-regular ">
-          Keep your information accurate and up to date.
-        </p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <PageHeader text="Account Settings" />
+          <p className="text-[#707070] lg:text-sm text-xs font-work-sans-regular ">
+            Keep your information accurate and up to date.
+          </p>
+        </div>
+        <div className="font-work-sans-regular flex items-center gap-2">
+          <span>KYC STATUS:</span> <KycStatus status={data?.kycStatus!} />
+        </div>
       </div>
+
       <SettingsTab activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-6">
         <AnimatePresence>
           {activeTab === "account" && (
             <FadeIn>
-              <AccountSetting />
+              <AccountSetting data={data} isSuccess={isSuccess} />
             </FadeIn>
           )}
         </AnimatePresence>

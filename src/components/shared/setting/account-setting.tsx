@@ -27,7 +27,13 @@ import userRoundPen from "@/assets/svgs/user-round-pen.svg";
 import { Avatar } from "../avatar/avatar";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const AccountSetting = () => {
+export const AccountSetting = ({
+  data,
+  isSuccess,
+}: {
+  data?: UserProfileInterface;
+  isSuccess: boolean;
+}) => {
   const queryClient = useQueryClient();
   const [readOnly, setReadOnly] = useState(true);
   const [showUploadModal, setShowUploadmodal] = useState(false);
@@ -67,7 +73,7 @@ export const AccountSetting = () => {
     phoneCode: "",
     twoFaStatus: "DISABLED",
   });
-  const { data, isSuccess } = useGetUserProfile();
+  // const { data, isSuccess } = useGetUserProfile();
 
   function fileToDataUrl(file: File): Promise<string> {
     return new Promise((resolve, reject) => {

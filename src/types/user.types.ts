@@ -1,5 +1,7 @@
 import { ProfileStatus } from "./auth.types";
 
+export type KycStatusType = "PENDING" | "AWAITING" | "APPROVED" | "REJECTED";
+
 export interface UserProfileInterface {
   id: string;
   firstName: string | null;
@@ -23,7 +25,7 @@ export interface UserProfileInterface {
   phoneCode: string | null;
   twoFaStatus: "ENABLED" | "DISABLED";
   assexId?: string;
-  kycStatus?: "PENDING" | "AWAITING" | "APPROVED" | "REJECTED";
+  kycStatus?: KycStatusType;
 }
 
 export interface UpdateUserInterface {
