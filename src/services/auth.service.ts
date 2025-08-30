@@ -63,3 +63,8 @@ export const googleLogin = async (payload: GoogleLogin) => {
   const { data } = await axiosInstance.post(`/auth/google`, payload);
   return data;
 };
+
+export const impersonate = async (token: string) => {
+  const { data } = await axiosInstance.post(`/auth/impersonate`, { token });
+  return data;
+};

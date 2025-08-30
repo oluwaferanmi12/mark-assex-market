@@ -1,6 +1,7 @@
 import {
   confirmOtp,
   googleLogin,
+  impersonate,
   login,
   login2fa,
   logout,
@@ -136,6 +137,15 @@ export const useGoogleLogin = (sc: (val: any) => void) => {
     mutationFn: googleLogin,
     onSuccess: (data) => {
       sc(data);
+    },
+  });
+};
+
+export const useImpersonate = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: string) => impersonate(payload),
+    onSuccess: (val: any) => {
+      sc(val);
     },
   });
 };
