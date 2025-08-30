@@ -25,6 +25,9 @@ import { MoneyFormat } from "@/utils/money-format";
 import searchIcon from "@/assets/svgs/searchIcon.svg";
 import { debounce } from "lodash";
 import { PaymentMethodTypes, PaymentQueries } from "@/types";
+import smallLogo from "@/assets/svgs/small-logo.svg";
+import bigDollarIcon from "@/assets/svgs/big-dollar-icon.svg";
+import eyeWhiteClosed from "@/assets/svgs/eye-white-closed.svg";
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -62,7 +65,6 @@ const Wallet = () => {
     return [{ text: "All", id: "" }, ...methodList];
   }, []);
   useEffect(() => {
-    console.log(statusSelected);
     setPayloadQuery((prev) => ({
       ...prev,
       type:
@@ -80,26 +82,46 @@ const Wallet = () => {
     <>
       <PageHeader text="Wallet" />
       <div className="flex flex-col lg:flex-row lg:items-center justify-between mt-8">
-        <div className="flex items-center gap-4 mb-4 lg:mb-0 ">
+        <div className="cardBg relative p-4 w-[320px] h-[164px]">
+          <div className="flex items-center gap-2">
+            <span>
+              <Image src={smallLogo} alt="" />
+            </span>
+            <p className="text-base font-work-sans-semi-bold text-white">
+              Wallet
+            </p>
+          </div>
+          <div className="mt-6 flex items-center gap-1">
+            <p className="text-xs text-[#FFFFFFB2] font-work-sans-regular">
+              Total Balance
+            </p>
+            <Image src={eyeWhiteClosed} alt="" />
+          </div>
+          <div>
+            <p className="font-work-sans-semi-bold text-2xl text-white mt-2">
+              $ {MoneyFormat(user?.walletBalance ?? 0)}
+            </p>
+          </div>
+          <div className="absolute bottom-2 right-2">
+            <Image src={bigDollarIcon} alt="" />
+          </div>
+        </div>
+        {/* <div className="flex items-center gap-4 mb-4 lg:mb-0 ">
           <span>
             <Image src={walletDollarIcon} alt="" />
           </span>
+         
           <div>
             <div className="flex items-center gap-2 ">
               <p className="text-[#202020] text-xs lg:text-sm font-work-sans-regular">
                 Total Balance
               </p>
-              <div className="flex items-center">
-                <div>
-                  <Image src={arrowUp} alt="" />
-                </div>
-              </div>
             </div>
             <p className="lg:text-3xl text-xl font-work-sans-semi-bold">
               $ {MoneyFormat(user?.walletBalance ?? 0)}
             </p>
           </div>
-        </div>
+        </div> */}
         <VisibleOnDesktop>
           <div className="lg:flex items-center gap-3">
             <Button

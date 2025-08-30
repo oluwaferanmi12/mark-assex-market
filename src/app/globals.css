@@ -76,3 +76,10 @@ body {
     display: none !important;
   }
 }
+
+.cardBg {
+  background-image: url("../assets/svgs/bg-card.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
