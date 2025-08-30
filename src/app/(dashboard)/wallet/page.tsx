@@ -32,6 +32,7 @@ const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [typeSelected, setTypeSelected] = useState("All");
+  const [hideBalance, setHideBalance] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const { data: user } = useGetUserProfile();
   const [payloadQuery, setPayloadQuery] = useState<PaymentQueries>({
@@ -95,11 +96,20 @@ const Wallet = () => {
             <p className="text-xs text-[#FFFFFFB2] font-work-sans-regular">
               Total Balance
             </p>
-            <Image src={eyeWhiteClosed} alt="" />
+            <Image
+              onClick={() => {
+                setHideBalance((prev) => !prev);
+              }}
+              src={eyeWhiteClosed}
+              alt=""
+            />
           </div>
           <div>
             <p className="font-work-sans-semi-bold text-2xl text-white mt-2">
-              $ {MoneyFormat(user?.walletBalance ?? 0)}
+              {hideBalance
+                ? "*****"
+                : `$${MoneyFormat(user?.walletBalance ?? 0)}`}{" "}
+           
             </p>
           </div>
           <div className="absolute bottom-2 right-2">
