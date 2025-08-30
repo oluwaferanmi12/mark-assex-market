@@ -802,13 +802,13 @@ const WithdrawalDetails = () => {
                 <Row>
                   <Col xs={12}>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Min Deposit:</p>
+                      <p className="text-[#404040]">Min Withdraw:</p>
                       <p className="text-[#111111]">
                         ${MoneyFormat(activePaymentDetails?.minAmount ?? 0)}
                       </p>
                     </div>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Max Deposit:</p>
+                      <p className="text-[#404040]">Max Withdraw:</p>
                       <p className="text-[#111111]">
                         ${MoneyFormat(activePaymentDetails?.maxAmount ?? 0)}
                       </p>
@@ -820,7 +820,7 @@ const WithdrawalDetails = () => {
                       <p className="text-[#111111]">{0}</p>
                     </div>
                     <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Deposit Time:</p>
+                      <p className="text-[#404040]">Withdraw Time:</p>
                       <p className="text-[#111111]">
                         {activePaymentDetails?.time}
                       </p>
