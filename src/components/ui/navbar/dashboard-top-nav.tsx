@@ -65,7 +65,7 @@ export const DashboardTopNav = ({
   const [show2fa, setShow2fa] = useState(false);
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [countDownDone, setCountDownDone] = useState(false);
-  const [showVerificationModal, setShowVerificationModal] = useState(true);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const setUpMutate = useSetup2fa(() => {
     toast.success("2fa setup successfully");
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
@@ -114,6 +114,9 @@ export const DashboardTopNav = ({
       if (userProfile.twoFaStatus === "DISABLED") {
         dispatch(setShow2faFlow(true));
         setShow2fa(true);
+      }
+      if (userProfile.kycStatus !== "APPROVED") {
+        setShowVerificationModal(true);
       }
     }
   }, [userProfile]);

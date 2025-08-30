@@ -4,11 +4,23 @@ import { AuthGuard } from "@/components/guard/auth-guard";
 import { DashboardSideNav } from "@/components/ui/navbar/dashboard-side-nav";
 import { DashboardTopNav } from "@/components/ui/navbar/dashboard-top-nav";
 import { useGetUserProfile } from "@/hooks/queries/useSettings";
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { setShowVerificationModal } from "@/store/slices/accountVerificationSlice";
 import { Col, Row } from "antd";
-import { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const { data } = useGetUserProfile();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (data?.kycStatus !== "AWAITING") {
+      dispatch(setShowVerificationModal(true));
+    }
+  }, [pathname]);
   return (
     <div className="bg-[#FAFAFA] w-full h-full">
       <Row>

@@ -23,6 +23,7 @@ export interface UserProfileInterface {
   phoneCode: string | null;
   twoFaStatus: "ENABLED" | "DISABLED";
   assexId?: string;
+  kycStatus?: "PENDING" | "AWAITING" | "APPROVED" | "REJECTED";
 }
 
 export interface UpdateUserInterface {
