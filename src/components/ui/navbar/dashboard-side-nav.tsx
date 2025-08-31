@@ -169,7 +169,7 @@ export const DashboardSideNav = ({
   }, [pathName]);
 
   return (
-    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen max-h-screen min-h-screen px-6 z-50 top-0 flex flex-col overflow-hidden">
+    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen  min-h-screen px-6 z-50 top-0 flex flex-col overflow-hidden">
       {/* Scroll container */}
       <div className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col">
         {/* Desktop logo (sticky optional) */}
