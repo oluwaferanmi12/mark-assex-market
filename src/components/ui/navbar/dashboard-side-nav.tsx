@@ -169,72 +169,77 @@ export const DashboardSideNav = ({
   }, [pathName]);
 
   return (
-    <div className="bg-white border w-4/5 lg:w-auto fixed lg:static border-[#BEBEBE80] py-8 h-screen  min-h-screen px-6 z-50 top-0 flex flex-col overflow-hidden">
-      {/* Scroll container */}
-      <div className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col">
-        {/* Desktop logo (sticky optional) */}
-        <div className="hidden lg:block sticky top-0 bg-white z-20 pb-2">
-          <Image src={smallLogo} alt="" />
-        </div>
+   <div
+    className="
+      fixed lg:static top-0 left-0 z-50 w-4/5 lg:w-auto bg-white border border-[#BEBEBE80] px-4 py-8 h-[100dvh] lg:h-screen flex flex-col
+      pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]
+      overscroll-contain
+    "
+  >
+    {/* Header (not scrollable) */}
+    <div className="shrink-0  mt-4">
+      {/* Desktop logo */}
+      <div className="hidden lg:block sticky top-0 bg-white z-20 pb-2">
+        <Image src={smallLogo} alt="" />
+      </div>
 
-         <div className="lg:hidden border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <p className="text-xs font-work-sans-regular text-[#707070] ">
-                Wallet balance
-              </p>
-              <span>
-                <Image src={eyeIcon} alt="" />
-              </span>
-            </div>
-            <div className="flex gap-1 items-center">
-              <span>
-                <Image src={wallet} alt="" />
-              </span>
-              <p className="text-[#202020]  text-base font-work-sans-semi-bold">
-                ${MoneyFormat(userProfile?.walletBalance ?? 0)}
-              </p>
-            </div>
+      {/* Mobile wallet header */}
+      <div className="lg:hidden border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-xs font-work-sans-regular text-[#707070] ">
+              Wallet balance
+            </p>
+            <span><Image src={eyeIcon} alt="" /></span>
           </div>
-          <div
-            onClick={() => {
-              handleCloseAsModal && handleCloseAsModal();
-            }}
-            className="cursor-pointer"
-          >
-            <Image src={navCloseIcon} alt="" />
+          <div className="flex gap-1 items-center">
+            <span><Image src={wallet} alt="" /></span>
+            <p className="text-[#202020] text-base font-work-sans-semi-bold">
+              ${MoneyFormat(userProfile?.walletBalance ?? 0)}
+            </p>
           </div>
         </div>
-
-        {/* Fill remaining height; push bottom section down */}
-        <div className="flex-1 min-h-0 flex flex-col justify-between">
-          {/* TOP: main nav */}
-          <div className="lg:mt-6">
-            {navObject.map((item, index) => (
-              <DashboardNavWrapper key={index} item={item} />
-            ))}
-          </div>
-
-          {/* BOTTOM: settings/logout & user details (stick to bottom) */}
-          <div className="mt-6 shrink-0">
-            <div className="hidden lg:block">
-              {nav2object.map((item, index) => (
-                <DashboardNavWrapper key={index} item={item} />
-              ))}
-            </div>
-
-            <div className="lg:hidden">
-              {mobileObject.map((item, index) => (
-                <DashboardNavWrapper key={index} item={item} />
-              ))}
-            </div>
-
-            <DashboardUserDetails userProfile={userProfile} />
-
-            
-          </div>
-        </div>
+        <button
+          onClick={() => { handleCloseAsModal && handleCloseAsModal(); }}
+          className="cursor-pointer"
+          aria-label="Close navigation"
+        >
+          <Image src={navCloseIcon} alt="" />
+        </button>
       </div>
     </div>
+
+    {/* MAIN NAV — the ONLY scrollable section */}
+    <div
+      className="
+        flex-1 min-h-0
+        overflow-y-auto hide-scrollbar
+        [-webkit-overflow-scrolling:touch]
+      "
+    >
+      <div className="lg:mt-6">
+        {navObject.map((item, index) => (
+          <DashboardNavWrapper key={index} item={item} />
+        ))}
+      </div>
+    </div>
+
+    {/* Footer (pinned, not scrollable) */}
+    <div className="mt-6 shrink-0 mb-5">
+      <div className="hidden lg:block">
+        {nav2object.map((item, index) => (
+          <DashboardNavWrapper key={index} item={item} />
+        ))}
+      </div>
+
+      <div className="lg:hidden">
+        {mobileObject.map((item, index) => (
+          <DashboardNavWrapper key={index} item={item} />
+        ))}
+      </div>
+
+      <DashboardUserDetails userProfile={userProfile} />
+    </div>
+  </div>
   );
 };
