@@ -32,6 +32,10 @@ import scrollTextIcon from "@/assets/svgs/scroll-text.svg";
 import scrollTextIconGreen from "@/assets/svgs/scroll-text-green.svg";
 import dataBricksIcon from "@/assets/svgs/data-bricks-icon.svg";
 import dataBrickGreen from "@/assets/svgs/green-data-bricks.svg";
+import { MoneyFormat } from "@/utils/money-format";
+import eyeIcon from "@/assets/svgs/top-nav-eye-icon.svg";
+import wallet from "@/assets/svgs/top-nav-wallet.svg";
+import navCloseIcon from "@/assets/svgs/nav-x-button.svg";
 
 export const DashboardSideNav = ({
   handleCloseAsModal,
@@ -173,9 +177,33 @@ export const DashboardSideNav = ({
           <Image src={smallLogo} alt="" />
         </div>
 
-        {/* Mobile wallet header — stays on top */}
-        <div className="lg:hidden sticky top-0 bg-white z-20 border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
-          {/* ...wallet header content... */}
+         <div className="lg:hidden border-b pb-4 border-[#BEBEBE] flex justify-between items-center">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="text-xs font-work-sans-regular text-[#707070] ">
+                Wallet balance
+              </p>
+              <span>
+                <Image src={eyeIcon} alt="" />
+              </span>
+            </div>
+            <div className="flex gap-1 items-center">
+              <span>
+                <Image src={wallet} alt="" />
+              </span>
+              <p className="text-[#202020]  text-base font-work-sans-semi-bold">
+                ${MoneyFormat(userProfile?.walletBalance ?? 0)}
+              </p>
+            </div>
+          </div>
+          <div
+            onClick={() => {
+              handleCloseAsModal && handleCloseAsModal();
+            }}
+            className="cursor-pointer"
+          >
+            <Image src={navCloseIcon} alt="" />
+          </div>
         </div>
 
         {/* Fill remaining height; push bottom section down */}
