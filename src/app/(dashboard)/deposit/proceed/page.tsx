@@ -47,6 +47,7 @@ import paymentLoading from "@/assets/svgs/confirm-payment.svg";
 import { Spinner } from "@/components/spinner/spinner";
 import { data } from "framer-motion/client";
 import { debounce } from "lodash";
+import { CountDownTimer } from "@/components/ui/timer/countdown-timer";
 
 const Proceed = () => {
   const [amountToDepositObject, setAmountToDepositObject] =
@@ -343,7 +344,11 @@ const Proceed = () => {
                         <Image src={timerYellow} alt="" />
                         <p className="text-xs text-[#1F0D3F] font-work-sans-regular">
                           This account is for this transaction only and expires
-                          in 28:12
+                          in{" "}
+                          <CountDownTimer
+                            minutes={30}
+                            running={showInstantTransferModal}
+                          />
                         </p>
                       </div>
                     </div>
