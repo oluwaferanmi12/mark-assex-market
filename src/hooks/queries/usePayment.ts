@@ -1,4 +1,6 @@
 import {
+  convertRate,
+  currency,
   deposit,
   externalTransfer,
   getPaymentHistory,
@@ -13,6 +15,7 @@ import {
   withdraw,
 } from "@/services";
 import {
+  ConvertRate,
   CreateDepositInterface,
   CreateWithdrawalInterface,
   ExternalTransferPayload,
@@ -144,6 +147,25 @@ export const useExternalTransfer = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: ExternalTransferPayload) => externalTransfer(payload),
     onSuccess: (val: any) => {
+      sc(val);
+    },
+  });
+};
+
+export const useGetCurrency = (method: string) => {
+  return useQuery({
+    queryFn: () => currency(method),
+    queryKey: ["currency"],
+    enabled: !!method,
+  });
+};
+
+export const useConvertRate = (sc: (val: any) => void) => {
+  return useMutation({
+    mutationFn: (payload: ConvertRate) => {
+      return convertRate(payload);
+    },
+    onSuccess: (val) => {
       sc(val);
     },
   });

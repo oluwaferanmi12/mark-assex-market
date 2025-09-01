@@ -8,7 +8,7 @@ import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import { Col, Dropdown, MenuProps, Row } from "antd";
 import Image from "next/image";
 import walletDollarIcon from "@/assets/svgs/wallet-dollar-icon.svg";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import arrowRight from "@/assets/svgs/tabler-icon-rights.svg";
 import { PageHeader } from "@/components/ui/text/page-header";
@@ -20,7 +20,10 @@ import arrowRightMultiple from "@/assets/svgs/chevron-right-white.svg";
 import dollarGreen from "@/assets/svgs/dollar-green.svg";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import { SuccessModal } from "@/components/shared/response-modal/success-modal";
+import dollarBGgreen from "@/assets/svgs/dollar-bg-green.svg";
 import {
+  useConvertRate,
+  useGetCurrency,
   useGetPaymentMethodDetails,
   useGetPaymentMethods,
   usePaymentAccount,
@@ -35,6 +38,7 @@ import { useGetAccount, useGetAccountDetail } from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
 import { MoneyFormat } from "@/utils/money-format";
 import {
+  ConversionResult,
   CreateWithdrawalInterface,
   PaymentBank,
   UserBankAccountDetails,
@@ -50,6 +54,7 @@ import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
 import { useGetUserProfile } from "@/hooks/queries/useSettings";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { debounce } from "lodash";
 
 const WithdrawalDetails = () => {
   const dispatch = useAppDispatch();
@@ -61,6 +66,7 @@ const WithdrawalDetails = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPaymentSetup, setShowPaymentSetup] = useState(false);
+  const [amountToRecieve, setAmountToRecieve] = useState(0);
   const { data: paymentMethods } = useGetPaymentMethods();
   const { data: accounts } = useGetAccount();
   const { data: banks } = usePaymentBanks();
@@ -68,8 +74,14 @@ const WithdrawalDetails = () => {
   const [selectedBank, setSelectedBank] = useState<PaymentBank>();
   const [cryptoType, setCryptoType] = useState(false);
   const accountProfile = useGetUserProfile();
+  const [amountToRecieveObject, setAmountToRecieveObject] =
+    useState<ConversionResult>();
   const verifyMutate = useValidateBalance(() => {
     sendGenericOtp.mutate({ channel: "email" });
+  });
+  const { data: currencies } = useGetCurrency(accountType);
+  const rateConversion = useConvertRate((data) => {
+    setAmountToRecieveObject(data);
   });
   const [obtainedDetails, setObtainedDetails] =
     useState<UserBankAccountDetails | null>(null);
@@ -228,6 +240,17 @@ const WithdrawalDetails = () => {
     mutateWithdraw.mutate(payload);
   };
 
+  const mutateRef = useRef(rateConversion.mutate);
+  useEffect(() => {
+    mutateRef.current = rateConversion.mutate;
+  }, [rateConversion.mutate]);
+
+  const debouncedConvertRef = useRef(
+    debounce((currency: string, amount: number) => {
+      mutateRef.current({ currency, amount });
+    }, 1000)
+  );
+
   useEffect(() => {
     const urlVal = new URLSearchParams(window.location.search);
     const val_ = urlVal.get("val");
@@ -382,7 +405,9 @@ const WithdrawalDetails = () => {
                         Conversion Rate
                       </p>
                       <p className="text-[#111111] font-work-sans-regular">
-                        1 USD = 780.022 NGN
+                        1 {amountToRecieveObject?.base} ={" "}
+                        {MoneyFormat(amountToRecieveObject?.rate ?? 0)}{" "}
+                        {amountToRecieveObject?.target}
                       </p>
                     </div>
                   )}
@@ -409,7 +434,10 @@ const WithdrawalDetails = () => {
                       To be withdrawn:
                     </p>
                     <p className="text-[#111111]  font-work-sans-semi-bold">
-                      ${MoneyFormat(withdrawPayload.amount)}
+                      {amountToRecieveObject?.target}
+                      {MoneyFormat(
+                        amountToRecieveObject?.amountInCurrency ?? 0
+                      )}
                     </p>
                   </div>
                 </div>
@@ -610,7 +638,10 @@ const WithdrawalDetails = () => {
                           To be recieved:
                         </p>
                         <p className="text-[#111111] text-lg font-work-sans-semi-bold">
-                          ${withdrawPayload.amount}
+                          ${amountToRecieveObject?.target}{" "}
+                          {MoneyFormat(
+                            amountToRecieveObject?.amountInCurrency ?? 0
+                          )}
                         </p>
                       </div>
                     </>
@@ -656,7 +687,9 @@ const WithdrawalDetails = () => {
                                 Conversion rate
                               </p>
                               <p className="text-[#111111] font-work-sans-regular text-base">
-                                1 USD = 780.022 NGN
+                                1 {amountToRecieveObject?.base} ={" "}
+                                {MoneyFormat(amountToRecieveObject?.rate ?? 0)}{" "}
+                                {amountToRecieveObject?.target}
                               </p>
                             </div>
                           )}
@@ -702,23 +735,39 @@ const WithdrawalDetails = () => {
                   </Dropdown>
                 </div>
               </Col>
-              {!cryptoType && (
-                <Col lg={12} xs={24}>
-                  <div>
-                    <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                      Currency
-                    </p>
-                    <select
-                      style={{
-                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                      }}
-                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                    >
-                      <option>USD</option>
-                    </select>
-                  </div>
-                </Col>
-              )}
+
+              <Col lg={12} xs={24}>
+                <div>
+                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                    Currency
+                  </p>
+                  <select
+                    style={{
+                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                    }}
+                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                    onChange={(e) => {
+                      setWithdrawPayload((prev) => ({
+                        ...prev,
+                        currency: e.target.value,
+                      }));
+                      debouncedConvertRef.current(
+                        e.target.value,
+                        withdrawPayload.amount
+                      );
+                    }}
+                  >
+                    <option>Select Currency</option>
+                    {currencies?.map((item) => {
+                      return (
+                        <option key={item.currency} value={item.currency}>
+                          {item.currency}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </Col>
             </Row>
             <Row className="mb-4">
               <Col lg={12} xs={24}>
@@ -759,14 +808,22 @@ const WithdrawalDetails = () => {
                   <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
                     Amount
                   </p>
-                  <div>
+                  <div className="relative">
+                    <span className="absolute right-2 top-1 border border-[#0DAE94] p-2 bg-[#E7F7F4] rounded-sm">
+                      <Image src={dollarGreen} alt="" />
+                    </span>
                     <input
                       placeholder="Enter amount"
                       onChange={(e) => {
+                        // handleGetAmountToBePaid();
                         setWithdrawPayload((prev) => ({
                           ...prev,
                           amount: +e.target.value,
                         }));
+                        debouncedConvertRef.current(
+                          withdrawPayload.currency,
+                          +e.target.value
+                        );
                       }}
                       value={withdrawPayload.amount}
                       style={{
@@ -780,10 +837,28 @@ const WithdrawalDetails = () => {
               {!cryptoType && (
                 <Col xs={24} lg={12}>
                   <div>
-                    <TransferInput greyBg label="Amount to be Received" />
+                    <TransferInput
+                      disabled
+                      greyBg
+                      inputVal={MoneyFormat(
+                        amountToRecieveObject?.amountInCurrency ?? 0
+                      )}
+                      label="Amount to be Received"
+                    />
                   </div>
                 </Col>
               )}
+              <Col xs={24}>
+                {amountToRecieveObject && (
+                  <div className="flex items-center justify-end">
+                    <p className="text-xs font-work-sans-regular">
+                      1 {amountToRecieveObject?.base} ={" "}
+                      {MoneyFormat(amountToRecieveObject?.rate ?? 0)}{" "}
+                      {amountToRecieveObject?.target}
+                    </p>
+                  </div>
+                )}
+              </Col>
             </Row>
             <div className="my-4">
               <Button

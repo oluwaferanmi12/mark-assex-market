@@ -18,6 +18,7 @@ export interface CreateDepositInterface {
   chargeHash: string;
   methodSlug: string;
   toAccount: string;
+  currency: string;
 }
 
 export interface PaymentResponseInterface {
@@ -183,4 +184,20 @@ export interface ExternalTransferPayload {
   email: string;
   amount: number;
   token: string;
+}
+
+export interface ConvertRate {
+  currency: string;
+  amount: number;
+}
+
+export interface ConversionData {
+  currency: string;
+}
+export interface ConversionResult {
+  amount: number;
+  amountInCurrency: number;
+  base: string;
+  rate: number;
+  target: string;
 }

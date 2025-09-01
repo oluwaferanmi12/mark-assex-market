@@ -1,5 +1,8 @@
 import { axiosInstance } from "@/api/axios";
 import {
+  ConversionData,
+  ConversionResult,
+  ConvertRate,
   CreateDepositInterface,
   CreateWithdrawalInterface,
   ExternalTransferPayload,
@@ -99,4 +102,26 @@ export const externalTransfer = async (payload: ExternalTransferPayload) => {
     payload
   );
   return result.data;
+};
+
+export const currency = async (method: string): Promise<ConversionData[]> => {
+  const result = await axiosInstance.get(
+    `/payments/currency?methodSlug=${method}`
+  );
+  return result.data.data;
+};
+
+export const getRate = async (currency: string) => {
+  const result = await axiosInstance.get(`/payments/rate`);
+  return result.data.data;
+};
+
+export const convertRate = async (
+  payload: ConvertRate
+): Promise<ConversionResult> => {
+  const result = await axiosInstance.post(
+    `/payments/currency/convert`,
+    payload
+  );
+  return result.data.data;
 };

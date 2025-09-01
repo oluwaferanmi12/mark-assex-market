@@ -19,7 +19,9 @@ import masterCardIcon from "@/assets/svgs/mastercardIcon.svg";
 import dollarIcon from "@/assets/svgs/dollar-green.svg";
 import securityIcon from "@/assets/svgs/security-icon.svg";
 import {
+  useConvertRate,
   useDepositPayment,
+  useGetCurrency,
   useGetPaymentMethodDetails,
   useGetPaymentMethods,
   useVerifyPayment,
@@ -39,13 +41,20 @@ import navLogo from "@/assets/svgs/nav-logo.svg";
 import copyIcon from "@/assets/svgs/copy-blue-icon.svg";
 import arrowLeft from "@/assets/svgs/arrow-left.svg";
 import timerYellow from "@/assets/svgs/timer-yellow.svg";
-import { DepositBankTransferResponse } from "@/types";
+import { ConversionResult, DepositBankTransferResponse } from "@/types";
 import { CopyWrapper } from "@/components/shared/wrappers/copy-wrapper";
 import paymentLoading from "@/assets/svgs/confirm-payment.svg";
 import { Spinner } from "@/components/spinner/spinner";
+import { data } from "framer-motion/client";
+import { debounce } from "lodash";
 
 const Proceed = () => {
+  const [amountToDepositObject, setAmountToDepositObject] =
+    useState<ConversionResult>();
   const [verificationModal, setVerificationModal] = useState(false);
+  const rateConversion = useConvertRate((data) => {
+    setAmountToDepositObject(data);
+  });
   const [showDepositDetails, setShowDepositDetails] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { data: paymentMethods } = useGetPaymentMethods();
@@ -71,6 +80,7 @@ const Proceed = () => {
   const [activeDepositId, setActiveDepositId] = useState("");
   const [showGeneratedBankDetails, setShowGeneratedBankDetails] =
     useState(false);
+
   const mutateDeposit = useDepositPayment((data) => {
     checkoutUrl.current = data.checkout_url;
     setShowRedirectModal(true);
@@ -89,6 +99,18 @@ const Proceed = () => {
     setActiveDepositId(data.reference);
     setShowInstantTransferModal(true);
   });
+  const { data: currencies } = useGetCurrency(activeState!);
+  const [currencySelected, setCurrencySelected] = useState("");
+  const mutateRef = useRef(rateConversion.mutate);
+  useEffect(() => {
+    mutateRef.current = rateConversion.mutate;
+  }, [rateConversion.mutate]);
+
+  const debouncedConvertRef = useRef(
+    debounce((currency: string, amount: number) => {
+      mutateRef.current({ currency, amount });
+    }, 1000)
+  );
 
   const handleDeposit = () => {
     mutateDeposit.mutate({
@@ -96,6 +118,7 @@ const Proceed = () => {
       methodSlug: activeState!,
       chargeHash: "",
       toAccount: "",
+      currency: "",
     });
   };
 
@@ -143,6 +166,7 @@ const Proceed = () => {
           chargeHash: "",
           methodSlug: activeState,
           toAccount: "",
+          currency: "USD",
         });
         console.log("Got something heree");
       }
@@ -789,6 +813,7 @@ const Proceed = () => {
                       </div>
                     </div>
                   </Col>
+
                   <Col xs={24}>
                     <div className="bg-[#E7F7F4] p-4 rounded-lg flex items-center gap-4">
                       <Image src={checkCircle} alt="" />
@@ -819,7 +844,7 @@ const Proceed = () => {
               </div>
             ) : (
               <div>
-                <Row className="mb-4">
+                <Row gutter={24} className="mb-4">
                   <Col lg={12} xs={24}>
                     <div>
                       <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
@@ -838,8 +863,37 @@ const Proceed = () => {
                       </Dropdown>
                     </div>
                   </Col>
+                  <Col lg={12} xs={24}>
+                    <div>
+                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                        Currency
+                      </p>
+                      <select
+                        style={{
+                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                        }}
+                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        onChange={(e) => {
+                          setCurrencySelected(e.target.value);
+                          debouncedConvertRef.current(
+                            e.target.value,
+                            amountToDeposit
+                          );
+                        }}
+                      >
+                        <option value={""}>Select Currency</option>
+                        {currencies?.map((item) => {
+                          return (
+                            <option key={item.currency} value={item.currency}>
+                              {item.currency}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </Col>
                 </Row>
-                <Row className="mb-4">
+                <Row gutter={24} className="mb-4">
                   <Col lg={12} xs={24}>
                     <div>
                       <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
@@ -858,8 +912,7 @@ const Proceed = () => {
                           accounts.map((item) => {
                             return (
                               <option value={item.id}>
-                                {item.accountGroup.name}{" "}
-                                {item.accountGroup.description}
+                                {item.accountGroup.name} (#{item.mt5Id})
                               </option>
                             );
                           })}
@@ -881,6 +934,10 @@ const Proceed = () => {
 
                         <input
                           onChange={(e) => {
+                            debouncedConvertRef.current(
+                              currencySelected,
+                              +e.target.value
+                            );
                             setAmountToDeposit(+e.target.value);
                           }}
                           value={amountToDeposit}
@@ -895,10 +952,28 @@ const Proceed = () => {
                   </Col>
                   <Col xs={24} lg={12}>
                     <div className="mt-4 lg:mt-0">
-                      <TransferInput greyBg label="Amount to be Deposited" />
+                      <TransferInput
+                        disabled
+                        greyBg
+                        label="Amount to be Deposited"
+                        inputVal={MoneyFormat(
+                          amountToDepositObject?.amountInCurrency ?? 0
+                        )}
+                      />
                     </div>
                   </Col>
                 </Row>
+                <Col xs={24}>
+                  {amountToDepositObject && (
+                    <div className="flex items-center justify-end">
+                      <p className="text-xs font-work-sans-regular">
+                        1 {amountToDepositObject?.base} ={" "}
+                        {MoneyFormat(amountToDepositObject?.rate ?? 0)}{" "}
+                        {amountToDepositObject?.target}
+                      </p>
+                    </div>
+                  )}
+                </Col>
                 <div className="my-4">
                   <Button
                     action={() => {
@@ -909,6 +984,7 @@ const Proceed = () => {
                           chargeHash: "",
                           methodSlug: activeState!,
                           toAccount: selectedAccountId,
+                          currency: currencySelected,
                         });
 
                         return;
