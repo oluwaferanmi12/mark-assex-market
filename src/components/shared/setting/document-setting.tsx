@@ -12,8 +12,6 @@ export const DocumentSetting = () => {
   const [otherDocs, setOtherDocs] = useState<FileList | null>(null);
   const { data } = useGetKyc();
 
-  console.log(data, "DAta value here");
-
   const kycMutate = useSaveKyc(() => {
     toast.success("Document saved successfully");
   });
@@ -42,11 +40,11 @@ export const DocumentSetting = () => {
     const formdata = new FormData();
     formdata.append("addressDocument", addressDoc!);
     formdata.append("identityDocument", identityDoc!);
-    // if (otherDocs) {
-    //   Array.from(otherDocs).forEach((doc, index) => {
-    //     formdata.append("otherDocs", doc); // the key must match what your backend expects
-    //   });
-    // }
+    if (otherDocs) {
+      Array.from(otherDocs).forEach((doc, index) => {
+        formdata.append("otherDocs", doc); // the key must match what your backend expects
+      });
+    }
     kycMutate.mutate(formdata);
   };
   return (
@@ -55,6 +53,7 @@ export const DocumentSetting = () => {
         <Row justify={"center"} gutter={12}>
           <Col xs={24} lg={8}>
             <DocUploadedBox
+              boxType="address"
               documentType="Address Verifications"
               fileUrl={data?.addressDocumentUrl!}
               documentStatus={data?.addressStatus}
@@ -62,6 +61,7 @@ export const DocumentSetting = () => {
           </Col>
           <Col xs={24} lg={8}>
             <DocUploadedBox
+              boxType="identification"
               documentType="Identity Verification"
               fileUrl={data?.identityDocumentUrl!}
               documentStatus={data?.identityStatus}
@@ -69,6 +69,7 @@ export const DocumentSetting = () => {
           </Col>
           <Col xs={24} lg={8}>
             <DocUploadedBox
+              boxType="others"
               documentType="Additional Document"
               fileUrl={data?.otherDocumentUrl!}
               documentStatus={data?.otherStatus}
