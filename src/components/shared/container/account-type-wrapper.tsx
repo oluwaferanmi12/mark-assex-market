@@ -33,7 +33,7 @@ export const AccountTypeWrapper = ({
 
   return (
     <div
-      className={`p-8 rounded-lg mb-4 lg:mb-0 min-h-[400px] bg-white transition-[box-shadow,transform] duration-200 ease-out ${
+      className={`p-8 rounded-lg  mb-4  min-h-[400px] bg-white transition-[box-shadow,transform] duration-200 ease-out ${
         active ? "translate-y-0" : "hover:-translate-y-1"
       } ${active ? "" : "focus-within:-translate-y-1"}`}
       style={{ boxShadow: active ? ACTIVE_SHADOW : INACTIVE_SHADOW }}

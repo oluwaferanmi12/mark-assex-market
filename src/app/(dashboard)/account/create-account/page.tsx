@@ -39,14 +39,14 @@ const CreateAccount = () => {
       <PageGoBack />
       <p className="text-2xl font-work-sans-semi-bold mt-4">Account Type</p>
       <AccountToggle
-        activeAccount={activeAccount}
+        activeAccount={activeAccount}  
         setActiveAccount={setActiveAccount}
       />
       <div className="mt-4">
         {isPending ? (
           <CardGroupLoader length={3} />
         ) : (
-          <Row justify={"center"} gutter={24}>
+          <Row gutter={24}>
             {activeAccount === "live"
               ? liveAccounts.map((item, index) => {
                   return (
