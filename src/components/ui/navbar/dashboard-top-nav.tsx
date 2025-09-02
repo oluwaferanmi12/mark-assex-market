@@ -48,6 +48,7 @@ import copyBlueIcon from "@/assets/svgs/copy-blue-icon.svg";
 import cautionIcon from "@/assets/svgs/caution-icon-2.svg";
 import xIcon from "@/assets/svgs/x-close.svg";
 import cautionOutline from "@/assets/svgs/caution-outline.svg";
+import selector from "@/assets/svgs/table-icon-selector.svg";
 
 export const DashboardTopNav = ({
   userProfile,
@@ -644,8 +645,8 @@ export const DashboardTopNav = ({
             Welcome back! The market awaits.
           </p>
         </div>
-        <div className="flex items-end gap-8">
-          <div>
+        <div className="flex items-end justify-center ">
+          <div className="pr-6">
             <div className="flex items-center gap-2 mb-1">
               <p className="text-xs font-work-sans-regular text-[#707070] ">
                 Wallet balance
@@ -664,20 +665,20 @@ export const DashboardTopNav = ({
             </div>
           </div>
           <div
-            className="cursor-pointer"
-            onClick={() => {
-              setShowNotification(true);
-            }}
-          >
-            <Image src={notificationIcon} alt="" />
-          </div>
-          <div
-            className="cursor-pointer"
+            className="cursor-pointer mb-1 pr-4"
             onClick={() => {
               router.push("/support");
             }}
           >
             <Image src={headphoneIcon} alt="" />
+          </div>
+          <div
+            className="cursor-pointer mb-1 border-l px-4 border-[#BEBEBE]"
+            onClick={() => {
+              setShowNotification(true);
+            }}
+          >
+            <Image src={notificationIcon} alt="" />
           </div>
 
           <div className="relative " ref={dropdownRef}>
@@ -692,7 +693,13 @@ export const DashboardTopNav = ({
                 width={30}
                 height={30}
               />
-              <Image src={arrowDown} alt="" />
+              <div>
+                <p className="text-[#202020]  font-work-sans-medium">{`${userProfile?.lastName} ${userProfile?.firstName}`}</p>
+                <p className="text-[#707070] text-xs font-work-sans-light">
+                  {userProfile?.email}
+                </p>
+              </div>
+              <Image src={selector} alt="" />
             </div>
             <AnimatePresence>
               {showCustomDropDown && (
