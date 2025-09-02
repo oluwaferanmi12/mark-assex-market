@@ -690,8 +690,9 @@ export const DashboardTopNav = ({
             >
               <Avatar
                 avatar={userProfile?.picture ?? ""}
-                width={30}
-                height={30}
+                width={42}
+                height={42}
+                hasBorder
               />
               <div>
                 <p className="text-[#202020]  font-work-sans-medium">{`${userProfile?.lastName} ${userProfile?.firstName}`}</p>

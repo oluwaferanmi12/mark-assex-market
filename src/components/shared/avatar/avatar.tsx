@@ -5,10 +5,12 @@ export const Avatar = ({
   avatar,
   height = 50,
   width = 50,
+  hasBorder,
 }: {
   avatar?: string;
   height?: number;
   width?: number;
+  hasBorder?: boolean;
 }) => {
   return (
     <div
@@ -17,7 +19,9 @@ export const Avatar = ({
     >
       <Image
         fill
-        className="rounded-full object-cover"
+        className={`rounded-full object-cover ${
+          hasBorder && "border border-[#004DEF]"
+        } `}
         src={avatar ? avatar : defaultAvatar}
         alt="Avatar"
       />
