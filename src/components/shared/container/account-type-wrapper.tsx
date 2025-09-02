@@ -9,6 +9,7 @@ import { AccountGroupInterface } from "@/types";
 import { useState } from "react";
 import Link from "next/link";
 import { MoneyFormat } from "@/utils/money-format";
+import accountDefault from "@/assets/svgs/accoung-card-default.svg";
 
 const ACTIVE_SHADOW =
   "0px 16px 48px 0px rgba(0, 204, 177, 0.12), 0px 4px 12px 0px rgba(10, 124, 255, 0.24), 0px 0px 0px 4px #00CCB1";
@@ -49,11 +50,14 @@ export const AccountTypeWrapper = ({
         <span className="bg-[#00CCB11F] border border-[#00CCB11F] text-[#0DAE94] rounded-lg text-xs px-4 py-2 font-work-sans-medium">
           {item.name}
         </span>
-        {item.logo && (
-          <span>
-            <Image src={item.logo} width={50} height={50} alt="" />
-          </span>
-        )}
+        <span>
+          <Image
+            src={item.logo ? item.logo : accountDefault}
+            width={50}
+            height={50}
+            alt=""
+          />
+        </span>
       </div>
 
       <div className="my-4">
