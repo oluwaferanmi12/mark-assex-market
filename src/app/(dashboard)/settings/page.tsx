@@ -21,14 +21,14 @@ const Settings = () => {
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex lg:flex-row flex-col lg:items-center justify-between">
         <div>
           <PageHeader text="Account Settings" />
           <p className="text-[#707070] lg:text-sm text-xs font-work-sans-regular ">
             Keep your information accurate and up to date.
           </p>
         </div>
-        <div className="font-work-sans-regular flex items-center gap-2">
+        <div className="font-work-sans-regular flex mt-4 lg:mt-0 items-center gap-2">
           <span>KYC STATUS:</span> <KycStatus status={data?.kycStatus!} />
         </div>
       </div>

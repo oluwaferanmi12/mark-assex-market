@@ -9,11 +9,20 @@ import kycGreen from "@/assets/svgs/green-kyc-status.svg";
 import kycRed from "@/assets/svgs/red-kyc-status.svg";
 import { useEffect } from "react";
 import Image from "next/image";
+import { small } from "framer-motion/client";
 
-export const KycStatus = ({ status }: { status: KycStatusType }) => {
+export const KycStatus = ({
+  status,
+  smaller,
+}: {
+  status: KycStatusType;
+  smaller?: boolean;
+}) => {
   return (
     <div
-      className={`border-[0.5px] flex gap-2 items-center rounded-lg py-2 px-4 ${
+      className={`border-[0.5px] flex gap-2 items-center  ${
+        smaller ? "px-2 py-1 rounded-full" : "py-2 px-4 rounded-lg"
+      }  ${
         status === "APPROVED"
           ? " text-[#25A969] border-[#34C65980] bg-[#34C6590A]"
           : status === "AWAITING"
@@ -64,23 +73,24 @@ export const KycStatus = ({ status }: { status: KycStatusType }) => {
           ? "Rejected"
           : ""}
       </p>
-
-      <span>
-        <Image
-          src={
-            status === "APPROVED"
-              ? infoGreen
-              : status === "AWAITING"
-              ? infoBlue
-              : status === "PENDING"
-              ? infoYellow
-              : status === "REJECTED"
-              ? infoRed
-              : ""
-          }
-          alt=""
-        />
-      </span>
+      {!smaller && (
+        <span>
+          <Image
+            src={
+              status === "APPROVED"
+                ? infoGreen
+                : status === "AWAITING"
+                ? infoBlue
+                : status === "PENDING"
+                ? infoYellow
+                : status === "REJECTED"
+                ? infoRed
+                : ""
+            }
+            alt=""
+          />
+        </span>
+      )}
     </div>
   );
 };
