@@ -267,7 +267,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
           <TableEmptyState icon={graphIcon} tableText="No Transactions" />
         )}
 
-        <TablePagination />
+        {hasData && <TablePagination />}
       </div>
     </>
   );

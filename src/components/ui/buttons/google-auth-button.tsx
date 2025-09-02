@@ -30,11 +30,10 @@ export default function GoogleAuthButton({
   const [ready, setReady] = useState(false);
   const codeClientRef = useRef<any>(null);
 
-  // REQUIRED: set these in your .env.* (client-side)
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
   const REDIRECT_URI = `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
 
-  // Initialize after script loads
+  
   const initCodeClient = () => {
     try {
       if (!window.google || !CLIENT_ID || !REDIRECT_URI) return;
@@ -42,11 +41,9 @@ export default function GoogleAuthButton({
       codeClientRef.current = window.google.accounts.oauth2.initCodeClient({
         client_id: CLIENT_ID,
         scope: "openid email profile",
-        ux_mode: "redirect", // opens Google chooser, then redirects
+        ux_mode: "redirect",
         redirect_uri: REDIRECT_URI,
-        state: crypto.randomUUID(), // CSRF protection / pass metadata if you like
-        // prompt: "select_account", // uncomment to always force chooser
-        // hd: "yourcompany.com",    // uncomment to restrict to a GSuite domain
+        state: crypto.randomUUID(),
       });
 
       setReady(true);
@@ -76,7 +73,7 @@ export default function GoogleAuthButton({
         type="button"
         onClick={handleClick}
         disabled={!ready || loading}
-        className="w-full h-[50px]"
+        className="w-full h-[50px] cursor-pointer"
         aria-disabled={!ready}
       >
         {text}

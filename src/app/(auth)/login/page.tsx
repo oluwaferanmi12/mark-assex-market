@@ -215,7 +215,7 @@ const Login = () => {
               ></div>
             </div>
 
-            <div className="mt-4 relative">
+            <div className="mt-4 relative cursor-pointer">
               <GoogleAuthButton
                 loading={googleButtonLoading}
                 setLoading={setGoogleButtonLoading}
