@@ -247,7 +247,9 @@ const WithdrawalDetails = () => {
 
   const debouncedConvertRef = useRef(
     debounce((currency: string, amount: number) => {
-      mutateRef.current({ currency, amount });
+      if (currency) {
+        mutateRef.current({ currency, amount });
+      }
     }, 1000)
   );
 

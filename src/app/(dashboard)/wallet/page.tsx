@@ -28,6 +28,7 @@ import { PaymentMethodTypes, PaymentQueries } from "@/types";
 import smallLogo from "@/assets/svgs/small-logo.svg";
 import bigDollarIcon from "@/assets/svgs/big-dollar-icon.svg";
 import eyeWhiteClosed from "@/assets/svgs/eye-white-closed.svg";
+import eyeWhiteIconOpen from "@/assets/svgs/eye-white-icon.svg";
 const Wallet = () => {
   const [statusSelected, setStatusSelected] = useState("All");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -103,7 +104,7 @@ const Wallet = () => {
               onClick={() => {
                 setHideBalance((prev) => !prev);
               }}
-              src={eyeWhiteClosed}
+              src={hideBalance ? eyeWhiteClosed : eyeWhiteIconOpen}
               alt=""
             />
           </div>

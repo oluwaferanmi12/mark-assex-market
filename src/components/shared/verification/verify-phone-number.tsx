@@ -72,7 +72,7 @@ export const VerifyPhoneNumber = ({
           </p>
           <p className="mt-1 text-[#707070] text-xs lg:text-sm font-work-sans-regular">
             {showOtp
-              ? `Enter the code sent to +${selectedCode} ${phoneNumber}`
+              ? `Enter the code sent to  ${phoneNumber}`
               : "This helps confirm your identity and authorize future transactions on your account"}
           </p>
           <div className="mt-4">
