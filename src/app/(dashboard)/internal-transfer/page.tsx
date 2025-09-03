@@ -19,7 +19,9 @@ import { MoneyFormat } from "@/utils/money-format";
 import { useGetAccount } from "@/hooks/queries/useAccount";
 import { toast } from "sonner";
 import {
+  useConvertRate,
   useExternalTransfer,
+  useGetCurrency,
   useInternalTransfer,
 } from "@/hooks/queries/usePayment";
 import { useQueryClient } from "@tanstack/react-query";
@@ -29,7 +31,7 @@ import { useRouter } from "next/navigation";
 import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import successIcon from "@/assets/svgs/transaction-success-icon.svg";
 import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
-import { Account } from "@/types";
+import { Account, ConversionResult } from "@/types";
 import { PageGoBack } from "@/components/shared/page-go-back/page-go-back";
 import { OTPInput } from "@/components/ui/inputs/otp-input";
 import {
@@ -37,6 +39,7 @@ import {
   useVerifyGenericOtp,
 } from "@/hooks/queries/useGeneric";
 import { isValidEmail } from "@/utils/email-validate";
+import { CurrencyConverted } from "@/components/text/currency-converted";
 
 const InternalTransfer = () => {
   const queryClient = useQueryClient();
@@ -48,6 +51,8 @@ const InternalTransfer = () => {
   const { data: userAccounts } = useGetAccount();
   const [amount, setAmount] = useState(0);
   const [transactionSuccessful, setTransactionSuccessful] = useState(false);
+  // const { data: currencies } = useGetCurrency("internal-transfer");
+
   const [showOtp, setShowOtp] = useState(false);
   const internalTransferMutate = useInternalTransfer(() => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
@@ -57,6 +62,10 @@ const InternalTransfer = () => {
   const [fromAccountDetails, setFromAccountDetails] = useState<Account>();
   const sendGenericOtp = useSendGenericOtp(() => {
     setShowOtp(true);
+  });
+  const [rateObject, setRateObject] = useState<ConversionResult>();
+  const convertedRate = useConvertRate((data) => {
+    setRateObject(data);
   });
   const router = useRouter();
   const externalTransferMutate = useExternalTransfer(() => {
@@ -274,50 +283,7 @@ const InternalTransfer = () => {
         </Row>
       ) : (
         <div className="py-4">
-          <p className="text-[#707070] mb-2 lg:text-sm text-xs font-work-sans-regular">
-            Select option
-          </p>
-          <div className="flex lg:flex-row flex-col  items-center gap-2">
-            <div
-              onClick={() => {
-                setActiveOption(0);
-              }}
-              className="bg-white  px-4 py-2 border cursor-pointer border-[#BEBEBE59] rounded-lg flex items-center gap-2"
-            >
-              <Image
-                src={activeOption === 0 ? checkedIcon : unCheckedIcon}
-                alt=""
-              />
-              <p
-                className={`font-work-sans-regular text-xs lg:text-sm ${
-                  activeOption === 0 ? "text-[#202020]" : "text-[#707070]"
-                } `}
-              >
-                Between your accounts
-              </p>
-            </div>
-            <div
-              onClick={() => {
-                setActiveOption(1);
-              }}
-              className={
-                "bg-white px-4 cursor-pointer py-2 border border-[#BEBEBE59] rounded-lg flex items-center gap-2"
-              }
-            >
-              <Image
-                src={activeOption === 1 ? checkedIcon : unCheckedIcon}
-                alt=""
-              />
-              <p
-                className={`font-work-sans-regular text-xs lg:text-sm ${
-                  activeOption === 1 ? "text-[#202020]" : "text-[#707070]"
-                } `}
-              >
-                To another trader's account
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 my-4 lg:mb-0 ">
+          <div className="flex items-center gap-4 mb-4 lg:mb-0 ">
             <span>
               <Image src={walletDollarIcon} alt="" />
             </span>
@@ -332,151 +298,198 @@ const InternalTransfer = () => {
               </p>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg my-4 w-full">
-            <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-6 w-full mb-3 lg:mb-4">
-              <SelectInput
-                value={senderAccount}
-                setValue={setSenderAccount}
-                label="Sender Account"
+          <div className="mt-6">
+            <p className="text-[#707070] mb-2 lg:text-sm text-xs font-work-sans-regular">
+              Select option
+            </p>
+            <div className="flex lg:flex-row flex-col  items-center gap-2">
+              <div
+                onClick={() => {
+                  setActiveOption(0);
+                }}
+                className="bg-white  px-4 py-2 border cursor-pointer border-[#BEBEBE59] rounded-lg flex items-center gap-2"
               >
-                <option value="">Select an account</option>
-                <option value={"wallet"}>Wallet</option>
-                {userAccounts?.map((item) => {
-                  return (
-                    <option key={item.id} value={item.id}>
-                      {item.accountGroup.name}: {item.mt5Id} ($
-                      {MoneyFormat(item.balance)})
-                    </option>
-                  );
-                })}
-              </SelectInput>
-              {activeOption ? (
-                <TransferInput
-                  label="Trader's Email"
-                  inputVal={email}
-                  handleInput={(e) => {
-                    setEmail(e);
-                  }}
-                  placeholder="Enter trader's email"
+                <Image
+                  src={activeOption === 0 ? checkedIcon : unCheckedIcon}
+                  alt=""
                 />
-              ) : (
-                <SelectInput
-                  value={receiverAccount}
-                  setValue={(e) => {
-                    if (e === senderAccount) {
-                      toast.error(
-                        "You can not select the same account for transfer"
-                      );
-                      return;
-                    } else if (!senderAccount) {
-                      toast.error("Select a sender account");
-                      return;
-                    }
-                    setRecieverAccount(e);
-                  }}
-                  label="Recipient Account"
+                <p
+                  className={`font-work-sans-regular text-xs lg:text-sm ${
+                    activeOption === 0 ? "text-[#202020]" : "text-[#707070]"
+                  } `}
                 >
-                  <option value="">Select an account</option>
-                  <option value={"wallet"}>Wallet</option>
-                  {userAccounts?.map((item) => {
-                    return (
-                      <option key={item.id} value={item.id}>
-                        {item.accountGroup.name}(${item.balance})
-                      </option>
-                    );
-                  })}
-                </SelectInput>
-              )}
-            </div>
-            <div className="flex items-center flex-col lg:flex-row gap-3 lg:gap-6 w-full mb-4">
-              <TransferInput
-                label="Amount"
-                inputVal={String(amount)}
-                handleInput={(e) => {
-                  setAmount(+e);
+                  Between your accounts
+                </p>
+              </div>
+              <div
+                onClick={() => {
+                  setActiveOption(1);
                 }}
-              />
-              <TransferInput
-                inputVal={String(amount)}
-                handleInput={(e) => {
-                  setAmount(+amount);
-                }}
-                label="Amount to be recieved"
-                disabled
-                greyBg
-              />
-            </div>
-            <div className="my-4">
-              <VisibleOnDesktop>
-                {activeOption ? (
-                  <Button
-                    action={() => {
-                      if (!handleValidate()) {
-                        if (isValidEmail(email)) {
-                          sendGenericOtp.mutate({ channel: "email" });
-                        } else {
-                          toast.error("Invalid email entered");
-                        }
-                      } else {
-                        toast.error("All fields are required");
-                      }
-                    }}
-                    loading={sendGenericOtp.isPending}
-                    variant="green-bg"
-                    text="Proceed"
-                    icon={arrowRight}
-                    iconPosition="right"
-                  />
-                ) : (
-                  <Button
-                    action={() => {
-                      handleTransfer();
-                    }}
-                    loading={internalTransferMutate.isPending}
-                    variant="green-bg"
-                    text="Send"
-                    icon={arrowRight}
-                    iconPosition="right"
-                  />
-                )}
-              </VisibleOnDesktop>
-              <VisibleOnMobile>
-                {activeOption ? (
-                  <Button
-                    action={() => {
-                      if (!handleValidate()) {
-                        if (isValidEmail(email)) {
-                          sendGenericOtp.mutate({ channel: "email" });
-                        } else {
-                          toast.error("Invalid email entered");
-                        }
-                      } else {
-                        toast.error("All fields are required");
-                      }
-                    }}
-                    loading={sendGenericOtp.isPending}
-                    variant="green-bg"
-                    text="Proceed"
-                    icon={arrowRight}
-                    iconPosition="right"
-                    fullWidth
-                  />
-                ) : (
-                  <Button
-                    action={() => {
-                      handleTransfer();
-                    }}
-                    loading={internalTransferMutate.isPending}
-                    variant="green-bg"
-                    text="Send"
-                    icon={arrowRight}
-                    iconPosition="right"
-                    fullWidth
-                  />
-                )}
-              </VisibleOnMobile>
+                className={
+                  "bg-white px-4 cursor-pointer py-2 border border-[#BEBEBE59] rounded-lg flex items-center gap-2"
+                }
+              >
+                <Image
+                  src={activeOption === 1 ? checkedIcon : unCheckedIcon}
+                  alt=""
+                />
+                <p
+                  className={`font-work-sans-regular text-xs lg:text-sm ${
+                    activeOption === 1 ? "text-[#202020]" : "text-[#707070]"
+                  } `}
+                >
+                  To another trader's account
+                </p>
+              </div>
             </div>
           </div>
+
+          <Row>
+            <Col xs={24} lg={14}>
+              <div
+                style={{ border: "0.5px solid #BEBEBE59" }}
+                className="bg-white p-4 rounded-[20px] my-4 w-full"
+              >
+                <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-6 w-full mb-3 lg:mb-6">
+                  <SelectInput
+                    value={senderAccount}
+                    setValue={setSenderAccount}
+                    label="Sender Account"
+                  >
+                    <option value="">Select an account</option>
+                    <option value={"wallet"}>Wallet</option>
+                    {userAccounts?.map((item) => {
+                      return (
+                        <option key={item.id} value={item.id}>
+                          {item.accountGroup.name}: {item.mt5Id} ($
+                          {MoneyFormat(item.balance)})
+                        </option>
+                      );
+                    })}
+                  </SelectInput>
+                  {activeOption ? (
+                    <TransferInput
+                      label="Trader's Email"
+                      inputVal={email}
+                      handleInput={(e) => {
+                        setEmail(e);
+                      }}
+                      placeholder="Enter trader's email"
+                    />
+                  ) : (
+                    <SelectInput
+                      value={receiverAccount}
+                      setValue={(e) => {
+                        if (e === senderAccount) {
+                          toast.error(
+                            "You can not select the same account for transfer"
+                          );
+                          return;
+                        } else if (!senderAccount) {
+                          toast.error("Select a sender account");
+                          return;
+                        }
+                        setRecieverAccount(e);
+                      }}
+                      label="Trader's Account"
+                    >
+                      <option value="">Select an account</option>
+                      <option value={"wallet"}>Wallet</option>
+                      {userAccounts?.map((item) => {
+                        return (
+                          <option key={item.id} value={item.id}>
+                            {item.accountGroup.name}(${item.balance})
+                          </option>
+                        );
+                      })}
+                    </SelectInput>
+                  )}
+                </div>
+                <div className="flex items-center flex-col lg:flex-row gap-3 lg:gap-6 w-full mb-6 ">
+                  <TransferInput
+                    label="Amount"
+                    inputVal={String(amount)}
+                    handleInput={(e) => {
+                      setAmount(+e);
+                    }}
+                    showUsd
+                  />
+                </div>
+
+                <div className="my-4">
+                  <VisibleOnDesktop>
+                    {activeOption ? (
+                      <Button
+                        action={() => {
+                          if (!handleValidate()) {
+                            if (isValidEmail(email)) {
+                              sendGenericOtp.mutate({ channel: "email" });
+                            } else {
+                              toast.error("Invalid email entered");
+                            }
+                          } else {
+                            toast.error("All fields are required");
+                          }
+                        }}
+                        loading={sendGenericOtp.isPending}
+                        variant="green-bg"
+                        text="Proceed"
+                        icon={arrowRight}
+                        iconPosition="right"
+                      />
+                    ) : (
+                      <Button
+                        action={() => {
+                          handleTransfer();
+                        }}
+                        loading={internalTransferMutate.isPending}
+                        variant="green-bg"
+                        text="Send"
+                        icon={arrowRight}
+                        iconPosition="right"
+                      />
+                    )}
+                  </VisibleOnDesktop>
+                  <VisibleOnMobile>
+                    {activeOption ? (
+                      <Button
+                        action={() => {
+                          if (!handleValidate()) {
+                            if (isValidEmail(email)) {
+                              sendGenericOtp.mutate({ channel: "email" });
+                            } else {
+                              toast.error("Invalid email entered");
+                            }
+                          } else {
+                            toast.error("All fields are required");
+                          }
+                        }}
+                        loading={sendGenericOtp.isPending}
+                        variant="green-bg"
+                        text="Proceed"
+                        icon={arrowRight}
+                        iconPosition="right"
+                        fullWidth
+                      />
+                    ) : (
+                      <Button
+                        action={() => {
+                          handleTransfer();
+                        }}
+                        loading={internalTransferMutate.isPending}
+                        variant="green-bg"
+                        text="Send"
+                        icon={arrowRight}
+                        iconPosition="right"
+                        fullWidth
+                      />
+                    )}
+                  </VisibleOnMobile>
+                </div>
+              </div>
+            </Col>
+            <Col></Col>
+          </Row>
         </div>
       )}
     </>
