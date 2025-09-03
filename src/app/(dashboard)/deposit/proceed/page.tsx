@@ -120,8 +120,8 @@ const Proceed = () => {
       amount: amountToDeposit,
       methodSlug: activeState!,
       chargeHash: "",
-      toAccount: "",
-      currency: "",
+      toAccount: selectedAccountId,
+      currency: currencySelected,
     });
   };
 
