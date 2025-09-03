@@ -57,7 +57,11 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
         cell: (info) => (
           <TableText
             variant="body"
-            text={"USD " + MoneyFormat(+info.getValue())}
+            text={
+              info.row.original.currency +
+              " " +
+              MoneyFormat(+(info.row.original.amountInCurrency ?? 0))
+            }
           />
         ),
         header: () => <TableText variant="header" text="Amount" />,

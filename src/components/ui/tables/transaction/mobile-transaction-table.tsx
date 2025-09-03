@@ -38,10 +38,9 @@ export const MobileTransactionTable = ({
         className="border  border-[#BEBEBE80] bg-white rounded-lg mb-4"
       >
         <div className="flex border-b border-[#BEBEBE80] justify-between p-4">
-          
           <div>
             <p className="font-work-sans-medium">
-              ${MoneyFormat(+payment.amount)}
+              ${payment.currency} {MoneyFormat(+payment.amountInCurrency)}
             </p>
             <p className="text-xs font-work-sans-regular text-[#707070]">
               {TableDate(payment.createdAt)}{" "}
@@ -60,8 +59,17 @@ export const MobileTransactionTable = ({
           {activeIndex === index && (
             <FadeIn>
               <div className="p-4">
-                <TableRow leftText="ID" rightText={payment.reference} />
+                <TableRow
+                  leftText="Transaction Id"
+                  rightText={payment.reference}
+                />
                 <TableRow leftText="Amount" rightText={`$ ${payment.amount}`} />
+                <TableRow
+                  leftText="Conversion Rate"
+                  rightText={`${MoneyFormat(+(payment?.amount ?? 0))} USD = ${
+                    payment?.currency
+                  } ${MoneyFormat(+(payment?.amountInCurrency ?? 0))}`}
+                />
                 <TableRow leftText="Type" rightText={payment.type} />
                 <TableRow
                   leftText="Payment method"
@@ -71,7 +79,12 @@ export const MobileTransactionTable = ({
                       : payment?.method?.name
                   }
                 />
-                <TableRow leftText="Date" type="date" rightText={payment.createdAt} last />
+                <TableRow
+                  leftText="Date"
+                  type="date"
+                  rightText={payment.createdAt}
+                  last
+                />
               </div>
               {payment.status === "FAILED" && (
                 <div
