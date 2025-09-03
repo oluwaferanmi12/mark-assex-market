@@ -55,6 +55,7 @@ import { useGetUserProfile } from "@/hooks/queries/useSettings";
 import { setShow2faFlow } from "@/store/slices/twofaslice";
 import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
 import { debounce } from "lodash";
+import { CurrencyConverted } from "@/components/text/currency-converted";
 
 const WithdrawalDetails = () => {
   const dispatch = useAppDispatch();
@@ -716,207 +717,213 @@ const WithdrawalDetails = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg p-4 mt-6">
-          <div>
-            <Row gutter={28} className="mb-4">
-              <Col lg={12} xs={24}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Payment Method
-                  </p>
-
-                  <Dropdown menu={{ items: customMethods }}>
-                    <div
-                      style={{
-                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                      }}
-                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                    >
-                      {getMethodName()}
-                    </div>
-                  </Dropdown>
-                </div>
-              </Col>
-
-              <Col lg={12} xs={24}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Currency
-                  </p>
-                  <select
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                    onChange={(e) => {
-                      setWithdrawPayload((prev) => ({
-                        ...prev,
-                        currency: e.target.value,
-                      }));
-                      debouncedConvertRef.current(
-                        e.target.value,
-                        withdrawPayload.amount
-                      );
-                    }}
-                  >
-                    <option>Select Currency</option>
-                    {currencies?.map((item) => {
-                      return (
-                        <option key={item.currency} value={item.currency}>
-                          {item.currency}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              </Col>
-            </Row>
-            <Row className="mb-4">
-              <Col lg={12} xs={24}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    From Account
-                  </p>
-                  <select
-                    style={{
-                      boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                    }}
-                    onChange={(e) => {
-                      setWithdrawPayload((prev) => ({
-                        ...prev,
-                        fromAccount: e.target.value,
-                      }));
-                    }}
-                    className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                  >
-                    <option value={""}>wallet</option>
-                    {accounts &&
-                      accounts.length &&
-                      accounts.map((item, index) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.server}: {item.mt5Id} ($
-                            {item.balance})
-                          </option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </Col>
-            </Row>
-            <Row gutter={28}>
-              <Col xs={24} lg={12}>
-                <div>
-                  <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                    Amount
-                  </p>
-                  <div className="relative">
-                    <span className="absolute right-2 top-1 border border-[#0DAE94] p-2 bg-[#E7F7F4] rounded-sm">
-                      <Image src={dollarGreen} alt="" />
-                    </span>
-                    <input
-                      placeholder="Enter amount"
-                      onChange={(e) => {
-                        // handleGetAmountToBePaid();
-                        setWithdrawPayload((prev) => ({
-                          ...prev,
-                          amount: +e.target.value,
-                        }));
-                        debouncedConvertRef.current(
-                          withdrawPayload.currency,
-                          +e.target.value
-                        );
-                      }}
-                      value={withdrawPayload.amount}
-                      style={{
-                        boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                      }}
-                      className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                    />
-                  </div>
-                </div>
-              </Col>
-              {!cryptoType && (
-                <Col xs={24} lg={12}>
-                  <div>
-                    <TransferInput
-                      disabled
-                      greyBg
-                      inputVal={MoneyFormat(
-                        amountToRecieveObject?.amountInCurrency ?? 0
-                      )}
-                      label="Amount to be Received"
-                    />
-                  </div>
-                </Col>
-              )}
-              <Col xs={24}>
-                {amountToRecieveObject && (
-                  <div className="flex items-center justify-end">
-                    <p className="text-xs font-work-sans-regular">
-                      1 {amountToRecieveObject?.base} ={" "}
-                      {MoneyFormat(amountToRecieveObject?.rate ?? 0)}{" "}
-                      {amountToRecieveObject?.target}
-                    </p>
-                  </div>
-                )}
-              </Col>
-            </Row>
-            <div className="my-4">
-              <Button
-                action={() => {
-                  if (accountProfile.data?.twoFaStatus === "ENABLED") {
-                    if (withdrawPayload.amount) {
-                      setShowDepositDetails(true);
-                      return;
-                    } else if (!withdrawPayload.amount) {
-                      toast.error("Kindly enter an amount");
-                    }
-                  } else {
-                    dispatch(setShow2faFlow(true));
-                  }
-                }}
-                loading={false}
-                text="Proceed"
-                variant="green-bg"
-                icon={arrowRightMultiple}
-                iconPosition="right"
-              />
-            </div>
-            <VisibleOnDesktop>
-              <div className="bg-white border border-[#BEBEBE80] p-4 rounded-sm">
-                <Row>
-                  <Col xs={12}>
-                    <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Min Withdraw:</p>
-                      <p className="text-[#111111]">
-                        ${MoneyFormat(activePaymentDetails?.minAmount ?? 0)}
+        <Row gutter={24}>
+          <Col xs={24} lg={14}>
+            <div className="bg-white border border-[#BEBEBE59] rounded-lg p-4 mt-6">
+              <div>
+                <Row gutter={28} className="mb-6">
+                  <Col lg={12} xs={24}>
+                    <div>
+                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                        Payment Method
                       </p>
-                    </div>
-                    <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Max Withdraw:</p>
-                      <p className="text-[#111111]">
-                        ${MoneyFormat(activePaymentDetails?.maxAmount ?? 0)}
-                      </p>
+
+                      <Dropdown menu={{ items: customMethods }}>
+                        <div
+                          style={{
+                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          }}
+                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        >
+                          {getMethodName()}
+                        </div>
+                      </Dropdown>
                     </div>
                   </Col>
-                  <Col xs={12}>
-                    <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Commission:</p>
-                      <p className="text-[#111111]">{0}</p>
-                    </div>
-                    <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                      <p className="text-[#404040]">Withdraw Time:</p>
-                      <p className="text-[#111111]">
-                        {activePaymentDetails?.time}
+
+                  <Col lg={12} xs={24}>
+                    <div>
+                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                        Currency
                       </p>
+                      <select
+                        style={{
+                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                        }}
+                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                        onChange={(e) => {
+                          setWithdrawPayload((prev) => ({
+                            ...prev,
+                            currency: e.target.value,
+                          }));
+                          debouncedConvertRef.current(
+                            e.target.value,
+                            withdrawPayload.amount
+                          );
+                        }}
+                      >
+                        <option>Select Currency</option>
+                        {currencies?.map((item) => {
+                          return (
+                            <option key={item.currency} value={item.currency}>
+                              {item.currency}
+                            </option>
+                          );
+                        })}
+                      </select>
                     </div>
                   </Col>
                 </Row>
+                <Row className="mb-6">
+                  <Col xs={24}>
+                    <div>
+                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                        From Account
+                      </p>
+                      <select
+                        style={{
+                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                        }}
+                        onChange={(e) => {
+                          setWithdrawPayload((prev) => ({
+                            ...prev,
+                            fromAccount: e.target.value,
+                          }));
+                        }}
+                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                      >
+                        <option value={""}>wallet</option>
+                        {accounts &&
+                          accounts.length &&
+                          accounts.map((item, index) => {
+                            return (
+                              <option value={item.id} key={item.id}>
+                                {item.server}: {item.mt5Id} ($
+                                {item.balance})
+                              </option>
+                            );
+                          })}
+                      </select>
+                    </div>
+                  </Col>
+                </Row>
+                <Row gutter={28}>
+                  <Col className="mb-6" xs={24}>
+                    <div>
+                      <TransferInput
+                        placeholder="Enter amount"
+                        handleInput={(e) => {
+                          setWithdrawPayload((prev) => ({
+                            ...prev,
+                            amount: +e,
+                          }));
+                          debouncedConvertRef.current(
+                            withdrawPayload.currency,
+                            +e
+                          );
+                        }}
+                        inputVal={String(withdrawPayload.amount)}
+                        label="Amount(USD)"
+                        showUsd
+                      />
+                    </div>
+                  </Col>
+                  {!cryptoType && (
+                    <Col xs={24}>
+                      <div>
+                        <TransferInput
+                          disabled
+                          borderBlue
+                          greyBg
+                          inputVal={MoneyFormat(
+                            amountToRecieveObject?.amountInCurrency ?? 0
+                          )}
+                          label="Amount to be Received"
+                        />
+                      </div>
+                    </Col>
+                  )}
+                  <Col xs={24}>
+                    {amountToRecieveObject && (
+                      <CurrencyConverted payload={amountToRecieveObject} />
+                    )}
+                    {/* {amountToRecieveObject && (
+                    <div className="flex items-center justify-end">
+                      <p className="text-xs font-work-sans-regular">
+                        1 {amountToRecieveObject?.base} ={" "}
+                        {MoneyFormat(amountToRecieveObject?.rate ?? 0)}{" "}
+                        {amountToRecieveObject?.target}
+                      </p>
+                    </div>
+                  )} */}
+                  </Col>
+                </Row>
+                <div className="my-4">
+                  <Button
+                    action={() => {
+                      if (accountProfile.data?.twoFaStatus === "ENABLED") {
+                        if (withdrawPayload.amount) {
+                          setShowDepositDetails(true);
+                          return;
+                        } else if (!withdrawPayload.amount) {
+                          toast.error("Kindly enter an amount");
+                        }
+                      } else {
+                        dispatch(setShow2faFlow(true));
+                      }
+                    }}
+                    loading={false}
+                    text="Proceed"
+                    variant="green-bg"
+                    icon={arrowRightMultiple}
+                    iconPosition="right"
+                  />
+                </div>
               </div>
-            </VisibleOnDesktop>
-          </div>
-        </div>
+            </div>
+          </Col>
+          <Col xs={24} lg={10}>
+            <div className="border-[0.35px] mt-6 bg-white rounded-2xl border-[#BEBEBE59] p-4">
+              <p className="text-[#202020] mb-4 text-lg font-work-sans-semi-bold">
+                Transaction Details
+              </p>
+              <div>
+                <div className="flex items-center justify-between my-4">
+                  <p className="text-[#404040] font-work-sans-regular text-base">
+                    Min Withdrawal:
+                  </p>
+                  <p className="font-work-sans-medium text-base">
+                    ${MoneyFormat(activePaymentDetails?.minAmount ?? 0)}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between my-4">
+                  <p className="text-[#404040] font-work-sans-regular text-base">
+                    Max Withdrawal:
+                  </p>
+                  <p className="font-work-sans-medium text-base">
+                    ${MoneyFormat(activePaymentDetails?.maxAmount ?? 0)}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between my-4">
+                  <p className="text-[#404040] font-work-sans-regular text-base">
+                    Fee:
+                  </p>
+                  <p className="font-work-sans-medium text-base text-[#0DAE94]">
+                    $0
+                  </p>
+                </div>
+                <div className="flex items-center justify-between my-4">
+                  <p className="text-[#404040] font-work-sans-regular text-base">
+                    Avg. Payment Time
+                  </p>
+                  <p className="font-work-sans-medium text-base">
+                    {activePaymentDetails?.time}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
       )}
     </>
   );
