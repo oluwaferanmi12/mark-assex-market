@@ -41,7 +41,7 @@ export const TransferInput = ({
           placeholder={placeholder}
           disabled={disabled}
           className={` ${
-            greyBg ? "bg-[#F2F4F7] " : ""
+            greyBg ? "bg-[#F6FAFF] " : ""
           } border w-full h-[36px]  lg:h-[48px] ${borderBlue ? "border-[#007BFF]" :  "border-[#BEBEBE80] "} rounded-xl px-4`}
           onChange={(e) => {
             if (handleInput) {

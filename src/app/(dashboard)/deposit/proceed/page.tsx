@@ -48,6 +48,7 @@ import { Spinner } from "@/components/spinner/spinner";
 import { data } from "framer-motion/client";
 import { debounce } from "lodash";
 import { CountDownTimer } from "@/components/ui/timer/countdown-timer";
+import { CurrencyConverted } from "@/components/text/currency-converted";
 
 const Proceed = () => {
   const [amountToDepositObject, setAmountToDepositObject] =
@@ -539,7 +540,7 @@ const Proceed = () => {
       </ModalContainer>
 
       <PageHeader text="Deposit" />
-      <div className="bg-white p-4 rounded-lg mt-6">
+      <div className="rounded-lg mt-6">
         {activeState?.toLowerCase().includes("tether") ||
         activeState?.toLowerCase().includes("btc") ||
         activeState?.toLowerCase().includes("eth") ? (
@@ -736,7 +737,7 @@ const Proceed = () => {
         ) : (
           <>
             {showDepositDetails ? (
-              <div>
+              <div className="bg-white rounded-lg">
                 <p className="font-work-sans-regular text-[#707070]">
                   Payment Method
                 </p>
@@ -850,200 +851,224 @@ const Proceed = () => {
                 </Row>
               </div>
             ) : (
-              <div>
-                <Row gutter={24} className="mb-4">
-                  <Col lg={12} xs={24}>
-                    <div>
-                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                        Payment Method
-                      </p>
+              <Row gutter={24}>
+                <Col xs={24} lg={14}>
+                  <div className="bg-white p-4 rounded-lg">
+                    <Row gutter={24} className="mb-6">
+                      <Col lg={12} xs={24}>
+                        <div>
+                          <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                            Payment Method
+                          </p>
 
-                      <Dropdown menu={{ items: customMethods }}>
-                        <div
-                          style={{
-                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                          }}
-                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                        >
-                          {getMethodName()}
+                          <Dropdown menu={{ items: customMethods }}>
+                            <div
+                              style={{
+                                boxShadow:
+                                  "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                              }}
+                              className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                            >
+                              {getMethodName()}
+                            </div>
+                          </Dropdown>
                         </div>
-                      </Dropdown>
-                    </div>
-                  </Col>
-                  <Col lg={12} xs={24}>
-                    <div>
-                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                        Currency
-                      </p>
-                      <select
-                        style={{
-                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                        }}
-                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                        onChange={(e) => {
-                          setCurrencySelected(e.target.value);
-                          debouncedConvertRef.current(
-                            e.target.value,
-                            amountToDeposit
-                          );
-                        }}
-                      >
-                        <option value={""}>Select Currency</option>
-                        {currencies?.map((item) => {
-                          return (
-                            <option key={item.currency} value={item.currency}>
-                              {item.currency}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </Col>
-                </Row>
-                <Row gutter={24} className="mb-4">
-                  <Col lg={12} xs={24}>
-                    <div>
-                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                        To account
-                      </p>
-                      <select
-                        style={{
-                          boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
-                        }}
-                        onChange={(e) => {
-                          setSelectedAccountId(e.target.value);
-                        }}
-                        className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
-                      >
-                        {accounts &&
-                          accounts.map((item) => {
-                            return (
-                              <option value={item.id}>
-                                {item.accountGroup.name} (#{item.mt5Id})
-                              </option>
-                            );
-                          })}
-                        <option value={""}>Wallet</option>
-                      </select>
-                    </div>
-                  </Col>
-                </Row>
-                <Row gutter={28}>
-                  <Col xs={24} lg={12}>
-                    <div>
-                      <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
-                        Amount
-                      </p>
-                      <div>
-                        <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
-                          <Image src={dollarGreen} alt="" />
-                        </span>
-
-                        <input
-                          onChange={(e) => {
-                            debouncedConvertRef.current(
-                              currencySelected,
-                              +e.target.value
-                            );
-                            setAmountToDeposit(+e.target.value);
-                          }}
-                          value={amountToDeposit}
+                      </Col>
+                      <Col lg={12} xs={24}>
+                        <div>
+                          <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                            Currency
+                          </p>
+                          <select
+                            style={{
+                              boxShadow:
+                                "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                            }}
+                            className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                            onChange={(e) => {
+                              setCurrencySelected(e.target.value);
+                              debouncedConvertRef.current(
+                                e.target.value,
+                                amountToDeposit
+                              );
+                            }}
+                          >
+                            <option value={""}>Select Currency</option>
+                            {currencies?.map((item) => {
+                              return (
+                                <option
+                                  key={item.currency}
+                                  value={item.currency}
+                                >
+                                  {item.currency}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row gutter={24} className="mb-4">
+                      <Col xs={24}>
+                        
+                        <div>
+                          <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                            To account
+                          </p>
+                          <select
+                            style={{
+                              boxShadow:
+                                "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                            }}
+                            onChange={(e) => {
+                              setSelectedAccountId(e.target.value);
+                            }}
+                            className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                          >
+                            {accounts &&
+                              accounts.map((item) => {
+                                return (
+                                  <option value={item.id}>
+                                    {item.accountGroup.name} (#{item.mt5Id})
+                                  </option>
+                                );
+                              })}
+                            <option value={""}>Wallet</option>
+                          </select>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="mt-6" gutter={28}>
+                      <Col xs={24}>
+                        <TransferInput
                           placeholder="Enter amount"
-                          style={{
-                            boxShadow: "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                          handleInput={(e) => {
+                            debouncedConvertRef.current(currencySelected, +e);
+                            setAmountToDeposit(+e);
                           }}
-                          className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                          inputVal={String(amountToDeposit)}
+                          label="Amount(USD)"
+                          showUsd
                         />
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs={24} lg={12}>
-                    <div className="mt-4 lg:mt-0">
-                      <TransferInput
-                        disabled
-                        greyBg
-                        label="Amount to be Deposited"
-                        inputVal={MoneyFormat(
-                          amountToDepositObject?.amountInCurrency ?? 0
-                        )}
+                        {/* <div>
+                          <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
+                            Amount
+                          </p>
+                          <div>
+                            <span className="absolute flex items-center justify-center top-8 right-4 bg-[#E7F7F4] rounded-lg border border-#0DAE94[] py-1 px-2">
+                              <Image src={dollarGreen} alt="" />
+                            </span>
+
+                            <input
+                              onChange={(e) => {
+                                debouncedConvertRef.current(
+                                  currencySelected,
+                                  +e.target.value
+                                );
+                                setAmountToDeposit(+e.target.value);
+                              }}
+                              value={amountToDeposit}
+                              placeholder="Enter amount"
+                              style={{
+                                boxShadow:
+                                  "0px 2px 5px 0px rgba(68, 68, 68, 0.1)",
+                              }}
+                              className="w-full p-4 focus:outline-none rounded-lg text-[#707070] font-work-sans-regular"
+                            />
+                          </div>
+                        </div> */}
+                      </Col>
+                      <Col xs={24} className="mt-6">
+                        <div className="mt-6 lg:mt-0">
+                          <TransferInput
+                            borderBlue
+                            disabled
+                            greyBg
+                            label="Amount to be Deposited"
+                            inputVal={MoneyFormat(
+                              amountToDepositObject?.amountInCurrency ?? 0
+                            )}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Col xs={24} className="mt-2">
+                      {amountToDepositObject && (
+                        <CurrencyConverted payload={amountToDepositObject} />
+                      )}
+                    </Col>
+                    <div className="my-4">
+                      <Button
+                        action={() => {
+                          // setShowDepositDetails(true);
+                          if (activeState === "internal-bank-transfer") {
+                            mutateDepositForBankTransfer.mutate({
+                              amount: amountToDeposit,
+                              chargeHash: "",
+                              methodSlug: activeState!,
+                              toAccount: selectedAccountId,
+                              currency: currencySelected,
+                            });
+
+                            return;
+                          }
+                          setStartTimer(true);
+                          handleDeposit();
+                        }}
+                        loading={
+                          mutateDeposit.isPending ||
+                          mutateDepositForBankTransfer.isPending
+                        }
+                        text="Proceed"
+                        variant="green-bg"
+                        icon={arrowRightMultiple}
+                        iconPosition="right"
                       />
                     </div>
-                  </Col>
-                </Row>
-                <Col xs={24}>
-                  {amountToDepositObject && (
-                    <div className="flex items-center justify-end">
-                      <p className="text-xs font-work-sans-regular">
-                        1 {amountToDepositObject?.base} ={" "}
-                        {MoneyFormat(amountToDepositObject?.rate ?? 0)}{" "}
-                        {amountToDepositObject?.target}
-                      </p>
-                    </div>
-                  )}
-                </Col>
-                <div className="my-4">
-                  <Button
-                    action={() => {
-                      // setShowDepositDetails(true);
-                      if (activeState === "internal-bank-transfer") {
-                        mutateDepositForBankTransfer.mutate({
-                          amount: amountToDeposit,
-                          chargeHash: "",
-                          methodSlug: activeState!,
-                          toAccount: selectedAccountId,
-                          currency: currencySelected,
-                        });
-
-                        return;
-                      }
-                      setStartTimer(true);
-                      handleDeposit();
-                    }}
-                    loading={
-                      mutateDeposit.isPending ||
-                      mutateDepositForBankTransfer.isPending
-                    }
-                    text="Proceed"
-                    variant="green-bg"
-                    icon={arrowRightMultiple}
-                    iconPosition="right"
-                  />
-                </div>
-                <VisibleOnDesktop>
-                  <div className="bg-white border border-[#BEBEBE80] p-4 rounded-sm">
-                    {paymentMethodDetails && (
-                      <Row>
-                        <Col xs={12}>
-                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                            <p className="text-[#404040]">Min Deposit:</p>
-                            <p className="text-[#111111]">
-                              ${MoneyFormat(paymentMethodDetails?.minAmount!)}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                            <p className="text-[#404040]">Max Deposit:</p>
-                            <p className="text-[#111111]">
-                              ${MoneyFormat(paymentMethodDetails?.maxAmount!)}
-                            </p>
-                          </div>
-                        </Col>
-                        <Col xs={12}>
-                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                            <p className="text-[#404040]">Commission:</p>
-                            <p className="text-[#111111]">From </p>
-                          </div>
-                          <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
-                            <p className="text-[#404040]">Deposit Time:</p>
-                            <p className="text-[#111111]">
-                              {paymentMethodDetails.time}
-                            </p>
-                          </div>
-                        </Col>
-                      </Row>
-                    )}
                   </div>
-                </VisibleOnDesktop>
-              </div>
+                </Col>
+                <Col xs={24} lg={10} className="mt-4">
+                  <div className="border-[0.35px] bg-white rounded-2xl border-[#BEBEBE59] p-4">
+                    <p className="text-[#202020] mb-4 text-lg font-work-sans-semi-bold">
+                      Transaction Details
+                    </p>
+                    <div>
+                      <div className="flex items-center justify-between my-4">
+                        <p className="text-[#404040] font-work-sans-regular text-base">
+                          Min Withdrawal:
+                        </p>
+                        <p className="font-work-sans-medium text-base">
+                          ${MoneyFormat(paymentMethodDetails?.minAmount ?? 0)}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between my-4">
+                        <p className="text-[#404040] font-work-sans-regular text-base">
+                          Max Withdrawal:
+                        </p>
+                        <p className="font-work-sans-medium text-base">
+                          ${MoneyFormat(paymentMethodDetails?.maxAmount ?? 0)}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between my-4">
+                        <p className="text-[#404040] font-work-sans-regular text-base">
+                          Fee:
+                        </p>
+                        <p className="font-work-sans-medium text-base text-[#0DAE94]">
+                          $0
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between my-4">
+                        <p className="text-[#404040] font-work-sans-regular text-base">
+                          Avg. Payment Time
+                        </p>
+                        <p className="font-work-sans-medium text-base">
+                          {paymentMethodDetails?.time}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             )}
           </>
         )}
