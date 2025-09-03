@@ -26,6 +26,7 @@ import { MoneyFormat } from "@/utils/money-format";
 import { TableLoader } from "@/components/loaders/table-loader";
 import { DateViewer } from "@/components/shared/wrappers/date-viewer";
 import transactionSuccessIcon from "@/assets/svgs/transaction-success-icon.svg";
+import failedIcon from "@/assets/svgs/transaction-failed-icon.svg";
 
 type Props = {
   data?: Payment[];
@@ -115,6 +116,7 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
       <SideDrawerWrapper
         active={showSideDrawer}
         handleClose={() => setShowSideDrawer(false)}
+        fullHeight
       >
         <div className="h-full flex flex-col justify-between">
           <div>
@@ -123,13 +125,42 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
               handleCancel={() => setShowSideDrawer(false)}
             />
             <ModalBody>
-              <div className="flex items-center justify-center">
-                <Image src={transactionSuccessIcon} alt="" />
+              <div className="flex items-center flex-col justify-center">
+                <Image
+                  src={
+                    selectedTransaction?.status === "SUCCESS"
+                      ? transactionSuccessIcon
+                      : failedIcon
+                  }
+                  alt=""
+                />
+                <TableStatus
+                  text={
+                    selectedTransaction?.status === "SUCCESS"
+                      ? "Completed"
+                      : selectedTransaction?.status === "PENDING"
+                      ? "Pending"
+                      : "Failed"
+                  }
+                  variant={selectedTransaction?.status ?? "PENDING"}
+                />
+                <div>
+                  <p className="text-[#1F0D3F] mt-2 text-[32px] font-work-sans-semi-bold">
+                    {`${selectedTransaction?.currency} ${MoneyFormat(
+                      +(selectedTransaction?.amountInCurrency ?? "")
+                    )}`}
+                  </p>
+                </div>
+                <p className="text-[#404040] text-xs font-work-sans-regular">
+                  {selectedTransaction?.method.name}
+                </p>
               </div>
               <div className="mt-4 flex flex-col h-full flex-1 justify-between">
                 <div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
-                    <p className="text-[#707070] font-work-sans-regular">ID</p>
+                    <p className="text-[#707070] font-work-sans-regular">
+                      Transaction ID
+                    </p>
                     <p className="text-[#111111] font-work-sans-regular">
                       {selectedTransaction?.reference}
                     </p>
@@ -145,6 +176,18 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
                     <p className="text-[#707070] font-work-sans-regular">
+                      Conversion Rate
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      {`${MoneyFormat(
+                        +(selectedTransaction?.amount ?? 0)
+                      )} USD = ${selectedTransaction?.currency} ${MoneyFormat(
+                        +(selectedTransaction?.amountInCurrency ?? 0)
+                      )}`}
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
                       Payment Type
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
@@ -153,13 +196,18 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
                     <p className="text-[#707070] font-work-sans-regular">
+                      Payment Method
+                    </p>
+                    <p className="text-[#111111] font-work-sans-regular">
+                      {selectedTransaction?.method.name}
+                    </p>
+                  </div>
+                  <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
+                    <p className="text-[#707070] font-work-sans-regular">
                       Status
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      <TableStatus
-                        text={selectedTransaction?.status!}
-                        variant={selectedTransaction?.status!}
-                      />
+                      {selectedTransaction?.status}
                     </p>
                   </div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">
@@ -167,30 +215,31 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
                       Date
                     </p>
                     <p className="text-[#111111] font-work-sans-regular">
-                      {TableDate(selectedTransaction?.createdAt ?? "")}
+                      <DateViewer date={selectedTransaction?.createdAt!} />
                     </p>
                   </div>
-                  {selectedTransaction?.status === "FAILED" && (
-                    <div className="mt-8">
-                      <p className="text-[#707070] font-work-sans-regular">
-                        Reason
-                      </p>
-                      <div className="mt-1 bg-[#F40E0E1A] rounded-lg gap-2 p-2 flex items-center">
-                        <div className="">
-                          <Image
-                            src={cancelIcon}
-                            className="w-[30px] h-[30px]"
-                            alt=""
-                          />
-                        </div>
-                        <div className="font-work-sans-regular text-[#202020]">
-                          <span className="font-work-sans-medium">
-                            {selectedTransaction.reason}
-                          </span>
+                  {selectedTransaction?.status === "FAILED" &&
+                    selectedTransaction.reason && (
+                      <div className="mt-8">
+                        <p className="text-[#707070] font-work-sans-regular">
+                          Reason
+                        </p>
+                        <div className="mt-1 bg-[#F40E0E1A] rounded-lg gap-2 p-2 flex items-center">
+                          <div className="">
+                            <Image
+                              src={cancelIcon}
+                              className="w-[30px] h-[30px]"
+                              alt=""
+                            />
+                          </div>
+                          <div className="font-work-sans-regular text-[#202020]">
+                            <span className="font-work-sans-medium">
+                              {selectedTransaction.reason}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
             </ModalBody>

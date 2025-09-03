@@ -55,6 +55,8 @@ export interface Payment {
   user: PaymentUser;
   method: TransactionPaymentMethod;
   reason: string;
+  amountInCurrency: string;
+  currency: string
 }
 
 export interface CreateWithdrawalInterface {
