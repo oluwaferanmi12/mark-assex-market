@@ -25,6 +25,7 @@ import graphIcon from "@/assets/svgs/order-empty-icon.svg";
 import { MoneyFormat } from "@/utils/money-format";
 import { TableLoader } from "@/components/loaders/table-loader";
 import { DateViewer } from "@/components/shared/wrappers/date-viewer";
+import transactionSuccessIcon from "@/assets/svgs/transaction-success-icon.svg";
 
 type Props = {
   data?: Payment[];
@@ -118,10 +119,13 @@ export const TransactionTable = ({ data, loading = false }: Props) => {
         <div className="h-full flex flex-col justify-between">
           <div>
             <ModalHeader
-              headText="Transaction History"
+              headText="Transaction Details"
               handleCancel={() => setShowSideDrawer(false)}
             />
             <ModalBody>
+              <div className="flex items-center justify-center">
+                <Image src={transactionSuccessIcon} alt="" />
+              </div>
               <div className="mt-4 flex flex-col h-full flex-1 justify-between">
                 <div>
                   <div className="flex border-[#BEBEBE80] mb-2 items-center justify-between py-2 border-b border-dashed">

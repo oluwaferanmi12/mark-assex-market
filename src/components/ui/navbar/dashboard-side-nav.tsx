@@ -87,7 +87,7 @@ export const DashboardSideNav = ({
       slug: "internal-transfer",
     },
     {
-      text: "Transaction History",
+      text: "Transactions",
       activeIcon: scrollTextIconGreen,
       inactiveIcon: scrollTextIcon,
       clickAction: () => {},
