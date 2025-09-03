@@ -22,6 +22,7 @@ import {
   useConvertRate,
   useExternalTransfer,
   useGetCurrency,
+  useGetInternalTransferLimit,
   useInternalTransfer,
 } from "@/hooks/queries/usePayment";
 import { useQueryClient } from "@tanstack/react-query";
@@ -52,6 +53,9 @@ const InternalTransfer = () => {
   const [amount, setAmount] = useState(0);
   const [transactionSuccessful, setTransactionSuccessful] = useState(false);
   // const { data: currencies } = useGetCurrency("internal-transfer");
+  const { data: internalTransferLimit } = useGetInternalTransferLimit();
+
+  console.log(internalTransferLimit, "Internal Transfer lmit");
 
   const [showOtp, setShowOtp] = useState(false);
   const internalTransferMutate = useInternalTransfer(() => {
@@ -344,7 +348,7 @@ const InternalTransfer = () => {
             </div>
           </div>
 
-          <Row>
+          <Row gutter={24}>
             <Col xs={24} lg={14}>
               <div
                 style={{ border: "0.5px solid #BEBEBE59" }}
@@ -488,7 +492,45 @@ const InternalTransfer = () => {
                 </div>
               </div>
             </Col>
-            <Col></Col>
+            <Col xs={24} lg={10} className="lg:mt-0 mt-4">
+              <div className="border-[0.35px] mt-4 bg-white rounded-2xl border-[#BEBEBE59] p-4">
+                <p className="text-[#202020] mb-4 text-lg font-work-sans-semi-bold">
+                  Transaction Details
+                </p>
+                <div>
+                  <div className="flex items-center justify-between my-4">
+                    <p className="text-[#404040] font-work-sans-regular text-base">
+                      Account Transfer Limit:
+                    </p>
+                    <p className="font-work-sans-medium text-base">
+                      $
+                      {MoneyFormat(
+                        internalTransferLimit?.accountTransferLimit ?? 0
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between my-4">
+                    <p className="text-[#404040] font-work-sans-regular text-base">
+                      Country Transfer Limit:
+                    </p>
+                    <p className="font-work-sans-medium text-base">
+                      $
+                      {MoneyFormat(
+                        internalTransferLimit?.countryTransferLimit ?? 0
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between my-4">
+                    <p className="text-[#404040] font-work-sans-regular text-base">
+                      Transfer Limit:
+                    </p>
+                    <p className="font-work-sans-medium text-base ">
+                      ${MoneyFormat(internalTransferLimit?.transferLimit ?? 0)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Col>
           </Row>
         </div>
       )}

@@ -6,6 +6,7 @@ import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
   ExternalTransferPayload,
+  InternalTransferLimit,
   InternalTransferPayload,
   Payment,
   PaymentBank,
@@ -125,3 +126,9 @@ export const convertRate = async (
   );
   return result.data.data;
 };
+
+export const internalTransferLimit =
+  async (): Promise<InternalTransferLimit> => {
+    const result = await axiosInstance.get(`/payments/internal-transfer-limit`);
+    return result.data.data;
+  };

@@ -6,6 +6,7 @@ import {
   getPaymentHistory,
   getPaymentMethodDetails,
   internalTransfer,
+  internalTransferLimit,
   paymentAccounts,
   paymentBanks,
   paymentMethods,
@@ -168,5 +169,12 @@ export const useConvertRate = (sc: (val: any) => void) => {
     onSuccess: (val) => {
       sc(val);
     },
+  });
+};
+
+export const useGetInternalTransferLimit = () => {
+  return useQuery({
+    queryFn: () => internalTransferLimit(),
+    queryKey: ["internal-transfer-limit"],
   });
 };

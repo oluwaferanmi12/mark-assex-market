@@ -56,7 +56,7 @@ export interface Payment {
   method: TransactionPaymentMethod;
   reason: string;
   amountInCurrency: string;
-  currency: string
+  currency: string;
 }
 
 export interface CreateWithdrawalInterface {
@@ -202,4 +202,13 @@ export interface ConversionResult {
   base: string;
   rate: number;
   target: string;
+}
+
+export interface InternalTransferLimit {
+  accountTransferLimit: number;
+  accountTransferLimitEnabled: boolean;
+  countryTransferLimit: number;
+  countryTransferLimitEnabled: boolean;
+  transferLimit: number;
+  transferLimitEnabled: boolean;
 }

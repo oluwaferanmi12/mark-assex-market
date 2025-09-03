@@ -910,7 +910,6 @@ const Proceed = () => {
                     </Row>
                     <Row gutter={24} className="mb-4">
                       <Col xs={24}>
-                        
                         <div>
                           <p className="text-[#707070] text-sm font-work-sans-regular mb-1">
                             To account
@@ -1027,7 +1026,7 @@ const Proceed = () => {
                     </div>
                   </div>
                 </Col>
-                <Col xs={24} lg={10} className="mt-4">
+                <Col xs={24} lg={10} className="lg:mt-0 mt-4">
                   <div className="border-[0.35px] bg-white rounded-2xl border-[#BEBEBE59] p-4">
                     <p className="text-[#202020] mb-4 text-lg font-work-sans-semi-bold">
                       Transaction Details
