@@ -10,7 +10,8 @@ export const TransferInput = ({
   handleInput,
   inputVal,
   showUsd,
-  borderBlue
+  borderBlue,
+  greenBorder,
 }: {
   label: string;
   icon?: string;
@@ -20,7 +21,8 @@ export const TransferInput = ({
   handleInput?: (val: string) => void;
   inputVal?: string;
   showUsd?: boolean;
-  borderBlue?: boolean
+  borderBlue?: boolean;
+  greenBorder?: boolean;
 }) => {
   return (
     <div className="w-full">
@@ -42,7 +44,13 @@ export const TransferInput = ({
           disabled={disabled}
           className={` ${
             greyBg ? "bg-[#F6FAFF] " : ""
-          } border w-full h-[36px]  lg:h-[48px] ${borderBlue ? "border-[#007BFF]" :  "border-[#BEBEBE80] "} rounded-xl px-4`}
+          } border w-full h-[36px]  lg:h-[48px] ${
+            borderBlue
+              ? "border-[#007BFF]"
+              : greenBorder
+              ? "border-[#0DAE94]"
+              : "border-[#BEBEBE80] "
+          } rounded-xl px-4`}
           onChange={(e) => {
             if (handleInput) {
               handleInput(e.target.value);

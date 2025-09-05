@@ -12,9 +12,15 @@ import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
 import { SupportChatWrapper } from "@/components/shared/wrappers/support-chat-wrapper";
 import { SupportUserWrapper } from "@/components/shared/wrappers/support-user-wrapper";
 import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
+import plusIcon from "@/assets/svgs/plus-icon.svg";
+import searchGreen from "@/assets/svgs/search-green.svg";
+import Image from "next/image";
+import { TransferInput } from "@/components/ui/inputs/transfer-input";
+import { CreateTicketModal } from "@/components/ui/modal/support/ticket-modal";
 
 const Support = () => {
   const [showChatModal, setShowChatModal] = useState(false);
+  const [showTicketModal, setShowTicketModal] = useState(false);
   return (
     <>
       <SideDrawerWrapper
@@ -52,7 +58,24 @@ const Support = () => {
           </>
         </ModalBody>
       </SideDrawerWrapper>
-      <PageHeader text="Need Support" />
+      <CreateTicketModal
+        showTicketModal={showTicketModal}
+        handleClose={() => {
+          setShowTicketModal(false);
+        }}
+      />
+      <div className="flex items-center justify-between">
+        <PageHeader text="Need Support" />
+        <Button
+          loading={false}
+          icon={plusIcon}
+          text="New ticket"
+          action={() => {
+            setShowTicketModal(true);
+          }}
+          variant="green-bg"
+        />
+      </div>
       <p className="text-[#707070] font-work-sans-regular">
         Your go-to place for support. Search answers, resolve issues, and
         discover useful tips.
@@ -68,11 +91,18 @@ const Support = () => {
           Type a question or keyword to find quick answers or reach our team.
         </p>
         <div className="mt-3">
-          <SettingsInput
-            placeholder="Enter your question here"
-            readOnly={false}
-            label=""
-          />
+          <div className="relative">
+            <SettingsInput
+              placeholder="Enter your question here"
+              readOnly={false}
+              label=""
+            />
+            <Image
+              src={searchGreen}
+              alt=""
+              className="absolute w-[30px] h-[30px] right-2 top-1"
+            />
+          </div>
           <div className="mt-2 flex justify-end">
             <Button
               loading={false}
