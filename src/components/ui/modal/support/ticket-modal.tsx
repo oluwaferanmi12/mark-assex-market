@@ -42,7 +42,7 @@ export const CreateTicketModal = ({
 
   const createTicket = useCreateTicket((data) => {
     toast.success("Ticket created successfully");
-    console.log(data);
+    handleClose();
   });
 
   const files = useMemo(() => previews.map((p) => p.file), [previews]);
