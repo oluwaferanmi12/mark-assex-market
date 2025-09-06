@@ -17,10 +17,13 @@ import searchGreen from "@/assets/svgs/search-green.svg";
 import Image from "next/image";
 import { TransferInput } from "@/components/ui/inputs/transfer-input";
 import { CreateTicketModal } from "@/components/ui/modal/support/ticket-modal";
+import { useGetTickets } from "@/hooks/queries/useSupport";
 
 const Support = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [showTicketModal, setShowTicketModal] = useState(false);
+  const getTicket = useGetTickets();
+  console.log(getTicket.data, "Result data here");
   return (
     <>
       <SideDrawerWrapper
