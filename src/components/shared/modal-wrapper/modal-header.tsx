@@ -1,6 +1,8 @@
 import cancelIcon from "@/assets/svgs/modal-x-icon.svg";
 import Image from "next/image";
 
+// ...imports unchanged...
+
 export const ModalHeader = ({
   headText,
   handleCancel,
@@ -11,7 +13,7 @@ export const ModalHeader = ({
   iconType?: boolean;
 }) => {
   return (
-    <div className="bg-white flex items-center justify-between rounded-t-xl border-b border-[#BEBEBE59] p-4 py-2 ">
+    <div className="bg-white flex items-center justify-between rounded-t-xl border-b border-[#BEBEBE59] p-4 py-2">
       {iconType ? (
         <Image src={headText} alt="" />
       ) : (
@@ -19,7 +21,6 @@ export const ModalHeader = ({
           {headText}
         </p>
       )}
-
       <span className="cursor-pointer" onClick={handleCancel}>
         <Image src={cancelIcon} alt="" />
       </span>

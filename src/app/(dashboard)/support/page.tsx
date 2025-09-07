@@ -27,7 +27,7 @@ const Support = () => {
  
   return (
     <>
-      <SideDrawerWrapper
+      {/* <SideDrawerWrapper
         active={showChatModal}
         handleClose={() => {
           setShowChatModal(false);
@@ -61,7 +61,7 @@ const Support = () => {
             </div>
           </>
         </ModalBody>
-      </SideDrawerWrapper>
+      </SideDrawerWrapper> */}
       <CreateTicketModal
         showTicketModal={showTicketModal}
         handleClose={() => {

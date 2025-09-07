@@ -40,3 +40,10 @@ export interface SupportMessage {
   SupportTicketAssignee: SupportTicketAssignee[];
   SupportTicketMessage: SupportTicketMessage[];
 }
+
+export interface ReplyChat {
+  message: string;
+  type: "USER" | "ADMIN";
+  attachment: string;
+  id: string;
+}

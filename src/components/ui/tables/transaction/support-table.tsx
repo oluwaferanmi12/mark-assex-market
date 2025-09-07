@@ -24,6 +24,7 @@ import { Button } from "../../buttons/button";
 import { Dropdown, MenuProps } from "antd";
 import checkIcon from "@/assets/svgs/drop-down-check-icon.svg";
 import uncheckIcon from "@/assets/svgs/drop-down-unchecked.svg";
+import { SupportChatDrawer } from "@/components/shared/side-drawer/support/support-chat-drawer";
 
 type Props = {
   data?: SupportMessage[];
@@ -129,7 +130,7 @@ export const SupportTable = ({ data, loading = false }: Props) => {
       columnHelper.display({
         id: "action",
         cell: (info) => (
-          <Dropdown menu={{ items: menuItem }}>
+          <Dropdown trigger={["click"]} menu={{ items: menuItem }}>
             <div
               onClick={() => {
                 setActiveTicketId(info.row.original.id);
@@ -152,46 +153,18 @@ export const SupportTable = ({ data, loading = false }: Props) => {
   });
   const [activeTickedId, setActiveTicketId] = useState("");
   const [showChatModal, setShowChatModal] = useState(false);
-  const getTicketMessages = useGetTicketMessage(activeTickedId);
-  console.log(getTicketMessages.data, "DAta value heree");
+
   const hasData = (data?.length ?? 0) > 0;
   return (
     <>
-      <SideDrawerWrapper
-        active={showChatModal}
+      <SupportChatDrawer
+        key={activeTickedId}
+        activeTicketId={activeTickedId}
+        showChatModal={showChatModal}
         handleClose={() => {
           setShowChatModal(false);
         }}
-      >
-        <ModalHeader
-          headText="Assex Market Support"
-          handleCancel={() => {
-            setShowChatModal(false);
-          }}
-        />
-        <ModalBody>
-          <>
-            <SupportChatWrapper />
-            <SupportChatWrapper />
-            <SupportUserWrapper />
-            <div className="mt-2">
-              <textarea
-                placeholder="Write a message"
-                className="border font-work-sans-regular p-4 border-[#BEBEBE] w-full rounded-lg"
-              ></textarea>
-              <div className="flex justify-end">
-                <Button
-                  action={() => {}}
-                  loading={false}
-                  text="Send"
-                  variant="green-bg"
-                  buttonSmaller
-                />
-              </div>
-            </div>
-          </>
-        </ModalBody>
-      </SideDrawerWrapper>
+      />
       <div className="mt-4">
         {/* Loading skeleton */}
         {loading && <TableLoader />}
