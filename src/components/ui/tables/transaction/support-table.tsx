@@ -10,8 +10,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { TableLoader } from "@/components/loaders/table-loader";
+import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
+import Image from "next/image";
+import { useGetTicketMessage } from "@/hooks/queries/useSupport";
+import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
+import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
+import { SupportChatWrapper } from "@/components/shared/wrappers/support-chat-wrapper";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { SupportUserWrapper } from "@/components/shared/wrappers/support-user-wrapper";
+import { Button } from "../../buttons/button";
+import { Dropdown, MenuProps } from "antd";
+import checkIcon from "@/assets/svgs/drop-down-check-icon.svg";
+import uncheckIcon from "@/assets/svgs/drop-down-unchecked.svg";
 
 type Props = {
   data?: SupportMessage[];
@@ -20,6 +32,50 @@ type Props = {
 
 export const SupportTable = ({ data, loading = false }: Props) => {
   const columnHelper = createColumnHelper<SupportMessage>();
+  const [optionActive, setOptionActive] = useState<
+    "response" | "details" | undefined
+  >();
+  const menuItem: MenuProps["items"] = [
+    {
+      key: 1,
+      label: (
+        <div
+          onClick={() => {
+            setOptionActive("details");
+          }}
+          className="cursor-pointer flex items-center gap-2"
+        >
+          <Image
+            src={optionActive === "details" ? checkIcon : uncheckIcon}
+            alt=""
+          />
+          <p className="text-[#111111] text-sm font-work-sans-regular">
+            View Details
+          </p>
+        </div>
+      ),
+    },
+    {
+      key: 2,
+      label: (
+        <div
+          onClick={() => {
+            setOptionActive("response");
+            setShowChatModal(true);
+          }}
+          className="cursor-pointer flex items-center gap-2"
+        >
+          <Image
+            src={optionActive === "response" ? checkIcon : uncheckIcon}
+            alt=""
+          />
+          <p className="text-[#111111] text-sm font-work-sans-regular">
+            View Response
+          </p>
+        </div>
+      ),
+    },
+  ];
   const columns = useMemo(
     () => [
       columnHelper.accessor("ticketNumber", {
@@ -36,40 +92,55 @@ export const SupportTable = ({ data, loading = false }: Props) => {
       }),
       columnHelper.accessor("issue", {
         cell: (info) => (
-          <div className="flex justify-start pl-4">
+          <div className="flex justify-center pl-4">
             <TableText variant="body" text={info.getValue()} />
           </div>
         ),
         header: () => (
-          <div className="flex justify-start ">
+          <div className="flex justify-center ">
             <TableText variant="header" text="Title" />
           </div>
         ),
       }),
       columnHelper.accessor("status", {
         cell: (info) => (
-          <div className="flex justify-start pl-4">
+          <div className="flex justify-center pl-4">
             <TableText variant="body" text={info.getValue()} />
           </div>
         ),
         header: () => (
-          <div className="flex justify-start ">
+          <div className="flex justify-center ">
             <TableText variant="header" text="Status" />
           </div>
         ),
       }),
       columnHelper.accessor("createdAt", {
         cell: (info) => (
-          <div className="flex justify-start pl-4">
-            <TableText variant="body" text={info.getValue()} />
+          <div className="flex justify-center pl-4">
             <DateViewer date={info.getValue()} />
           </div>
         ),
         header: () => (
-          <div className="flex justify-start ">
+          <div className="flex justify-center ">
             <TableText variant="header" text="Date Created" />
           </div>
         ),
+      }),
+      columnHelper.display({
+        id: "action",
+        cell: (info) => (
+          <Dropdown menu={{ items: menuItem }}>
+            <div
+              onClick={() => {
+                setActiveTicketId(info.row.original.id);
+              }}
+              className="flex justify-center cursor-pointer"
+            >
+              <Image src={horizontalEllipsis} alt="" />
+            </div>
+          </Dropdown>
+        ),
+        header: () => <TableText variant="header" text="Action" />,
       }),
     ],
     []
@@ -79,9 +150,48 @@ export const SupportTable = ({ data, loading = false }: Props) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const [activeTickedId, setActiveTicketId] = useState("");
+  const [showChatModal, setShowChatModal] = useState(false);
+  const getTicketMessages = useGetTicketMessage(activeTickedId);
+  console.log(getTicketMessages.data, "DAta value heree");
   const hasData = (data?.length ?? 0) > 0;
   return (
     <>
+      <SideDrawerWrapper
+        active={showChatModal}
+        handleClose={() => {
+          setShowChatModal(false);
+        }}
+      >
+        <ModalHeader
+          headText="Assex Market Support"
+          handleCancel={() => {
+            setShowChatModal(false);
+          }}
+        />
+        <ModalBody>
+          <>
+            <SupportChatWrapper />
+            <SupportChatWrapper />
+            <SupportUserWrapper />
+            <div className="mt-2">
+              <textarea
+                placeholder="Write a message"
+                className="border font-work-sans-regular p-4 border-[#BEBEBE] w-full rounded-lg"
+              ></textarea>
+              <div className="flex justify-end">
+                <Button
+                  action={() => {}}
+                  loading={false}
+                  text="Send"
+                  variant="green-bg"
+                  buttonSmaller
+                />
+              </div>
+            </div>
+          </>
+        </ModalBody>
+      </SideDrawerWrapper>
       <div className="mt-4">
         {/* Loading skeleton */}
         {loading && <TableLoader />}

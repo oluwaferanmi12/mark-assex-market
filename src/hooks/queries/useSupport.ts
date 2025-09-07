@@ -1,4 +1,8 @@
-import { createSupport, getSupport } from "@/services/support.service";
+import {
+  createSupport,
+  getSupport,
+  getTicketMessages,
+} from "@/services/support.service";
 import { CreateSupportInterface } from "@/types/support.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -12,5 +16,13 @@ export const useGetTickets = () => {
   return useQuery({
     queryFn: () => getSupport(),
     queryKey: ["get-ticket"],
+  });
+};
+
+export const useGetTicketMessage = (id: string) => {
+  return useQuery({
+    queryFn: () => getTicketMessages(id),
+    queryKey: ["get-ticket-message"],
+    enabled: !!id
   });
 };
