@@ -9,6 +9,7 @@ import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 import { Button } from "../../buttons/button";
 import { useCreateTicket } from "@/hooks/queries/useSupport";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 type CreateTicketModalProps = {
   showTicketModal: boolean;
@@ -26,6 +27,7 @@ export const CreateTicketModal = ({
   handleClose,
   onImagesChange,
 }: CreateTicketModalProps) => {
+  const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
   const [previews, setPreviews] = useState<Preview[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +44,7 @@ export const CreateTicketModal = ({
 
   const createTicket = useCreateTicket((data) => {
     toast.success("Ticket created successfully");
+    queryClient.invalidateQueries({ queryKey: ["get-ticket"] });
     handleClose();
   });
 

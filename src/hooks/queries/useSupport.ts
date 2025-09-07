@@ -10,6 +10,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 export const useCreateTicket = (sc: (val: any) => void) => {
   return useMutation({
     mutationFn: (payload: CreateSupportInterface) => createSupport(payload),
+    onSuccess: (val: any) => {
+      sc(val);
+    },
   });
 };
 
@@ -25,6 +28,7 @@ export const useGetTicketMessage = (id: string) => {
     queryFn: () => getTicketMessages(id),
     queryKey: ["get-ticket-message"],
     enabled: !!id,
+    refetchInterval: 5000,
   });
 };
 

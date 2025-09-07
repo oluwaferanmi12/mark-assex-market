@@ -14,17 +14,11 @@ import { useMemo, useState } from "react";
 import { TableLoader } from "@/components/loaders/table-loader";
 import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
 import Image from "next/image";
-import { useGetTicketMessage } from "@/hooks/queries/useSupport";
-import { SideDrawerWrapper } from "@/components/shared/side-drawer/side-drawer";
-import { ModalHeader } from "@/components/shared/modal-wrapper/modal-header";
-import { SupportChatWrapper } from "@/components/shared/wrappers/support-chat-wrapper";
-import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
-import { SupportUserWrapper } from "@/components/shared/wrappers/support-user-wrapper";
-import { Button } from "../../buttons/button";
 import { Dropdown, MenuProps } from "antd";
 import checkIcon from "@/assets/svgs/drop-down-check-icon.svg";
 import uncheckIcon from "@/assets/svgs/drop-down-unchecked.svg";
 import { SupportChatDrawer } from "@/components/shared/side-drawer/support/support-chat-drawer";
+import { TableStatus } from "../../status/table-status";
 
 type Props = {
   data?: SupportMessage[];
@@ -36,6 +30,7 @@ export const SupportTable = ({ data, loading = false }: Props) => {
   const [optionActive, setOptionActive] = useState<
     "response" | "details" | undefined
   >();
+  const [selectedTicket, setSelectedTicket] = useState<SupportMessage>();
   const menuItem: MenuProps["items"] = [
     {
       key: 1,
@@ -106,7 +101,10 @@ export const SupportTable = ({ data, loading = false }: Props) => {
       columnHelper.accessor("status", {
         cell: (info) => (
           <div className="flex justify-center pl-4">
-            <TableText variant="body" text={info.getValue()} />
+            <TableStatus
+              text={info.getValue()}
+              variant={info.getValue() === "OPEN" ? "PENDING" : "SUCCESS"}
+            />
           </div>
         ),
         header: () => (
@@ -133,6 +131,7 @@ export const SupportTable = ({ data, loading = false }: Props) => {
           <Dropdown trigger={["click"]} menu={{ items: menuItem }}>
             <div
               onClick={() => {
+                setSelectedTicket(info.row.original);
                 setActiveTicketId(info.row.original.id);
               }}
               className="flex justify-center cursor-pointer"
@@ -162,8 +161,10 @@ export const SupportTable = ({ data, loading = false }: Props) => {
         activeTicketId={activeTickedId}
         showChatModal={showChatModal}
         handleClose={() => {
+          setActiveTicketId("");
           setShowChatModal(false);
         }}
+        ticket={selectedTicket}
       />
       <div className="mt-4">
         {/* Loading skeleton */}

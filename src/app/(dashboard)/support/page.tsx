@@ -24,7 +24,7 @@ const Support = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [showTicketModal, setShowTicketModal] = useState(false);
   const getTicket = useGetTickets();
- 
+
   return (
     <>
       {/* <SideDrawerWrapper
@@ -148,7 +148,7 @@ const Support = () => {
               <Button
                 loading={false}
                 action={() => {
-                  setShowChatModal(true);
+                  setShowTicketModal(true);
                 }}
                 text="Start Conversation"
                 variant="green-bg"

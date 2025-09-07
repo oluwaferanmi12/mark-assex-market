@@ -31,7 +31,7 @@ export interface SupportMessage {
   ticketNumber: string;
   issue: string;
   description: string;
-  status: string;
+  status: "CLOSED" | "OPEN";
   adminReadStatus: string;
   userReadStatus: string;
   createdAt: string;
