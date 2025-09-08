@@ -591,6 +591,13 @@ const Proceed = () => {
                           </li>
                         </p>
                       </div>
+                      <div>
+                        <p>
+                          <li>
+                            Use this deposit address only once. Do not send funds to it again after your first deposit.
+                          </li>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -600,10 +607,10 @@ const Proceed = () => {
                       Your unique deposit address:
                     </p>
                     <div
-                      className="p-2 rounded-lg flex justify-between items-center"
+                      className="p-2 rounded-lg flex lg:flex-row flex-col justify-between items-center"
                       style={{ border: "0.5px solid #BEBEBE80" }}
                     >
-                      <p className="font-work-sans-regular text-[#111111]">
+                      <p className="font-work-sans-regular mb-2 lg:mb-2 text-[#111111]">
                         {walletAddress ?? "No wallet address available"}
                       </p>
                       <Copy value={walletAddress ?? ""}>
@@ -630,7 +637,7 @@ const Proceed = () => {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} className="border border-[#BEBEBE80] rounded-lg p-4">
+              <Col xs={24} lg={12} className="border border-[#BEBEBE80] rounded-lg p-4">
                 <div className="flex items-center gap-4 mb-4 text-lg font-work-sans-regular">
                   <p className="text-[#404040]">Commission:</p>
                   <p className="text-[#111111]">From $0.00 to $01.00</p>
