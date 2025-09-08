@@ -11,10 +11,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
+import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { TableLoader } from "@/components/loaders/table-loader";
 import horizontalEllipsis from "@/assets/svgs/horizontal-ellipsis.svg";
 import Image from "next/image";
-import { Dropdown, MenuProps } from "antd";
+import { Col, Dropdown, MenuProps, Row } from "antd";
 import checkIcon from "@/assets/svgs/drop-down-check-icon.svg";
 import uncheckIcon from "@/assets/svgs/drop-down-unchecked.svg";
 import { SupportChatDrawer } from "@/components/shared/side-drawer/support/support-chat-drawer";
@@ -29,6 +30,11 @@ import { isPending } from "@reduxjs/toolkit";
 import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
 import { MobileTransactionTable } from "./mobile-transaction-table";
 import { MobileSupportTable } from "./mobile-support-table";
+import { MobileInput } from "../../inputs/mobile-table-input";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { ModalBody } from "@/components/shared/modal-wrapper/modal-body";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
+import { Button } from "../../buttons/button";
 
 type Props = {
   data?: SupportMessage[];
@@ -46,6 +52,7 @@ export const SupportTable = () => {
     perPage: 30,
     status: "",
   });
+  const [showFilter, setShowFilter] = useState(false);
   const { data, isPending: loading } = useGetTickets(queryPayload);
   const [search, setSearch] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -172,6 +179,7 @@ export const SupportTable = () => {
   const [activeTickedId, setActiveTicketId] = useState("");
   const [statusSelected, setStatusSelected] = useState("All");
   const [showChatModal, setShowChatModal] = useState(false);
+
   const statusDropDownList: DropDownListInterface[] = [
     { text: "All", id: "" },
     { text: "Open", id: "OPEN" },
@@ -189,6 +197,62 @@ export const SupportTable = () => {
 
   return (
     <>
+      <ModalContainer
+        active={showFilter}
+        handleClose={() => {
+          setShowFilter(false);
+        }}
+      >
+        <ModalBody>
+          <div>
+            <p className="text-[#202020] font-work-sans-medium text-base">
+              Filters
+            </p>
+          </div>
+          <Row className="mt-4">
+            <Col xs={24}>
+              <div>
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Status
+                </p>
+                <DropDownList
+                  dropDownList={statusDropDownList}
+                  selected={statusSelected}
+                  setSelected={setStatusSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={statusSelected} />
+                  </div>
+                </DropDownList>
+              </div>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <div className="mb-2">
+            <Button
+              variant="green-faded-border"
+              fullWidth
+              text="Clear all"
+              action={() => {
+                setStatusSelected("");
+              }}
+              loading={false}
+            />
+          </div>
+          <div>
+            <Button
+              variant="green-bg"
+              fullWidth
+              text="Filter"
+              action={() => {
+                setShowFilter(false);
+              }}
+              loading={false}
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
       <SupportChatDrawer
         key={activeTickedId}
         activeTicketId={activeTickedId}
@@ -202,6 +266,27 @@ export const SupportTable = () => {
       <div className="mt-4">
         {/* Loading skeleton */}
         {loading && <TableLoader />}
+
+        <VisibleOnMobile>
+          <div className="flex items-center gap-2 mt-4">
+            <MobileInput
+              onChange={(e) => {
+                setSearch(e);
+              }}
+            />
+            <div className="h-[40px]">
+              <Image
+                src={mobileFilterIcon}
+                objectFit="cover"
+                alt=""
+                className="h-full"
+                onClick={() => {
+                  setShowFilter(true);
+                }}
+              />
+            </div>
+          </div>
+        </VisibleOnMobile>
 
         <VisibleOnDesktop>
           <div className="flex justify-between items-end mb-4">
