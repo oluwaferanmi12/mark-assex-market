@@ -35,6 +35,7 @@ import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text
 import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { MobileInput } from "../../inputs/mobile-table-input";
 import { useGetPayments } from "@/hooks/queries/usePayment";
+import pendingIcon from "@/assets/svgs/pending-icon.svg";
 
 export const TransactionTable = () => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
@@ -186,8 +187,11 @@ export const TransactionTable = () => {
                   src={
                     selectedTransaction?.status === "SUCCESS"
                       ? transactionSuccessIcon
+                      : selectedTransaction?.status === "PENDING"
+                      ? pendingIcon
                       : failedIcon
                   }
+                  className="mb-2"
                   alt=""
                 />
                 <TableStatus
