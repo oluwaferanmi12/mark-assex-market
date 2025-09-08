@@ -160,6 +160,8 @@ export interface PaymentQueries {
   type: "DEPOSIT" | "WITHDRAWAL" | "TRANSFER" | string;
   keyword: string;
   methodSlug: string;
+  page:number;
+  perPage: number;
 }
 
 export enum PaymentMethodTypes {
@@ -211,4 +213,12 @@ export interface InternalTransferLimit {
   countryTransferLimitEnabled: boolean;
   transferLimit: number;
   transferLimitEnabled: boolean;
+}
+
+export interface FullPaymentInterface {
+  data?: Payment[];
+  nextPage?: number;
+  prevPage?: number | null;
+  total?: number;
+  totalPages?: number;
 }

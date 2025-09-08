@@ -47,3 +47,20 @@ export interface ReplyChat {
   attachment: string;
   id: string;
 }
+
+export interface TicketQuery {
+  keyword: string;
+  status: string;
+  page: number;
+  perPage: number;
+}
+
+export interface TicketFullQuery {
+  nextPage: null | number;
+  prevPage: null | number;
+  total: number;
+  totalPages: number;
+  data: SupportMessage[];
+}
+
+

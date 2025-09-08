@@ -4,6 +4,8 @@ import {
   ReplyChat,
   SupportMessage,
   SupportTicketMessage,
+  TicketFullQuery,
+  TicketQuery,
 } from "@/types/support.types";
 
 export const createSupport = async (payload: CreateSupportInterface) => {
@@ -11,9 +13,13 @@ export const createSupport = async (payload: CreateSupportInterface) => {
   return data.data;
 };
 
-export const getSupport = async (): Promise<SupportMessage[]> => {
-  const { data } = await axiosInstance.get(`/support/ticket`);
-  return data.data.data;
+export const getSupport = async (
+  ticketQuery: TicketQuery
+): Promise<TicketFullQuery> => {
+  const { data } = await axiosInstance.get(
+    `/support/ticket?keyword=${ticketQuery.keyword}&page=${ticketQuery.page}&perPage=${ticketQuery.perPage}&status=${ticketQuery.status}`
+  );
+  return data.data;
 };
 
 export const getTicketMessages = async (

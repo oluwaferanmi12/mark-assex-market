@@ -20,6 +20,7 @@ import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
   ExternalTransferPayload,
+  FullPaymentInterface,
   InternalTransferPayload,
   Payment,
   PaymentBank,
@@ -58,7 +59,7 @@ export const useDepositPayment = (sc: (data: any) => void) => {
 };
 
 export const useGetPayments = (payload: PaymentQueries) => {
-  return useQuery<Payment[]>({
+  return useQuery<FullPaymentInterface>({
     queryFn: () => getPaymentHistory(payload),
     queryKey: ["get-payments", payload],
   });

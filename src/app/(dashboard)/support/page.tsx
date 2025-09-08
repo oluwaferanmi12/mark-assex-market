@@ -23,7 +23,7 @@ import { SupportTable } from "@/components/ui/tables/transaction/support-table";
 const Support = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [showTicketModal, setShowTicketModal] = useState(false);
-  const getTicket = useGetTickets();
+  
 
   return (
     <>
@@ -159,7 +159,7 @@ const Support = () => {
         </Col>
       </Row>
 
-      <SupportTable data={getTicket.data} loading={getTicket.isPending} />
+      <SupportTable  />
     </>
   );
 };

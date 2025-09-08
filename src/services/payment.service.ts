@@ -6,6 +6,7 @@ import {
   CreateDepositInterface,
   CreateWithdrawalInterface,
   ExternalTransferPayload,
+  FullPaymentInterface,
   InternalTransferLimit,
   InternalTransferPayload,
   Payment,
@@ -30,15 +31,15 @@ export const deposit = async (payload: CreateDepositInterface) => {
 
 export const getPaymentHistory = async (
   paymentQuery?: PaymentQueries
-): Promise<Payment[]> => {
+): Promise<FullPaymentInterface> => {
   const { data } = await axiosInstance.get(
     `/payments?keyword=${paymentQuery?.keyword ?? ""}&status=${
       paymentQuery?.status ?? ""
     }&type=${paymentQuery?.type ?? ""}&methodSlug=${
       paymentQuery?.methodSlug ?? ""
-    }`
+    }&page=${paymentQuery?.page}&perPage=${paymentQuery?.perPage}`
   );
-  return data.data.data;
+  return data.data;
 };
 
 export const getPaymentMethodDetails = async (

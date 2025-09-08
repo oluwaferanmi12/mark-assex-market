@@ -4,7 +4,11 @@ import {
   getTicketMessages,
   replyMessage,
 } from "@/services/support.service";
-import { CreateSupportInterface, ReplyChat } from "@/types/support.types";
+import {
+  CreateSupportInterface,
+  ReplyChat,
+  TicketQuery,
+} from "@/types/support.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useCreateTicket = (sc: (val: any) => void) => {
@@ -16,10 +20,10 @@ export const useCreateTicket = (sc: (val: any) => void) => {
   });
 };
 
-export const useGetTickets = () => {
+export const useGetTickets = (ticketQuery: TicketQuery) => {
   return useQuery({
-    queryFn: () => getSupport(),
-    queryKey: ["get-ticket"],
+    queryFn: () => getSupport(ticketQuery),
+    queryKey: ["get-ticket", ticketQuery],
   });
 };
 

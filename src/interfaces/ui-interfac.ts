@@ -17,7 +17,7 @@ export interface ButtonInterface {
     | "grey-border"
     | "transparent"
     | "bg-with-black-text"
-    | "bg-white-with-grey-border",
+    | "bg-white-with-grey-border";
 
   fullRounded?: boolean;
   fullWidth?: boolean;
@@ -130,3 +130,11 @@ export interface ClientInterface {
   date: string;
 }
 
+export interface PaginationData {
+  nextPage?: null | number;
+  prevPage?: null | number;
+  total?: number;
+  totalPages?: number;
+  handleNext?: () => void;
+  handlePrev?: () => void;
+}

@@ -9,6 +9,7 @@ import { useGetTicketMessage, useReply } from "@/hooks/queries/useSupport";
 import { CardGroupLoader } from "@/components/loaders/card-loader";
 import { useQueryClient } from "@tanstack/react-query";
 import { SupportMessage } from "@/types/support.types";
+import { useGetUserProfile } from "@/hooks/queries/useSettings";
 
 export const SupportChatDrawer = ({
   handleClose,
@@ -24,6 +25,7 @@ export const SupportChatDrawer = ({
   const queryClient = useQueryClient();
   const { data, isPending } = useGetTicketMessage(activeTicketId);
   const [message, setMessage] = useState("");
+  const userProfile = useGetUserProfile();
   const reply = useReply(() => {
     setMessage("");
     queryClient.invalidateQueries({ queryKey: ["get-ticket-message"] });
@@ -57,7 +59,10 @@ export const SupportChatDrawer = ({
                 {item.admin ? (
                   <SupportChatWrapper chat={item} />
                 ) : (
-                  <SupportUserWrapper chat={item} />
+                  <SupportUserWrapper
+                    userIcon={userProfile.data?.picture}
+                    chat={item}
+                  />
                 )}
               </div>
             ))

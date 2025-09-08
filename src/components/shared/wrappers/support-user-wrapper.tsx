@@ -1,13 +1,15 @@
-import userIcon from "@/assets/svgs/user-chat-icon.svg";
 import Image from "next/image";
 import doubleCheckIcon from "@/assets/svgs/double-marked.svg";
 import { SupportTicketMessage } from "@/types/support.types";
 import moment from "moment";
+import { Avatar } from "../avatar/avatar";
 
 export const SupportUserWrapper = ({
   chat,
+  userIcon,
 }: {
   chat: SupportTicketMessage;
+  userIcon?: string | null;
 }) => {
   return (
     <div className="flex justify-end gap-3 mt-4">
@@ -30,7 +32,7 @@ export const SupportUserWrapper = ({
         </div>
       </div>
       <div>
-        <Image src={userIcon} alt="" />
+        <Avatar avatar={userIcon ?? ""} />
       </div>
     </div>
   );
