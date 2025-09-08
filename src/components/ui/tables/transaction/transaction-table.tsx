@@ -473,7 +473,11 @@ export const TransactionTable = () => {
         </VisibleOnDesktop>
         <VisibleOnMobile>
           <div className="flex items-center gap-2 mt-4">
-            <MobileInput />
+            <MobileInput
+              onChange={(e) => {
+                setSearchValue(e);
+              }}
+            />
             <div className="h-[40px]">
               <Image
                 src={mobileFilterIcon}
