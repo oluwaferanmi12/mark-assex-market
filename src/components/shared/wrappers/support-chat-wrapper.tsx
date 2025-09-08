@@ -21,9 +21,9 @@ export const SupportChatWrapper = ({
         </p>
         <div
           style={{ border: "0.35px solid #BEBEBE59" }}
-          className="w-full mt-2 p-4 rounded-b-lg rounded-tr-lg bg-[#E9E9E9] text-[#111111]"
+          className="w-full mt-2 lg:p-4 p-2 rounded-b-lg rounded-tr-lg bg-[#E9E9E9] text-[#111111]"
         >
-          <p className="font-work-sans-regular mt-1 ">{chat.message}</p>
+          <p className="font-work-sans-regular mt-1 lg:text-sm text-xs ">{chat.message}</p>
         </div>
       </div>
     </div>

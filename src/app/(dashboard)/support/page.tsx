@@ -118,8 +118,8 @@ const Support = () => {
         </div>
       </div>
       <div className="mt-4 ">
-        <p className="font-work-sans-medium text-base">Contact us</p>
-        <p className="font-work-sans-regular">
+        <p className="font-work-sans-medium text-xs lg:text-base">Contact us</p>
+        <p className="font-work-sans-regular lg:text-sm text-xs">
           Reach out anytime, we’re here to help with anything you need.
         </p>
       </div>
@@ -129,19 +129,19 @@ const Support = () => {
       >
         <Col lg={12} xs={24}>
           <div className="mb-3 lg:mb-0">
-            <p className="font-work-sans-regular text-base">Speak Directly</p>
-            <p className="font-work-sans-regular  text-[#707070]">
+            <p className="font-work-sans-regular text-sm lg:text-base">Speak Directly</p>
+            <p className="font-work-sans-regular text-xs lg:text-sm  text-[#707070]">
               Prefer to talk? Reach our support team directly at
             </p>
-            <p className="font-work-sans-regular underline ">
+            <p className="font-work-sans-regular underline lg:text-sm tex-xs ">
               +234 800 123 5346.
             </p>
           </div>
         </Col>
         <Col lg={12} xs={24}>
           <div>
-            <p className="font-work-sans-regular text-base">Live Chat</p>
-            <p className="font-work-sans-regular  text-[#707070]">
+            <p className="font-work-sans-regular text-sm lg:text-base">Live Chat</p>
+            <p className="font-work-sans-regular text-xs lg:text-sm text-[#707070]">
               Chat with us now for immediate assistance.
             </p>
             <div className="mt-4">

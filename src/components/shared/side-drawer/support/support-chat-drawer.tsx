@@ -43,7 +43,7 @@ export const SupportChatDrawer = ({
     <SideDrawerWrapper
       active={showChatModal}
       handleClose={handleClose}
-      fullHeight
+     
     >
       {/* Header (fixed at top of drawer) */}
       <ModalHeader headText="Assex Market Support" handleCancel={handleClose} />

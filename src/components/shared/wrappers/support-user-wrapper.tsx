@@ -22,9 +22,9 @@ export const SupportUserWrapper = ({
         </p>
         <div
           style={{ border: "0.35px solid #0DAE94" }}
-          className="w-full mt-2 p-4 rounded-b-lg rounded-tl-lg bg-[#E7F7F4] text-[#111111]"
+          className="w-full mt-2 lg:p-4 p-2 rounded-b-lg rounded-tl-lg bg-[#E7F7F4] text-[#111111]"
         >
-          <p className="font-work-sans-regular mt-1 ">{chat.message}</p>
+          <p className="font-work-sans-regular mt-1 lg:text-sm text-xs ">{chat.message}</p>
         </div>
         <div className="flex items-center  mt-1 justify-end">
           <Image className="w-[16px] h-[16px]" src={doubleCheckIcon} alt="" />
