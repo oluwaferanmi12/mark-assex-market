@@ -140,7 +140,7 @@ export const DashboardSideNav = ({
       activeIcon: dailyIcon,
       inactiveIcon: dailyIcon,
       clickAction: () => {},
-      slug: "bonus",
+      slug: "support",
     },
   ];
 
