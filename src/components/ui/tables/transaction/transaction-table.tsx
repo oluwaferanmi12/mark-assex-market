@@ -36,6 +36,10 @@ import mobileFilterIcon from "@/assets/svgs/mobile-filter.svg";
 import { MobileInput } from "../../inputs/mobile-table-input";
 import { useGetPayments } from "@/hooks/queries/usePayment";
 import pendingIcon from "@/assets/svgs/pending-icon.svg";
+import { TransactionFilter } from "../../modal/transaction/transaction-filter";
+import { ModalContainer } from "@/components/shared/modal-wrapper/modal-wrapper";
+import { Col, Row } from "antd";
+import { ModalFooter } from "@/components/shared/modal-wrapper/modal-footer";
 
 export const TransactionTable = () => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
@@ -56,6 +60,7 @@ export const TransactionTable = () => {
   const [typeSelected, setTypeSelected] = useState("All");
 
   const columnHelper = createColumnHelper<Payment>();
+  const [showFilter, setShowFilter] = useState(false);
   const columns = useMemo(
     () => [
       columnHelper.accessor("reference", {
@@ -170,6 +175,98 @@ export const TransactionTable = () => {
   return (
     <>
       {/* Drawer */}
+
+      <ModalContainer
+        active={showFilter}
+        handleClose={() => {
+          setShowFilter(false);
+        }}
+      >
+        <ModalBody>
+          <div>
+            <p className="text-[#202020] font-work-sans-medium text-base">
+              Filters
+            </p>
+          </div>
+          <Row className="mt-4">
+            <Col xs={24}>
+              <div className="mb-3">
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Payment Method
+                </p>
+                <DropDownList
+                  dropDownList={methodDropDownList}
+                  selected={methodSelected}
+                  setSelected={setMethodSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={methodSelected} />
+                  </div>
+                </DropDownList>
+              </div>
+            </Col>
+            <Col xs={24}>
+              <div className="mb-3">
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Type
+                </p>
+                <DropDownList
+                  dropDownList={typeDropDownList}
+                  selected={typeSelected}
+                  setSelected={setTypeSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={typeSelected} />
+                  </div>
+                </DropDownList>
+              </div>
+            </Col>
+            <Col xs={24}>
+              <div className="mb-3">
+                <p className="text-[#707070] text-xs font-work-sans-regular mb-1">
+                  Status
+                </p>
+                <DropDownList
+                  dropDownList={statusDropDownList}
+                  selected={statusSelected}
+                  setSelected={setStatusSelected}
+                >
+                  <div>
+                    <DropDownTextWrapper filterSelected={statusSelected} />
+                  </div>
+                </DropDownList>
+              </div>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <div className="mb-2">
+            <Button
+              variant="green-faded-border"
+              fullWidth
+              text="Clear all"
+              action={() => {
+                setMethodSelected("");
+                setTypeSelected("");
+                setStatusSelected("");
+              }}
+              loading={false}
+            />
+          </div>
+          <div>
+            <Button
+              variant="green-bg"
+              fullWidth
+              text="Filter"
+              action={() => {
+                setShowFilter(false);
+              }}
+              loading={false}
+            />
+          </div>
+        </ModalFooter>
+      </ModalContainer>
+
       <SideDrawerWrapper
         active={showSideDrawer}
         handleClose={() => setShowSideDrawer(false)}
@@ -383,6 +480,9 @@ export const TransactionTable = () => {
                 objectFit="cover"
                 alt=""
                 className="h-full"
+                onClick={() => {
+                  setShowFilter(true);
+                }}
               />
             </div>
           </div>
