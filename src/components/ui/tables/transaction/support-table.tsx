@@ -26,6 +26,9 @@ import { DropDownList } from "../../drop-down/dropdown-list";
 import { DropDownTextWrapper } from "@/components/shared/wrappers/drop-down-text";
 import { DropDownListInterface } from "@/interfaces/ui-interfac";
 import { isPending } from "@reduxjs/toolkit";
+import { VisibleOnMobile } from "@/components/shared/wrappers/visible-on-mobile";
+import { MobileTransactionTable } from "./mobile-transaction-table";
+import { MobileSupportTable } from "./mobile-support-table";
 
 type Props = {
   data?: SupportMessage[];
@@ -45,6 +48,7 @@ export const SupportTable = () => {
   });
   const { data, isPending: loading } = useGetTickets(queryPayload);
   const [search, setSearch] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedTicket, setSelectedTicket] = useState<SupportMessage>();
   const menuItem: MenuProps["items"] = [
     {
@@ -227,65 +231,87 @@ export const SupportTable = () => {
             </div>
           </div>
         </VisibleOnDesktop>
-
-        {/* Table with data */}
-        {!loading && hasData && (
-          <>
-            <table className="w-full">
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="min-w-full w-full">
-                    {headerGroup.headers.map((header, index, rootData) => (
-                      <th
-                        className={`bg-[#F0F4F8] p-4 ${
-                          index === 0 ? "rounded-tl-2xl" : ""
-                        } ${
-                          index === rootData.length - 1 ? "rounded-tr-2xl" : ""
-                        }`}
-                        key={header.id}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr
-                    onClick={() => {
-                      // setSelectedTransaction(row.original);
-                      // setShowSideDrawer(true);
-                    }}
-                    style={{
-                      boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
-                    }}
-                    key={row.id}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td className="bg-[#FEFEFE33]" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
+        <VisibleOnDesktop>
+          {/* Table with data */}
+          {!loading && hasData && (
+            <>
+              <table className="w-full">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id} className="min-w-full w-full">
+                      {headerGroup.headers.map((header, index, rootData) => (
+                        <th
+                          className={`bg-[#F0F4F8] p-4 ${
+                            index === 0 ? "rounded-tl-2xl" : ""
+                          } ${
+                            index === rootData.length - 1
+                              ? "rounded-tr-2xl"
+                              : ""
+                          }`}
+                          key={header.id}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr
+                      onClick={() => {
+                        // setSelectedTransaction(row.original);
+                        // setShowSideDrawer(true);
+                      }}
+                      style={{
+                        boxShadow: "0px 4px 10px rgba(64, 64, 64, 0.05)",
+                      }}
+                      key={row.id}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td className="bg-[#FEFEFE33]" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+        </VisibleOnDesktop>
 
         {/* Empty state */}
         {!loading && !hasData && (
-          <TableEmptyState icon={graphIcon} tableText="No Transactions" />
+          <TableEmptyState icon={graphIcon} tableText="No Support " />
         )}
+
+        <VisibleOnMobile>
+          <div className="my-4">
+            {data?.data?.length ? (
+              data.data?.map((item, index) => {
+                return (
+                  <MobileSupportTable
+                    message={item}
+                    activeIndex={activeIndex}
+                    setActiveIndex={setActiveIndex}
+                    index={index}
+                  />
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </div>
+        </VisibleOnMobile>
 
         {hasData && (
           <TablePagination

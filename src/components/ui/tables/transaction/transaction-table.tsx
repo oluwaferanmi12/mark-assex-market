@@ -543,10 +543,10 @@ export const TransactionTable = () => {
               </tbody>
             </table>
           )}
-          {!loading && !hasData && (
-            <TableEmptyState icon={graphIcon} tableText="No Transactions" />
-          )}
         </VisibleOnDesktop>
+        {!loading && !hasData && (
+          <TableEmptyState icon={graphIcon} tableText="No Transactions" />
+        )}
 
         <VisibleOnMobile>
           <div className="my-4">

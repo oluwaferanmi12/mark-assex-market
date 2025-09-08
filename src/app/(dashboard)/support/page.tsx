@@ -127,8 +127,8 @@ const Support = () => {
         style={{ border: "0.5px solid #BEBEBE80" }}
         className="bg-white mt-4 p-4 rounded-lg"
       >
-        <Col xs={12}>
-          <div>
+        <Col lg={12} xs={24}>
+          <div className="mb-3 lg:mb-0">
             <p className="font-work-sans-regular text-base">Speak Directly</p>
             <p className="font-work-sans-regular  text-[#707070]">
               Prefer to talk? Reach our support team directly at
@@ -138,7 +138,7 @@ const Support = () => {
             </p>
           </div>
         </Col>
-        <Col xs={12}>
+        <Col lg={12} xs={24}>
           <div>
             <p className="font-work-sans-regular text-base">Live Chat</p>
             <p className="font-work-sans-regular  text-[#707070]">
