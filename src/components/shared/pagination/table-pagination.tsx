@@ -10,12 +10,13 @@ export const TablePagination = ({
   totalPages,
   handleNext,
   handlePrev,
+  currentPage,
 }: PaginationData) => {
   return (
     <div className="w-full flex my-6 justify-between">
       <div className="bg-white px-4 py-2 flex items-center gap-3 rounded-lg">
         <p className="text-[#111111] text-xs font-work-sans-regular">
-          SHOWING {nextPage ? nextPage - 1 : 1} - {totalPages} OF
+          SHOWING {currentPage ?? 1} - {totalPages} OF
         </p>
         <span className="bg-[#0DAE94] p-2 px-4 font-work-sans-regular text-white text-xs rounded-lg">
           {total}
@@ -30,7 +31,7 @@ export const TablePagination = ({
               }
             }}
             style={{ boxShadow: "0px 4px 10px rgba(0,0,0,0.1)" }}
-            className="flex items-center border border-[#BEBEBE] px-4 py-2 rounded-xl gap-2 text-xs font-work-sans-regular"
+            className="flex items-center cursor-pointer border border-[#BEBEBE] px-4 py-2 rounded-xl gap-2 text-xs font-work-sans-regular"
           >
             <Image src={previousIcon} alt="" />
             <p>Prev</p>
@@ -45,7 +46,7 @@ export const TablePagination = ({
               }
             }}
             style={{ boxShadow: "0px 4px 10px rgba(0,0,0,0.1)" }}
-            className="flex items-center border border-[#BEBEBE] px-4 py-2 rounded-xl gap-2 text-xs font-work-sans-regular"
+            className="flex items-center cursor-pointer border border-[#BEBEBE] px-4 py-2 rounded-xl gap-2 text-xs font-work-sans-regular"
           >
             <p>Next</p>
             <Image src={nextIcon} alt="" />

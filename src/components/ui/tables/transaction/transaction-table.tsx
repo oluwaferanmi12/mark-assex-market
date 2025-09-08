@@ -162,7 +162,7 @@ export const TransactionTable = () => {
         "",
       methodSlug: methodSelected === "All" ? "" : methodSelected,
       keyword: searchValue,
-      perPage: 30
+      perPage: 30,
     }));
   }, [typeSelected, statusSelected, methodSelected, searchValue]);
 
@@ -461,6 +461,7 @@ export const TransactionTable = () => {
 
         {hasData && (
           <TablePagination
+            currentPage={data?.currentPage}
             nextPage={data?.nextPage}
             prevPage={data?.prevPage}
             handleNext={() => {

@@ -221,4 +221,5 @@ export interface FullPaymentInterface {
   prevPage?: number | null;
   total?: number;
   totalPages?: number;
+  currentPage?: number;
 }

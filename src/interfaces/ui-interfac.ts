@@ -137,4 +137,5 @@ export interface PaginationData {
   totalPages?: number;
   handleNext?: () => void;
   handlePrev?: () => void;
+  currentPage?: number
 }
