@@ -385,6 +385,9 @@ export const SupportTable = () => {
               data.data?.map((item, index) => {
                 return (
                   <MobileSupportTable
+                    setActiveTicketId={setActiveTicketId}
+                    setSelectedTicket={setSelectedTicket}
+                    setShowChatModal={setShowChatModal}
                     message={item}
                     activeIndex={activeIndex}
                     setActiveIndex={setActiveIndex}

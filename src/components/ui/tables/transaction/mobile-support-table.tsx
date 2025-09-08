@@ -13,17 +13,24 @@ import { Payment } from "@/types";
 import { MoneyFormat } from "@/utils/money-format";
 import { TableDate } from "@/utils/date-formatter";
 import { SupportMessage } from "@/types/support.types";
+import { Button } from "../../buttons/button";
 
 export const MobileSupportTable = ({
   index,
   activeIndex,
   setActiveIndex,
   message,
+  setActiveTicketId,
+  setSelectedTicket,
+  setShowChatModal,
 }: {
   index: number;
   activeIndex: number;
   setActiveIndex: (val: number) => void;
   message: SupportMessage;
+  setSelectedTicket: (val: SupportMessage) => void;
+  setActiveTicketId: (val: string) => void;
+  setShowChatModal: (val: boolean) => voidƒ;
 }) => {
   const [showReason, setShowReason] = useState(false);
   return (
@@ -72,6 +79,19 @@ export const MobileSupportTable = ({
                   rightText={message.createdAt}
                   last
                 />
+                <div>
+                  <Button
+                    fullWidth
+                    action={() => {
+                      setSelectedTicket(message);
+                      setActiveTicketId(message.id);
+                      setShowChatModal(true);
+                    }}
+                    loading={false}
+                    text="View messages"
+                    variant="green-bg"
+                  />
+                </div>
               </div>
             </FadeIn>
           )}
