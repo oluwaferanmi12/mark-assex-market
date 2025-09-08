@@ -30,7 +30,7 @@ export const MobileSupportTable = ({
   message: SupportMessage;
   setSelectedTicket: (val: SupportMessage) => void;
   setActiveTicketId: (val: string) => void;
-  setShowChatModal: (val: boolean) => voidƒ;
+  setShowChatModal: (val: boolean) => void;
 }) => {
   const [showReason, setShowReason] = useState(false);
   return (
