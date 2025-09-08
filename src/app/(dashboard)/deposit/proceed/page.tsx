@@ -1041,7 +1041,7 @@ const Proceed = () => {
                     <div>
                       <div className="flex items-center justify-between my-4">
                         <p className="text-[#404040] font-work-sans-regular text-base">
-                          Min Withdrawal:
+                          Min Deposit:
                         </p>
                         <p className="font-work-sans-medium text-base">
                           ${MoneyFormat(paymentMethodDetails?.minAmount ?? 0)}
@@ -1049,7 +1049,7 @@ const Proceed = () => {
                       </div>
                       <div className="flex items-center justify-between my-4">
                         <p className="text-[#404040] font-work-sans-regular text-base">
-                          Max Withdrawal:
+                          Max Deposit:
                         </p>
                         <p className="font-work-sans-medium text-base">
                           ${MoneyFormat(paymentMethodDetails?.maxAmount ?? 0)}
