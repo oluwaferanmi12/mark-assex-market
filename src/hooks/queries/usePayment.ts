@@ -133,6 +133,7 @@ export const useVerifyPayment = (id: string, refetchActive: boolean) => {
     queryKey: ["verify-payment"],
     enabled: !!id,
     refetchInterval: refetchActive ? 10000 : false,
+    gcTime: 0,
   });
 };
 
