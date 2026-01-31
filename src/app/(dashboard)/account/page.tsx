@@ -250,7 +250,7 @@ const Account = () => {
         </ModalFooter>
       </ModalContainer>
       <div>
-        {userProfile?.kycStatus === "PENDING" && (
+        {userProfile?.kycStatus === "PENDING" && ( 
           <div className="mb-4">
             <AccounVerificationPending />
           </div>
